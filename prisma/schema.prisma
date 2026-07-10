@@ -1,0 +1,14 @@
+// RSweld – Prisma schema
+// Phase 1: connection only. Models & migrations are added in the next phase.
+//
+// Prisma 7 note: connection URLs live in `prisma.config.ts` (for Migrate) and in
+// the driver adapter passed to `PrismaClient` (for runtime) — not in this block.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
