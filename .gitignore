@@ -43,3 +43,6 @@ next-env.d.ts
 
 # prisma – generated client (regenerated via `pnpm prisma:generate` / postinstall)
 /lib/generated
+
+# claude code – personal, machine-local settings (skills & shared config are committed)
+.claude/settings.local.json
