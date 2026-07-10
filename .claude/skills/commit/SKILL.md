@@ -34,7 +34,7 @@ Create a clean git commit for RSweld.
 
 <body: what & why, wrapped ~72 cols. Optional for tiny changes.>
 
-Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+Co-Authored-By: <current Claude model, as instructed by the harness> <noreply@anthropic.com>
 ```
 
 - **types**: `feat`, `fix`, `chore`, `refactor`, `docs`, `style`, `test`, `perf`, `build`, `ci`
@@ -56,7 +56,7 @@ Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
 
    <body>
 
-   Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+   Co-Authored-By: <current Claude model, as instructed by the harness> <noreply@anthropic.com>
    EOF
    )"
    ```

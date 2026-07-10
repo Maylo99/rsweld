@@ -1,153 +1,178 @@
 # RSweld
 
-Firemný web pre **RSweld** — zváranie nerezových komponentov a výroba nerezových
-zábradlí (Považská Bystrica, Slovensko).
+Company website for **RSweld** — stainless steel welding and custom stainless
+railings (Považská Bystrica, Slovakia).
 
-> **Stav: Fáza 1 — inicializácia.** Projekt obsahuje funkčný skeleton, tech stack
-> a prepojenie na Supabase. Databázová schéma (Prisma modely + migrácie), finálny
-> obsah stránok a napojenie formulárov na DB/email pribudnú vo fáze 2.
+> **Status: Phase 2 — full site.** Design, content, gallery with lightbox,
+> quote/contact forms and the database schema are in place. The site runs
+> without credentials (static seed data, no persistence); once Supabase and
+> Resend credentials land in `.env`, run the migration + seed below and
+> everything is live end-to-end.
 
 ## Tech stack
 
-| Oblasť        | Nástroj                                                |
-| ------------- | ------------------------------------------------------ |
-| Framework     | Next.js 16 (App Router, TypeScript strict)             |
-| Styling       | Tailwind CSS v4                                        |
-| UI komponenty | shadcn/ui (Base UI / Nova preset)                      |
-| ORM           | Prisma 7 → Supabase Postgres (`@prisma/adapter-pg`)    |
-| Validácia     | Zod                                                    |
-| Email         | Resend (transakčné notifikácie — fáza 2)               |
-| Úložisko      | Supabase Storage (obrázky referencií)                  |
-| Animácie      | Motion (Framer Motion) — pripravené, použité vo fáze 2 |
-| Lint / Format | ESLint (Next + TS strict) + Prettier                   |
-| Balíčkovač    | pnpm                                                   |
+| Area            | Tool                                                 |
+| --------------- | ---------------------------------------------------- |
+| Framework       | Next.js 16 (App Router, TypeScript strict)           |
+| Styling         | Tailwind CSS v4                                      |
+| UI components   | shadcn/ui (Base UI / Nova preset)                    |
+| ORM             | Prisma 7 → Supabase Postgres (`@prisma/adapter-pg`)  |
+| Validation      | Zod (+ react-hook-form on the client)                |
+| Email           | Resend (inquiry notifications)                       |
+| Storage         | Supabase Storage (gallery images, quote attachments) |
+| Animations      | Motion (LazyMotion, one shared `AnimatedSection`)    |
+| Lint / format   | ESLint (Next + TS strict) + Prettier                 |
+| Package manager | pnpm                                                 |
 
-## Požiadavky
+## Requirements
 
-- **Node.js ≥ 22** (LTS). Odporúčané cez [nvm](https://github.com/nvm-sh/nvm):
-  `nvm install 22 && nvm use 22`.
-- **pnpm** (cez corepack): `corepack enable && corepack prepare pnpm@latest --activate`
+- **Node.js ≥ 22** (LTS), e.g. via [nvm](https://github.com/nvm-sh/nvm):
+  `nvm install 22 && nvm use 22`
+- **pnpm** (via corepack): `corepack enable && corepack prepare pnpm@latest --activate`
 
-## Lokálny setup
+## Local setup
 
 ```bash
-# 1. Inštalácia závislostí (spustí aj `prisma generate` cez postinstall)
+# 1. Install dependencies (postinstall runs `prisma generate`)
 pnpm install
 
-# 2. Environment premenné
+# 2. Environment variables
 cp .env.example .env
-#    ...a vyplň hodnoty (viď nižšie)
+#    ...fill in the values (see below); the site also runs with an empty .env
 
-# 3. Prisma client (ak treba manuálne pregenerovať)
-pnpm prisma:generate
-
-# 4. Dev server
+# 3. Dev server
 pnpm dev
 ```
 
-Otvor [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-## Environment premenné
+### Going live with a database (once credentials exist)
 
-Skopíruj `.env.example` do `.env` a vyplň:
+```bash
+pnpm db:migrate   # applies prisma/migrations via DIRECT_URL
+pnpm db:seed      # idempotent upsert of references + testimonials
+```
 
-| Premenná                        | Popis                                                                       |
-| ------------------------------- | --------------------------------------------------------------------------- |
-| `DATABASE_URL`                  | **Pooled** connection (pgbouncer, port 6543) — runtime cez Prisma adaptér.  |
-| `DIRECT_URL`                    | **Direct** connection (port 5432) — pre Prisma Migrate.                     |
-| `NEXT_PUBLIC_SUPABASE_URL`      | URL Supabase projektu.                                                      |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Verejný anon kľúč (bezpečný pre browser).                                   |
-| `SUPABASE_SERVICE_ROLE_KEY`     | Service role kľúč — **len server**, obchádza RLS (admin upload do Storage). |
-| `RESEND_API_KEY`                | API kľúč z [resend.com](https://resend.com).                                |
-| `RESEND_FROM_EMAIL`             | Overený odosielateľ, napr. `RSweld <dopyty@rsweld.sk>`.                     |
-| `NOTIFICATION_EMAIL`            | Schránka, ktorá dostáva notifikácie o nových dopytoch.                      |
+Without `DATABASE_URL`, pages fall back to the static seed data in `lib/data/`
+and the API skips persistence (logged as a warning) — nothing crashes.
 
-### Odkiaľ vziať connection stringy a kľúče
+## Environment variables
 
-1. **Supabase Dashboard** → tvoj projekt.
+| Variable                        | Purpose                                                                    |
+| ------------------------------- | -------------------------------------------------------------------------- |
+| `DATABASE_URL`                  | **Pooled** connection (pgbouncer, port 6543) — runtime via Prisma adapter. |
+| `DIRECT_URL`                    | **Direct** connection (port 5432) — Prisma Migrate.                        |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL.                                                      |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key (browser-safe).                                            |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Service role key — **server only**, bypasses RLS (attachment uploads).     |
+| `RESEND_API_KEY`                | API key from [resend.com](https://resend.com).                             |
+| `RESEND_FROM_EMAIL`             | Verified sender, e.g. `RSweld <dopyty@rsweld.sk>`.                         |
+| `NOTIFICATION_EMAIL`            | Inbox that receives inquiry notifications.                                 |
+
+### Where to find the connection strings & keys
+
+1. **Supabase Dashboard** → your project.
 2. **Database** (`Project Settings → Database → Connection string`):
-   - `DATABASE_URL` = **Transaction / pooled** string (port `6543`). Odporúčané
-     doplniť `?pgbouncer=true&connection_limit=1`.
+   - `DATABASE_URL` = **Transaction / pooled** string (port `6543`), append
+     `?pgbouncer=true&connection_limit=1`.
    - `DIRECT_URL` = **Session / direct** string (port `5432`).
-3. **API** (`Project Settings → API`): skopíruj `Project URL`, `anon public` kľúč
-   a `service_role` kľúč.
+3. **API** (`Project Settings → API`): copy `Project URL`, `anon public` key and
+   `service_role` key.
 
-### Vytvorenie Storage bucketu `references`
+### Storage buckets
 
-Pre galériu / referencie:
+Create two buckets in **Supabase Dashboard → Storage**:
 
-1. Supabase Dashboard → **Storage** → **New bucket**.
-2. Názov: `references`.
-3. Zapni **Public bucket** (public read) — obrázky sa zobrazujú na webe verejne.
-4. Upload z admin časti pôjde cez `SUPABASE_SERVICE_ROLE_KEY` na strane servera
-   (viď `lib/supabase.ts`), preto **nie je** potrebné otvárať write cez RLS.
+| Bucket       | Visibility               | Used for                                                                                     |
+| ------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
+| `references` | **Public** (public read) | Gallery images uploaded by the admin (later).                                                |
+| `inquiries`  | **Private** (no public)  | Drawing attachments from the quote form. Links in notification emails use 7-day signed URLs. |
 
-## Skripty
+Uploads go through `SUPABASE_SERVICE_ROLE_KEY` server-side (`lib/supabase.ts`),
+so no RLS write policies are needed.
 
-| Skript                 | Popis                                       |
-| ---------------------- | ------------------------------------------- |
-| `pnpm dev`             | Dev server (Turbopack).                     |
-| `pnpm build`           | Produkčný build.                            |
-| `pnpm start`           | Spustí produkčný build.                     |
-| `pnpm lint`            | ESLint.                                     |
-| `pnpm format`          | Prettier — zformátuje projekt.              |
-| `pnpm format:check`    | Prettier — len kontrola.                    |
-| `pnpm prisma:generate` | Vygeneruje Prisma client (`lib/generated`). |
+## Scripts
 
-## Štruktúra projektu
+| Script                 | Purpose                                       |
+| ---------------------- | --------------------------------------------- |
+| `pnpm dev`             | Dev server (Turbopack).                       |
+| `pnpm build`           | Production build.                             |
+| `pnpm start`           | Serve the production build.                   |
+| `pnpm lint`            | ESLint.                                       |
+| `pnpm format`          | Prettier — write.                             |
+| `pnpm format:check`    | Prettier — check only.                        |
+| `pnpm prisma:generate` | Generate the Prisma client (`lib/generated`). |
+| `pnpm db:migrate`      | `prisma migrate deploy` (needs `DIRECT_URL`). |
+| `pnpm db:seed`         | Seed references + testimonials (idempotent).  |
+
+## Project structure
 
 ```
 rsweld/
 ├── prisma/
-│   └── schema.prisma      # len generator + datasource (bez modelov — fáza 2)
-├── prisma.config.ts       # Prisma 7 config (DIRECT_URL pre Migrate)
+│   ├── schema.prisma          # Inquiry, Reference, Testimonial models
+│   ├── migrations/0_init/     # initial SQL (generated offline via migrate diff)
+│   └── seed.ts                # idempotent seed (tsx)
+├── prisma.config.ts           # Prisma 7 config (DIRECT_URL for Migrate, seed cmd)
 ├── app/
-│   ├── layout.tsx         # root layout (header/footer/toaster, lang="sk")
-│   ├── page.tsx           # domov (skeleton)
-│   ├── cenova-ponuka/     # placeholder
-│   ├── kontakt/           # placeholder
-│   ├── realizacie/        # placeholder
-│   └── api/inquiries/     # POST endpoint (validácia Zod, zatiaľ bez DB)
+│   ├── layout.tsx             # fonts, metadata, LocalBusiness JSON-LD
+│   ├── page.tsx               # home: hero → services → references → about → …
+│   ├── realizacie/            # gallery with category filter + lightbox
+│   ├── cenova-ponuka/         # quote form (file upload)
+│   ├── kontakt/               # contact info, map, contact form
+│   ├── api/inquiries/         # POST: validate → upload → persist → notify
+│   ├── sitemap.ts / robots.ts
 ├── components/
-│   ├── ui/                # shadcn/ui komponenty
-│   ├── layout/            # header, footer
-│   └── shared/            # zdieľané komponenty (fáza 2)
+│   ├── ui/                    # shadcn/ui primitives
+│   ├── layout/                # header (sticky, sheet menu), footer
+│   ├── home/                  # hero, services, references, about, testimonials, faq, cta
+│   ├── gallery/               # gallery-grid, lightbox
+│   ├── forms/                 # quote-form, contact-form, use-inquiry-submit
+│   └── shared/                # logo, animated-section, section-heading, instagram-icon
 ├── lib/
-│   ├── prisma.ts          # Prisma client singleton (pg adaptér)
-│   ├── supabase.ts        # Supabase klienti (Storage)
-│   ├── validations.ts     # Zod schémy (inquirySchema)
-│   ├── site.ts            # metadáta webu + navigácia
-│   └── generated/         # vygenerovaný Prisma client (git-ignored)
-├── .env.example
-└── README.md
+│   ├── prisma.ts              # Prisma client singleton (pg adapter, pooled URL)
+│   ├── supabase.ts            # lazy Supabase clients (Storage)
+│   ├── queries.ts             # DB reads with static-seed fallback
+│   ├── validations.ts         # Zod schemas + attachment constraints
+│   ├── data/                  # seed/fallback content (references, services, faq…)
+│   ├── site.ts                # contact details, nav
+│   └── json-ld.ts             # LocalBusiness structured data
+├── scripts/
+│   └── generate-placeholders.mjs  # brushed-steel placeholder images (sharp)
+└── public/references/         # generated placeholders — swap for real photos
 ```
 
 ## API
 
 ### `POST /api/inquiries`
 
-Validuje vstup cez Zod (`inquirySchema`) a vracia JSON.
+Accepts JSON or `multipart/form-data` (quote form with optional attachment).
 
-- `201 { "success": true }` — validný vstup.
-- `422 { "success": false, "fieldErrors": {...} }` — chyba validácie.
-- `400 { "success": false, "error": ... }` — nevalidný JSON.
+- `201 { "success": true }` — valid input.
+- `422 { "success": false, "fieldErrors": {...} }` — validation failure.
+- `400` — malformed body.
+- `500` — DB configured but the write failed.
 
-> Fáza 1: **neukladá** do DB ani neodosiela email. Napojenie na Prisma model a
-> Resend pribudne vo fáze 2.
+Attachment limits: 10 MB; `.pdf .png .jpg .jpeg .webp .dwg .dxf .step .stp`.
 
-Príklad:
+Persistence (Prisma) and notification (Resend) are skipped with a logged
+warning while their credentials are missing.
 
-```bash
-curl -X POST http://localhost:3000/api/inquiries \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Ján Novák","email":"jan@example.sk","message":"Záujem o cenovú ponuku na zábradlie.","type":"quote"}'
-```
+## Placeholder images
 
-## Poznámky k Prisme 7
+`public/references/*.jpg` are generated stand-ins
+(`node scripts/generate-placeholders.mjs`). When the client delivers real
+photos: replace the files (keep names), update alt texts in
+`lib/data/references.ts`, re-seed. The `<Logo />` component is a text
+placeholder — swap in the real logo file when delivered.
 
-Prisma 7 už **nepodporuje** `url` / `directUrl` v `datasource` bloku schémy.
-Preto:
+## Prisma 7 notes
 
-- Runtime pripojenie (`PrismaClient`) používa **driver adaptér** `@prisma/adapter-pg`
-  s pooled `DATABASE_URL` — viď `lib/prisma.ts`.
-- Migrácie čítajú connection string z `prisma.config.ts` (`DIRECT_URL`).
+Prisma 7 does **not** support `url` / `directUrl` in the schema `datasource`:
+
+- Runtime uses the **driver adapter** `@prisma/adapter-pg` with the pooled
+  `DATABASE_URL` — see `lib/prisma.ts`.
+- Migrate reads `DIRECT_URL` from `prisma.config.ts`.
+- The initial migration was generated offline
+  (`prisma migrate diff --from-empty --to-schema … --script`), so it can be
+  applied later with `prisma migrate deploy`.

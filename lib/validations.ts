@@ -2,8 +2,7 @@ import { z } from "zod";
 
 /**
  * Validation for inquiries submitted from the site (contact form + quote
- * request). Kept generic and decoupled from any DB model — the persistence
- * layer is wired up in the next phase.
+ * request). Visible error messages are Slovak (site content).
  */
 export const inquirySchema = z.object({
   name: z
@@ -27,3 +26,28 @@ export const inquirySchema = z.object({
 });
 
 export type InquiryInput = z.infer<typeof inquirySchema>;
+
+/** Client-side form schema — `type` is fixed per form, not user input. */
+export const inquiryFormSchema = inquirySchema.omit({ type: true });
+
+export type InquiryFormValues = z.infer<typeof inquiryFormSchema>;
+
+/** Attachment constraints for quote requests (drawings, photos). */
+export const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024; // 10 MB
+
+export const ACCEPTED_ATTACHMENT_EXTENSIONS = [
+  ".pdf",
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".webp",
+  ".dwg",
+  ".dxf",
+  ".step",
+  ".stp",
+] as const;
+
+export function isAcceptedAttachment(fileName: string): boolean {
+  const lower = fileName.toLowerCase();
+  return ACCEPTED_ATTACHMENT_EXTENSIONS.some((extension) => lower.endsWith(extension));
+}

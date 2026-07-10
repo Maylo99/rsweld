@@ -1,5 +1,4 @@
 // RSweld – Prisma schema
-// Phase 1: connection only. Models & migrations are added in the next phase.
 //
 // Prisma 7 note: connection URLs live in `prisma.config.ts` (for Migrate) and in
 // the driver adapter passed to `PrismaClient` (for runtime) — not in this block.
@@ -11,4 +10,66 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+enum InquiryType {
+  CONTACT
+  QUOTE
+}
+
+enum ReferenceCategory {
+  CABLE_RAILING // nerezové zábradlie lankové
+  ROD_RAILING // prútové zábradlie
+  VERTICAL_RAILING // zvislé zábradlia
+  FRENCH_BALCONY // francúzske balkóny
+  DESIGN_TABLE // dizajnové stolíky (vrátane spolupráce Red Bull)
+  CONVEYOR // nerezové dopravníky (spolupráca IMC)
+  PIPING // potrubia
+  ENGINEERING_COMPONENT // komponenty pre strojársky priemysel (IMC)
+  WATER_INDUSTRY_COMPONENT // komponenty pre vodárenský priemysel
+  LADDER // nerezové rebríky
+}
+
+model Inquiry {
+  id        String      @id @default(cuid())
+  type      InquiryType
+  name      String
+  email     String
+  phone     String?
+  message   String
+  /// Path of an uploaded drawing/attachment in Supabase Storage (quote requests).
+  filePath  String?
+  createdAt DateTime    @default(now())
+
+  @@map("inquiries")
+}
+
+model Reference {
+  id          String            @id @default(cuid())
+  title       String
+  description String?
+  category    ReferenceCategory
+  /// Public path of the image (Supabase Storage `references` bucket or /public).
+  imagePath   String
+  /// Slovak alt text for the image (accessibility + SEO).
+  imageAlt    String
+  featured    Boolean           @default(false)
+  sortOrder   Int               @default(0)
+  createdAt   DateTime          @default(now())
+
+  @@index([category])
+  @@index([featured])
+  @@map("references")
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  author    String
+  company   String?
+  quote     String
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@map("testimonials")
 }

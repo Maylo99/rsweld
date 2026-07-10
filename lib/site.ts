@@ -1,12 +1,21 @@
 /**
- * Central site metadata & navigation. Final copy/content is filled in the
- * next phase — these are skeleton values.
+ * Central site metadata, contact details & navigation.
+ * Visible strings are Slovak (site content); identifiers stay English.
  */
 export const siteConfig = {
   name: "RSweld",
-  description: "Zváranie nerezových komponentov a výroba nerezových zábradlí — Považská Bystrica.",
+  description:
+    "Zváranie nerezových komponentov a výroba nerezových zábradlí na mieru — Považská Bystrica a okolie.",
   location: "Považská Bystrica, Slovensko",
+  serviceArea: "Považská Bystrica a okolie (Trenčiansky kraj)",
   url: "https://rsweld.sk",
+  owner: "René Slávik",
+  phone: "+421 911 533 066",
+  phoneHref: "tel:+421911533066",
+  email: "rsweldsk@gmail.com",
+  emailHref: "mailto:rsweldsk@gmail.com",
+  instagram: "https://instagram.com/rsweldsk",
+  instagramHandle: "@rsweldsk",
 } as const;
 
 export type NavItem = {
