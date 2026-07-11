@@ -39,11 +39,16 @@ export function Hero() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button size="lg" render={<Link href="/cenova-ponuka" />}>
+          <Button size="lg" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
             Nezáväzná cenová ponuka
             <ArrowRightIcon aria-hidden />
           </Button>
-          <Button size="lg" variant="outline" render={<Link href="/realizacie" />}>
+          <Button
+            size="lg"
+            variant="outline"
+            nativeButton={false}
+            render={<Link href="/realizacie" />}
+          >
             Pozrieť realizácie
           </Button>
         </div>

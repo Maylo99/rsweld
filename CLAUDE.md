@@ -49,7 +49,9 @@ react-hook-form · Resend · Motion · Supabase Storage.
   (`Field`, `FieldGroup`, `FieldError`…) with react-hook-form directly
   (`zodResolver` supports Zod v4).
 - Composition via the **`render` prop**, not `asChild`:
-  `<Button render={<Link href="/x" />}>…</Button>`.
+  `<Button render={<Link href="/x" />}>…</Button>` — and when the rendered
+  element is a link/anchor, also pass `nativeButton={false}` or Base UI logs
+  a console warning.
 - lucide-react v1 **removed brand icons** — Instagram lives in
   `components/shared/instagram-icon.tsx`.
 - Add components: `pnpm dlx shadcn@latest add <name>` (`-d` skips the

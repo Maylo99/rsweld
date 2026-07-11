@@ -40,7 +40,7 @@ export function Header() {
               </Link>
             );
           })}
-          <Button size="sm" render={<Link href="/cenova-ponuka" />}>
+          <Button size="sm" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
             Nezáväzný dopyt
           </Button>
         </nav>
@@ -51,6 +51,7 @@ export function Header() {
             variant="ghost"
             size="icon"
             aria-label={`Zavolať ${siteConfig.phone}`}
+            nativeButton={false}
             render={<a href={siteConfig.phoneHref} />}
           >
             <PhoneIcon className="size-4" />
@@ -82,7 +83,11 @@ export function Header() {
                 ))}
               </nav>
               <div className="mt-auto border-t px-6 py-4">
-                <Button className="w-full" render={<Link href="/cenova-ponuka" />}>
+                <Button
+                  className="w-full"
+                  nativeButton={false}
+                  render={<Link href="/cenova-ponuka" />}
+                >
                   Nezáväzný dopyt
                 </Button>
                 <a

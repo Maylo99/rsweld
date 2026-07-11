@@ -24,11 +24,16 @@ export function CtaSection() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <Button size="lg" render={<Link href="/cenova-ponuka" />}>
+            <Button size="lg" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
               Nezáväzná cenová ponuka
               <ArrowRightIcon aria-hidden />
             </Button>
-            <Button size="lg" variant="outline" render={<a href={siteConfig.phoneHref} />}>
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<a href={siteConfig.phoneHref} />}
+            >
               <PhoneIcon aria-hidden />
               {siteConfig.phone}
             </Button>

@@ -25,7 +25,7 @@ export function FeaturedReferencesSection({ references }: FeaturedReferencesSect
             title="Vybrané projekty"
             description="Ukážka toho, čo z nerezu vyrábame — od zábradlí po priemyselné celky."
           />
-          <Button variant="outline" render={<Link href="/realizacie" />}>
+          <Button variant="outline" nativeButton={false} render={<Link href="/realizacie" />}>
             Všetky realizácie
             <ArrowRightIcon aria-hidden />
           </Button>
