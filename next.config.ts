@@ -6,10 +6,19 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: import.meta.dirname,
   },
+  experimental: {
+    serverActions: {
+      // Admin photo uploads. Photos are downscaled in the browser first (see
+      // MAX_IMAGE_BYTES in lib/validations.ts); this must stay under Vercel's
+      // 4.5 MB request cap.
+      bodySizeLimit: "4mb",
+    },
+  },
   async redirects() {
     return [
       // The gallery used to live at /realizacie — keep old links and rankings.
       { source: "/realizacie", destination: "/galeria", permanent: true },
+      { source: "/admin/realizacie/:path*", destination: "/admin", permanent: false },
     ];
   },
   images: {
