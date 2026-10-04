@@ -6,6 +6,23 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: import.meta.dirname,
   },
+  async redirects() {
+    return [
+      // The gallery used to live at /realizacie — keep old links and rankings.
+      { source: "/realizacie", destination: "/galeria", permanent: true },
+    ];
+  },
+  images: {
+    // Gallery photos uploaded through the admin live in the public Supabase
+    // Storage bucket; seed photos are still served from /public.
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

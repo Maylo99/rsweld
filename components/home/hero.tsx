@@ -47,9 +47,9 @@ export function Hero() {
             size="lg"
             variant="outline"
             nativeButton={false}
-            render={<Link href="/realizacie" />}
+            render={<Link href="/galeria" />}
           >
-            Pozrieť realizácie
+            Pozrieť galériu
           </Button>
         </div>
 

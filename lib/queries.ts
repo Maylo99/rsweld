@@ -1,6 +1,12 @@
-import { referencesSeed } from "@/lib/data/references";
+import { cache } from "react";
+
+import { isDatabaseConfigured } from "@/lib/config";
+import { gallerySeed } from "@/lib/data/gallery";
 import { testimonialsSeed } from "@/lib/data/testimonials";
-import type { ReferenceItem, TestimonialItem } from "@/lib/types";
+import { placementPhotos, publicGallery } from "@/lib/gallery";
+import { fetchGalleryData } from "@/lib/gallery-data";
+import { placementConfig } from "@/lib/placements";
+import type { DisplayPhoto, GalleryData, PlacementKey, TestimonialItem } from "@/lib/types";
 
 /**
  * Content queries with graceful degradation: read from the database when
@@ -9,37 +15,28 @@ import type { ReferenceItem, TestimonialItem } from "@/lib/types";
  * during local development without a DB.
  */
 
-const isDatabaseConfigured = () => Boolean(process.env.DATABASE_URL);
-
-export async function getReferences(): Promise<ReferenceItem[]> {
+/** One snapshot per request, shared by every section that renders photos. */
+const getGalleryData = cache(async (): Promise<GalleryData> => {
   if (!isDatabaseConfigured()) {
-    return referencesSeed;
+    return gallerySeed;
   }
 
   try {
-    const { prisma } = await import("@/lib/prisma");
-    const rows = await prisma.reference.findMany({
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-    });
-    return rows.map((row) => ({
-      id: row.id,
-      title: row.title,
-      description: row.description ?? undefined,
-      category: row.category,
-      imagePath: row.imagePath,
-      imageAlt: row.imageAlt,
-      featured: row.featured,
-      sortOrder: row.sortOrder,
-    }));
+    return await fetchGalleryData();
   } catch (error) {
-    console.error("getReferences: database read failed, using seed data", error);
-    return referencesSeed;
+    console.error("getGalleryData: database read failed, using seed data", error);
+    return gallerySeed;
   }
+});
+
+/** Data for the /galeria page (gallery order + per-tag orders). */
+export async function getGallery() {
+  return publicGallery(await getGalleryData());
 }
 
-export async function getFeaturedReferences(): Promise<ReferenceItem[]> {
-  const references = await getReferences();
-  return references.filter((reference) => reference.featured).slice(0, 6);
+/** Photos the administrator put into a website section, in their order. */
+export async function getPlacementPhotos(placement: PlacementKey): Promise<DisplayPhoto[]> {
+  return placementPhotos(await getGalleryData(), placement, placementConfig[placement].limit);
 }
 
 export async function getTestimonials(): Promise<TestimonialItem[]> {

@@ -1,23 +1,39 @@
 "use client";
 
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { referenceCategoryLabels, type ReferenceItem } from "@/lib/types";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { DisplayPhoto } from "@/lib/types";
 
 type LightboxProps = {
-  items: ReferenceItem[];
+  items: DisplayPhoto[];
   /** Index of the open item within `items`, or null when closed. */
   openIndex: number | null;
   onOpenIndexChange: (index: number | null) => void;
 };
 
+/** Minimum horizontal finger travel (px) that counts as a swipe. */
+const SWIPE_THRESHOLD = 50;
+
 /*
- * Minimal image lightbox on top of the dialog primitive: prev/next buttons,
- * arrow-key navigation, Escape handled by the dialog itself.
+ * Minimal image lightbox on top of the dialog primitive: prev/next buttons
+ * over the photo, arrow keys, touch swipe; Escape handled by the dialog.
+ *
+ * The photo is shown uncropped at its natural aspect ratio, as large as the
+ * viewport allows (capped by both width and height, room left for the
+ * caption). The caption uses `w-0 min-w-full` so it follows the image width
+ * instead of widening the dialog. The dialog is pinned with `left-0 right-0
+ * mx-auto` instead of `left-1/2`, otherwise `w-fit` could only grow to half
+ * the viewport.
  */
 export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps) {
   const item = openIndex !== null ? items[openIndex] : undefined;
@@ -32,16 +48,30 @@ export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps)
     onOpenIndexChange((openIndex + 1) % items.length);
   }, [items.length, onOpenIndexChange, openIndex]);
 
+  // Capture phase: the dialog stops arrow-key propagation before it bubbles
+  // up to `window`, so a bubbling listener never fires.
   useEffect(() => {
     if (openIndex === null) return;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowLeft") showPrevious();
       if (event.key === "ArrowRight") showNext();
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, [openIndex, showNext, showPrevious]);
 
+  const touchStartX = useRef<number | null>(null);
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = event.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (deltaX > SWIPE_THRESHOLD) showPrevious();
+    if (deltaX < -SWIPE_THRESHOLD) showNext();
+  };
+
+  const hasMultiple = items.length > 1;
+  const overlayButtonClass =
+    "bg-background/85 hover:bg-background absolute z-10 shadow-sm backdrop-blur";
   return (
     <Dialog
       open={openIndex !== null}
@@ -49,54 +79,90 @@ export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps)
         if (!open) onOpenIndexChange(null);
       }}
     >
-      <DialogContent className="w-[min(96vw,64rem)] max-w-none border-none bg-transparent p-0 shadow-none">
+      <DialogContent
+        showCloseButton={false}
+        className="right-0 left-0 mx-auto w-fit max-w-[96vw] translate-x-0 gap-0 bg-transparent p-0 shadow-none ring-0 sm:max-w-[96vw]"
+      >
         {item ? (
-          <figure className="overflow-hidden rounded-xl">
+          <figure className="relative overflow-hidden rounded-xl">
+            <DialogClose
+              render={
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className={`${overlayButtonClass} top-3 right-3`}
+                />
+              }
+            >
+              <XIcon aria-hidden />
+              <span className="sr-only">Zavrieť</span>
+            </DialogClose>
             <DialogTitle className="sr-only">{item.title}</DialogTitle>
             <DialogDescription className="sr-only">
-              {referenceCategoryLabels[item.category]}
+              {item.tags.map((tag) => tag.name).join(", ")}
             </DialogDescription>
 
-            <div className="relative aspect-[4/3] w-full">
+            <div
+              className="relative"
+              onTouchStart={(event) => {
+                touchStartX.current = event.touches[0].clientX;
+              }}
+              onTouchEnd={handleTouchEnd}
+            >
               <Image
+                key={item.id}
                 src={item.imagePath}
                 alt={item.imageAlt}
-                fill
+                // Placeholder ratio until the file loads; the natural size wins after.
+                width={2400}
+                height={1800}
                 sizes="96vw"
-                className="object-cover"
+                className="bg-muted block h-auto max-h-[calc(100dvh-9rem)] w-auto max-w-[96vw]"
                 priority
               />
+              {hasMultiple ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="icon-lg"
+                    onClick={showPrevious}
+                    aria-label="Predchádzajúca fotka"
+                    className={`${overlayButtonClass} top-1/2 left-3 size-11 -translate-y-1/2 rounded-full`}
+                  >
+                    <ChevronLeftIcon aria-hidden />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon-lg"
+                    onClick={showNext}
+                    aria-label="Ďalšia fotka"
+                    className={`${overlayButtonClass} top-1/2 right-3 size-11 -translate-y-1/2 rounded-full`}
+                  >
+                    <ChevronRightIcon aria-hidden />
+                  </Button>
+                </>
+              ) : null}
             </div>
 
-            <figcaption className="bg-card flex items-center justify-between gap-4 p-4">
+            <figcaption className="bg-card flex w-0 min-w-full items-center justify-between gap-4 p-4">
               <div>
-                <p className="text-primary text-xs font-semibold tracking-wide uppercase">
-                  {referenceCategoryLabels[item.category]}
-                </p>
+                {item.tags.length > 0 ? (
+                  <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                    {item.tags.map((tag) => tag.name).join(" · ")}
+                  </p>
+                ) : null}
                 <p className="mt-0.5 font-semibold">{item.title}</p>
                 {item.description ? (
                   <p className="text-muted-foreground mt-0.5 text-sm">{item.description}</p>
                 ) : null}
               </div>
-              {items.length > 1 ? (
-                <div className="flex shrink-0 gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={showPrevious}
-                    aria-label="Predchádzajúca fotka"
-                  >
-                    <ChevronLeftIcon aria-hidden />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={showNext}
-                    aria-label="Ďalšia fotka"
-                  >
-                    <ChevronRightIcon aria-hidden />
-                  </Button>
-                </div>
+              {hasMultiple && openIndex !== null ? (
+                <p
+                  className="text-muted-foreground shrink-0 text-sm tabular-nums"
+                  aria-live="polite"
+                >
+                  {openIndex + 1} / {items.length}
+                </p>
               ) : null}
             </figcaption>
           </figure>

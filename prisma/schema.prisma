@@ -17,17 +17,12 @@ enum InquiryType {
   QUOTE
 }
 
-enum ReferenceCategory {
-  CABLE_RAILING // nerezové zábradlie lankové
-  ROD_RAILING // prútové zábradlie
-  VERTICAL_RAILING // zvislé zábradlia
-  FRENCH_BALCONY // francúzske balkóny
-  DESIGN_TABLE // dizajnové stolíky (vrátane spolupráce Red Bull)
-  CONVEYOR // nerezové dopravníky (spolupráca IMC)
-  PIPING // potrubia
-  ENGINEERING_COMPONENT // komponenty pre strojársky priemysel (IMC)
-  WATER_INDUSTRY_COMPONENT // komponenty pre vodárenský priemysel
-  LADDER // nerezové rebríky
+/// Website sections a photo can be shown in. Labels, limits and descriptions
+/// live in `lib/placements.ts`.
+enum Placement {
+  GALLERY // the /galeria page ("Všetky" + tag filters)
+  HOME_FEATURED // homepage "Vybrané projekty"
+  HOME_ABOUT // homepage "O nás" image (single)
 }
 
 model Inquiry {
@@ -44,22 +39,58 @@ model Inquiry {
   @@map("inquiries")
 }
 
-model Reference {
-  id          String            @id @default(cuid())
+model Photo {
+  id          String           @id @default(cuid())
   title       String
   description String?
-  category    ReferenceCategory
   /// Public path of the image (Supabase Storage `references` bucket or /public).
   imagePath   String
   /// Slovak alt text for the image (accessibility + SEO).
   imageAlt    String
-  featured    Boolean           @default(false)
-  sortOrder   Int               @default(0)
-  createdAt   DateTime          @default(now())
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now()) @updatedAt
+  tags        PhotoTag[]
+  placements  PhotoPlacement[]
 
-  @@index([category])
-  @@index([featured])
-  @@map("references")
+  @@map("photos")
+}
+
+/// Gallery filter tag. `sortOrder` is the order of the filter chips.
+model Tag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  sortOrder Int        @default(0)
+  createdAt DateTime   @default(now())
+  photos    PhotoTag[]
+
+  @@map("tags")
+}
+
+/// Photo ↔ tag membership. `sortOrder` is the photo's position when the
+/// gallery is filtered by this tag — independent of every other list.
+model PhotoTag {
+  photoId   String
+  tagId     String
+  sortOrder Int    @default(0)
+  photo     Photo  @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  tag       Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([photoId, tagId])
+  @@index([tagId, sortOrder])
+  @@map("photo_tags")
+}
+
+/// Photo shown in a website section, with its own position in that section.
+model PhotoPlacement {
+  photoId   String
+  placement Placement
+  sortOrder Int       @default(0)
+  photo     Photo     @relation(fields: [photoId], references: [id], onDelete: Cascade)
+
+  @@id([photoId, placement])
+  @@index([placement, sortOrder])
+  @@map("photo_placements")
 }
 
 model Testimonial {

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { siteConfig } from "@/lib/site";
+import type { DisplayPhoto } from "@/lib/types";
 
 /*
  * Short, personal about section with trust points.
@@ -16,9 +17,21 @@ const trustPoints = [
   "Doprava a montáž priamo na mieste realizácie",
 ];
 
-export function AboutSection() {
+/** Shown when the administrator has not picked a photo for this section. */
+const fallbackPhoto = {
+  imagePath: "/references/tig-weld-detail.jpg",
+  imageAlt: "Detail TIG zvaru nerezovej ocele z dielne RSweld",
+};
+
+export function AboutSection({ photo }: { photo?: DisplayPhoto }) {
+  const { imagePath, imageAlt } = photo ?? fallbackPhoto;
+
   return (
-    <section className="mx-auto max-w-6xl px-4 py-20 sm:py-24" aria-labelledby="about-heading">
+    <section
+      id="o-nas"
+      className="mx-auto max-w-6xl scroll-mt-20 px-4 py-20 sm:py-24"
+      aria-labelledby="about-heading"
+    >
       <div className="grid items-center gap-12 lg:grid-cols-2">
         <AnimatedSection>
           <SectionHeading eyebrow="O nás" title="Remeslo, na ktoré sa dá spoľahnúť" />
@@ -47,8 +60,8 @@ export function AboutSection() {
         <AnimatedSection delay={0.1} className="relative">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <Image
-              src="/references/about.jpg"
-              alt="Detail brúsenej nerezovej ocele z dielne RSweld"
+              src={imagePath}
+              alt={imageAlt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"

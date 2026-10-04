@@ -25,7 +25,7 @@ export type NavItem = {
 
 export const mainNav: NavItem[] = [
   { href: "/", label: "Domov" },
-  { href: "/realizacie", label: "Realizácie" },
+  { href: "/galeria", label: "Galéria" },
   { href: "/cenova-ponuka", label: "Cenová ponuka" },
   { href: "/kontakt", label: "Kontakt" },
 ];
