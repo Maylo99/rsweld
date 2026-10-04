@@ -49,3 +49,6 @@ next-env.d.ts
 
 # Admin photo uploads in local development (no Supabase Storage)
 /public/uploads/
+
+# IDE
+.idea/
