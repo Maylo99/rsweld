@@ -10,7 +10,7 @@ Company website for RSweld — stainless steel welding and custom railings
   messages in code, test names.
 - **Slovak is only for**: (1) visible site content — headings, copy, button
   labels, user-facing validation messages, meta descriptions, alt texts;
-  (2) URL route segments (`/cenova-ponuka`, `/realizacie`, `/kontakt`).
+  (2) URL route segments (`/cenova-ponuka`, `/galeria`, `/kontakt`, `/admin/zobrazenie`).
 - Draft copy that the client has not confirmed is marked
   `TODO: verify with client` (comment in English).
 
@@ -57,6 +57,31 @@ react-hook-form · Resend · Motion · Supabase Storage.
 - Add components: `pnpm dlx shadcn@latest add <name>` (`-d` skips the
   interactive preset prompt).
 
+### Admin area (`/admin`)
+
+- Single user, credentials in env (`ADMIN_EMAIL`, `ADMIN_PASSWORD`,
+  `AUTH_SECRET`) — no user table, **never** add a fallback password.
+- Next 16 renamed `middleware.ts` → **`proxy.ts`** (must export `proxy`);
+  the old name still builds but warns.
+- The proxy does not see Server Action POSTs — every action and admin page
+  starts with `requireSession()`. Don't drop it.
+- `lib/auth.ts` runs in the edge proxy: Web Crypto only, no `next/headers`,
+  no Node APIs. Cookie handling lives in `lib/auth-server.ts`.
+- A `"use server"` file may only export async functions — putting a shared
+  `const initialState` in `app/admin/actions.ts` breaks the build.
+- Gallery = `Photo` + `Tag` (many-to-many) + `PhotoPlacement` (website
+  sections). Each list (gallery "Všetky", every tag, every section) has its
+  **own** `sortOrder` on the join row — never derive one list's order from
+  another. Sections are declared in `lib/placements.ts` + the `Placement` enum.
+- Admin mutations called from client components return `MutationResult`;
+  messages come only from `UserFacingError` (`lib/errors.ts`) — anything else
+  shows a generic Slovak error.
+- Photos are downscaled in the browser before upload (Server Action body limit
+  `4mb` in `next.config.ts`, Vercel caps requests at 4.5 MB).
+- `/realizacie` permanently redirects to `/galeria` (old links / SEO).
+- Public pages live in the `app/(site)/` route group (header/footer/JSON-LD);
+  `app/layout.tsx` is the bare document shell so `/admin` stays clean.
+
 ### Graceful degradation without credentials
 
 - `lib/queries.ts` reads Prisma only when `DATABASE_URL` is set, else falls
@@ -90,8 +115,8 @@ react-hook-form · Resend · Motion · Supabase Storage.
 - Never commit `.env` (only `.env.example`) or `lib/generated`.
 - Shared Zod schemas → `lib/validations.ts`; contact data & nav → `lib/site.ts`;
   content types → `lib/types.ts` (decoupled from Prisma types on purpose).
-- Placeholder images: `node scripts/generate-placeholders.mjs` (deterministic);
-  real client photos replace files in `public/references/` keeping names.
+- Seed photos live in `public/references/` (`lib/data/gallery.ts`); real
+  content is managed in `/admin` once the DB is live.
 
 ## Project state
 

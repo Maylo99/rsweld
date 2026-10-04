@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 pnpm db:migrate   # applies prisma/migrations via DIRECT_URL
-pnpm db:seed      # idempotent upsert of references + testimonials
+pnpm db:seed      # idempotent upsert of gallery photos/tags + testimonials
 ```
 
 Without `DATABASE_URL`, pages fall back to the static seed data in `lib/data/`
@@ -68,6 +68,9 @@ and the API skips persistence (logged as a warning) — nothing crashes.
 | `RESEND_API_KEY`                | API key from [resend.com](https://resend.com).                             |
 | `RESEND_FROM_EMAIL`             | Verified sender, e.g. `RSweld <dopyty@rsweld.sk>`.                         |
 | `NOTIFICATION_EMAIL`            | Inbox that receives inquiry notifications.                                 |
+| `ADMIN_EMAIL`                   | The single administrator's login e-mail.                                   |
+| `ADMIN_PASSWORD`                | That administrator's password — the only thing guarding `/admin`.          |
+| `AUTH_SECRET`                   | Random secret signing the admin session cookie (32 bytes, base64url).      |
 
 ### Where to find the connection strings & keys
 
@@ -85,41 +88,96 @@ Create two buckets in **Supabase Dashboard → Storage**:
 
 | Bucket       | Visibility               | Used for                                                                                     |
 | ------------ | ------------------------ | -------------------------------------------------------------------------------------------- |
-| `references` | **Public** (public read) | Gallery images uploaded by the admin (later).                                                |
+| `references` | **Public** (public read) | Gallery images uploaded through `/admin`.                                                    |
 | `inquiries`  | **Private** (no public)  | Drawing attachments from the quote form. Links in notification emails use 7-day signed URLs. |
 
 Uploads go through `SUPABASE_SERVICE_ROLE_KEY` server-side (`lib/supabase.ts`),
 so no RLS write policies are needed.
 
+## Admin area (`/admin`)
+
+A single administrator manages the photos shown on the site. Sections:
+
+| Route               | Purpose                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| `/admin`            | Photo library — search, filter by tag / section, bulk tag / show / hide / delete.           |
+| `/admin/nahrat`     | Bulk upload (drag & drop), shared tags + sections for the batch. Downscaled in the browser. |
+| `/admin/fotky/[id]` | Edit one photo: title, description, alt text, tags, sections, replace image.                |
+| `/admin/zobrazenie` | "Where and in what order": drag & drop ordering per list, add / remove photos.              |
+| `/admin/tagy`       | Create, rename, delete and reorder tags (= order of the gallery filter chips).              |
+
+**Data model.** A `Photo` has many `Tag`s (`PhotoTag`) and is shown in website
+sections (`PhotoPlacement`: `GALLERY`, `HOME_FEATURED`, `HOME_ABOUT` — labels and
+limits in `lib/placements.ts`). Every list has its **own** `sortOrder`: the
+gallery's "Všetky" order, each tag's filter order and each homepage section are
+independent, so moving a photo in one never reshuffles another. A tag filter on
+`/galeria` only shows photos that are also in `GALLERY`. New memberships are
+appended to the end of their list.
+
+**Authentication.** There is no user table — the credentials are
+`ADMIN_EMAIL` + `ADMIN_PASSWORD`, and a successful login mints an HMAC-signed
+session cookie (`AUTH_SECRET`, HttpOnly, SameSite=Lax, 7 days). With any of the
+three variables missing the admin area is disabled; there is deliberately no
+fallback password. Login attempts are rate-limited to 8 per 10 minutes per IP
+(in-memory — a speed bump, not the security boundary).
+
+- `proxy.ts` gates every `/admin/**` request (Next 16's renamed middleware).
+- Every page and Server Action re-checks the session via `requireSession()`,
+  because Server Action POSTs do not pass through the proxy.
+- `/admin` is `noindex` (layout metadata, `x-robots-tag`, `robots.txt`).
+
+**Requirements.** The admin needs both integrations: `DATABASE_URL` for the
+content and Supabase Storage for the photos. Without a database it renders the
+seed gallery read-only with an explanatory notice; without Storage the texts and
+ordering still save but new uploads fail with a Slovak error — except in
+`pnpm dev`, where uploads fall back to `public/uploads/` (git-ignored) so the
+whole flow can be tried locally.
+
+**Changing the password.** Edit `ADMIN_PASSWORD` in the environment (Vercel →
+Settings → Environment Variables) and redeploy. Rotating `AUTH_SECRET` signs
+everyone out.
+
 ## Scripts
 
-| Script                 | Purpose                                       |
-| ---------------------- | --------------------------------------------- |
-| `pnpm dev`             | Dev server (Turbopack).                       |
-| `pnpm build`           | Production build.                             |
-| `pnpm start`           | Serve the production build.                   |
-| `pnpm lint`            | ESLint.                                       |
-| `pnpm format`          | Prettier — write.                             |
-| `pnpm format:check`    | Prettier — check only.                        |
-| `pnpm prisma:generate` | Generate the Prisma client (`lib/generated`). |
-| `pnpm db:migrate`      | `prisma migrate deploy` (needs `DIRECT_URL`). |
-| `pnpm db:seed`         | Seed references + testimonials (idempotent).  |
+| Script                 | Purpose                                        |
+| ---------------------- | ---------------------------------------------- |
+| `pnpm dev`             | Dev server (Turbopack).                        |
+| `pnpm build`           | Production build.                              |
+| `pnpm start`           | Serve the production build.                    |
+| `pnpm lint`            | ESLint.                                        |
+| `pnpm format`          | Prettier — write.                              |
+| `pnpm format:check`    | Prettier — check only.                         |
+| `pnpm prisma:generate` | Generate the Prisma client (`lib/generated`).  |
+| `pnpm db:migrate`      | `prisma migrate deploy` (needs `DIRECT_URL`).  |
+| `pnpm db:seed`         | Seed photos, tags + testimonials (idempotent). |
 
 ## Project structure
 
 ```
 rsweld/
 ├── prisma/
-│   ├── schema.prisma          # Inquiry, Reference, Testimonial models
+│   ├── schema.prisma          # Inquiry, Photo/Tag/PhotoTag/PhotoPlacement, Testimonial
 │   ├── migrations/0_init/     # initial SQL (generated offline via migrate diff)
 │   └── seed.ts                # idempotent seed (tsx)
 ├── prisma.config.ts           # Prisma 7 config (DIRECT_URL for Migrate, seed cmd)
+├── proxy.ts                   # auth gate for /admin/** (Next 16 middleware)
 ├── app/
-│   ├── layout.tsx             # fonts, metadata, LocalBusiness JSON-LD
-│   ├── page.tsx               # home: hero → services → references → about → …
-│   ├── realizacie/            # gallery with category filter + lightbox
-│   ├── cenova-ponuka/         # quote form (file upload)
-│   ├── kontakt/               # contact info, map, contact form
+│   ├── layout.tsx             # document shell: fonts, metadata, toaster
+│   ├── (site)/                # public site — header, footer, JSON-LD
+│   │   ├── layout.tsx
+│   │   ├── page.tsx           # home: hero → services → references → about → …
+│   │   ├── galeria/           # gallery with tag filter (?tag=slug) + lightbox
+│   │   ├── cenova-ponuka/     # quote form (file upload)
+│   │   └── kontakt/           # contact info, map, contact form
+│   ├── admin/                 # single-user admin (noindex)
+│   │   ├── layout.tsx         # admin chrome (only when signed in)
+│   │   ├── page.tsx           # photo library (bulk actions)
+│   │   ├── nahrat/            # bulk upload
+│   │   ├── fotky/[id]/        # edit photo
+│   │   ├── zobrazenie/        # per-section / per-tag ordering
+│   │   ├── tagy/              # tag management
+│   │   ├── prihlasenie/       # login
+│   │   └── actions.ts         # Server Actions (login + gallery CRUD)
 │   ├── api/inquiries/         # POST: validate → upload → persist → notify
 │   ├── sitemap.ts / robots.ts
 ├── components/
@@ -128,13 +186,23 @@ rsweld/
 │   ├── home/                  # hero, services, references, about, testimonials, faq, cta
 │   ├── gallery/               # gallery-grid, lightbox
 │   ├── forms/                 # quote-form, contact-form, use-inquiry-submit
+│   ├── admin/                 # nav, photos/, upload/, arrange/, tags/, pickers
 │   └── shared/                # logo, animated-section, section-heading, instagram-icon
 ├── lib/
 │   ├── prisma.ts              # Prisma client singleton (pg adapter, pooled URL)
 │   ├── supabase.ts            # lazy Supabase clients (Storage)
+│   ├── storage.ts             # gallery image upload / cleanup
 │   ├── queries.ts             # DB reads with static-seed fallback
+│   ├── admin/gallery.ts       # gallery writes (DB required); load.ts, lists.ts
+│   ├── gallery.ts             # pure helpers over the gallery snapshot
+│   ├── gallery-data.ts        # reads the gallery snapshot from the DB
+│   ├── placements.ts          # website sections: labels, limits
+│   ├── auth.ts                # credentials + signed session token (edge-safe)
+│   ├── auth-server.ts         # session cookie helpers, requireSession()
+│   ├── rate-limit.ts          # in-memory login throttle
+│   ├── config.ts              # isDatabaseConfigured / isStorageConfigured
 │   ├── validations.ts         # Zod schemas + attachment constraints
-│   ├── data/                  # seed/fallback content (references, services, faq…)
+│   ├── data/                  # seed/fallback content (gallery, services, faq…)
 │   ├── site.ts                # contact details, nav
 │   └── json-ld.ts             # LocalBusiness structured data
 ├── scripts/
@@ -158,13 +226,12 @@ Attachment limits: 10 MB; `.pdf .png .jpg .jpeg .webp .dwg .dxf .step .stp`.
 Persistence (Prisma) and notification (Resend) are skipped with a logged
 warning while their credentials are missing.
 
-## Placeholder images
+## Seed photos
 
-`public/references/*.jpg` are generated stand-ins
-(`node scripts/generate-placeholders.mjs`). When the client delivers real
-photos: replace the files (keep names), update alt texts in
-`lib/data/references.ts`, re-seed. The `<Logo />` component is a text
-placeholder — swap in the real logo file when delivered.
+`public/references/*.jpg` are the client's photos (2026-07 set) used as seed /
+fallback content (`lib/data/gallery.ts`). Once the database is live, photos are
+managed in `/admin` and uploads go to Supabase Storage. The `<Logo />`
+component is a text placeholder — swap in the real logo file when delivered.
 
 ## Prisma 7 notes
 
