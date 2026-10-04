@@ -4,7 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { DisplayPhoto } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 type LightboxProps = {
   items: DisplayPhoto[];
@@ -23,6 +24,47 @@ type LightboxProps = {
 
 /** Minimum horizontal finger travel (px) that counts as a swipe. */
 const SWIPE_THRESHOLD = 50;
+
+const overlayButtonClass =
+  "bg-background/85 hover:bg-background absolute z-10 shadow-sm backdrop-blur";
+
+type NavZoneProps = {
+  side: "left" | "right";
+  onClick: () => void;
+  label: string;
+  children: React.ReactNode;
+};
+
+/*
+ * Prev/next hit area: a full-height strip along the photo edge, with the
+ * round button drawn inside it. The strip is the actual <button>, so a click
+ * anywhere near the arrow counts. Centering is done with flexbox, not
+ * `-translate-y-1/2` — the button's `active:translate-y-px` press effect
+ * would override that transform and make the button jump away mid-click.
+ */
+function NavZone({ side, onClick, label, children }: NavZoneProps) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={cn(
+        "group/nav absolute inset-y-0 z-10 flex w-1/4 max-w-36 cursor-pointer items-center px-3 outline-none",
+        side === "left" ? "left-0 justify-start" : "right-0 justify-end",
+      )}
+    >
+      <span
+        className={cn(
+          buttonVariants({ variant: "secondary", size: "icon-lg" }),
+          overlayButtonClass,
+          "group-hover/nav:bg-background group-focus-visible/nav:ring-ring/50 static size-11 rounded-full group-focus-visible/nav:ring-3",
+        )}
+      >
+        {children}
+      </span>
+    </button>
+  );
+}
 
 /*
  * Minimal image lightbox on top of the dialog primitive: prev/next buttons
@@ -70,8 +112,6 @@ export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps)
   };
 
   const hasMultiple = items.length > 1;
-  const overlayButtonClass =
-    "bg-background/85 hover:bg-background absolute z-10 shadow-sm backdrop-blur";
   return (
     <Dialog
       open={openIndex !== null}
@@ -90,7 +130,7 @@ export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps)
                 <Button
                   variant="secondary"
                   size="icon"
-                  className={`${overlayButtonClass} top-3 right-3`}
+                  className={cn(overlayButtonClass, "top-3 right-3 z-20")}
                 />
               }
             >
@@ -122,24 +162,12 @@ export function Lightbox({ items, openIndex, onOpenIndexChange }: LightboxProps)
               />
               {hasMultiple ? (
                 <>
-                  <Button
-                    variant="secondary"
-                    size="icon-lg"
-                    onClick={showPrevious}
-                    aria-label="Predchádzajúca fotka"
-                    className={`${overlayButtonClass} top-1/2 left-3 size-11 -translate-y-1/2 rounded-full`}
-                  >
+                  <NavZone side="left" onClick={showPrevious} label="Predchádzajúca fotka">
                     <ChevronLeftIcon aria-hidden />
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="icon-lg"
-                    onClick={showNext}
-                    aria-label="Ďalšia fotka"
-                    className={`${overlayButtonClass} top-1/2 right-3 size-11 -translate-y-1/2 rounded-full`}
-                  >
+                  </NavZone>
+                  <NavZone side="right" onClick={showNext} label="Ďalšia fotka">
                     <ChevronRightIcon aria-hidden />
-                  </Button>
+                  </NavZone>
                 </>
               ) : null}
             </div>
