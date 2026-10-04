@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 
-import { Footer } from "@/components/layout/footer";
-import { Header } from "@/components/layout/header";
 import { Toaster } from "@/components/ui/sonner";
-import { getLocalBusinessJsonLd } from "@/lib/json-ld";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -32,6 +29,11 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout — document shell only. Public pages get their chrome (header,
+ * footer, structured data) from `app/(site)/layout.tsx`; the admin area under
+ * `/admin` deliberately renders without it.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,13 +42,7 @@ export default function RootLayout({
   return (
     <html lang="sk" className={`${spaceGrotesk.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(getLocalBusinessJsonLd()) }}
-        />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
         <Toaster />
       </body>
     </html>
