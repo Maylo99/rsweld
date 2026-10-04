@@ -23,7 +23,7 @@ export function Header() {
         </Link>
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-6 md:flex" aria-label="Hlavná navigácia">
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="Hlavná navigácia">
           {mainNav.map((item) => {
             const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
@@ -46,7 +46,7 @@ export function Header() {
         </nav>
 
         {/* Mobile navigation */}
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 lg:hidden">
           <Button
             variant="ghost"
             size="icon"

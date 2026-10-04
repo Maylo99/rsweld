@@ -1,35 +1,33 @@
-import { ChevronDownIcon } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
+import Link from "next/link";
 
 import { AnimatedSection } from "@/components/shared/animated-section";
+import { FaqAccordion } from "@/components/shared/faq-accordion";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { faqItems } from "@/lib/data/faq";
 
 /*
- * FAQ built on native <details>/<summary>: accessible, zero JS.
+ * Short FAQ teaser (featured questions only); the full list lives on
+ * `/caste-otazky`.
  */
 export function FaqSection() {
   return (
     <section className="mx-auto max-w-3xl px-4 py-20 sm:py-24" aria-labelledby="faq-heading">
       <AnimatedSection>
-        <SectionHeading eyebrow="FAQ" title="Časté otázky" align="center" />
+        <SectionHeading id="faq-heading" eyebrow="FAQ" title="Časté otázky" align="center" />
       </AnimatedSection>
 
-      <AnimatedSection delay={0.08} className="mt-10 space-y-3">
-        {faqItems.map((item) => (
-          <details
-            key={item.id}
-            className="group border-border bg-card open:border-primary/40 rounded-xl border transition-colors"
+      <AnimatedSection delay={0.08} className="mt-10">
+        <FaqAccordion items={faqItems.filter((item) => item.featured)} openFirst />
+        <div className="mt-8 text-center">
+          <Link
+            href="/caste-otazky"
+            className="text-primary inline-flex items-center gap-2 text-sm font-semibold hover:underline"
           >
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-sm font-semibold [&::-webkit-details-marker]:hidden">
-              {item.question}
-              <ChevronDownIcon
-                className="text-muted-foreground size-4 shrink-0 transition-transform group-open:rotate-180"
-                aria-hidden
-              />
-            </summary>
-            <p className="text-muted-foreground px-5 pb-5 text-sm leading-relaxed">{item.answer}</p>
-          </details>
-        ))}
+            Všetky otázky a odpovede
+            <ArrowRightIcon className="size-4" aria-hidden />
+          </Link>
+        </div>
       </AnimatedSection>
     </section>
   );

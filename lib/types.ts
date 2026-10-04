@@ -67,8 +67,22 @@ export type ServiceItem = {
   icon: "quote" | "welding" | "grinding" | "cleaning" | "assembly";
 };
 
+export type FaqCategory = "pricing" | "production" | "materials" | "cooperation";
+
 export type FaqItem = {
   id: string;
   question: string;
   answer: string;
+  category: FaqCategory;
+  /** Also shown in the short FAQ teaser on the home page. */
+  featured?: boolean;
+};
+
+export type ProcessStep = {
+  id: string;
+  title: string;
+  description: string;
+  /** Short, typical duration hint shown as a chip (e.g. "do 2–3 dní"). */
+  duration: string;
+  icon: "inquiry" | "measure" | "quote" | "workshop" | "handover";
 };

@@ -1,5 +1,6 @@
-import { CheckIcon } from "lucide-react";
+import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -55,6 +56,13 @@ export function AboutSection({ photo }: { photo?: DisplayPhoto }) {
               </li>
             ))}
           </ul>
+          <Link
+            href="/o-nas"
+            className="text-primary mt-8 inline-flex items-center gap-2 text-sm font-semibold hover:underline"
+          >
+            Viac o nás
+            <ArrowRightIcon className="size-4" aria-hidden />
+          </Link>
         </AnimatedSection>
 
         <AnimatedSection delay={0.1} className="relative">

@@ -5,6 +5,7 @@ import { FeaturedReferencesSection } from "@/components/home/featured-references
 import { Hero } from "@/components/home/hero";
 import { ServicesSection } from "@/components/home/services-section";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
+import { ProcessSection } from "@/components/shared/process-section";
 import { getPlacementPhotos, getTestimonials } from "@/lib/queries";
 
 // Re-generate at most once per hour when a database is connected.
@@ -22,6 +23,7 @@ export default async function HomePage() {
       <Hero />
       <ServicesSection />
       <FeaturedReferencesSection photos={featuredPhotos} />
+      <ProcessSection />
       <AboutSection photo={aboutPhoto} />
       <TestimonialsSection testimonials={testimonials} />
       <FaqSection />

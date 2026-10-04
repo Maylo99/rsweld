@@ -1,3 +1,4 @@
+import { faqItems } from "@/lib/data/faq";
 import { siteConfig } from "@/lib/site";
 
 /**
@@ -29,5 +30,18 @@ export function getLocalBusinessJsonLd() {
     },
     sameAs: [siteConfig.instagram],
     priceRange: "$$",
+  };
+}
+
+/** FAQPage structured data for the `/caste-otazky` page. */
+export function getFaqPageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
   };
 }
