@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import { CtaSection } from "@/components/home/cta-section";
 import { AnimatedSection } from "@/components/shared/animated-section";
+import { PageHero } from "@/components/shared/page-hero";
 import { ProcessSection } from "@/components/shared/process-section";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { getPlacementPhotos } from "@/lib/queries";
@@ -61,17 +62,18 @@ export default async function AboutPage() {
 
   return (
     <>
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20" aria-labelledby="about-heading">
+      {/* TODO: verify with client (personal story) */}
+      <PageHero
+        id="about-heading"
+        eyebrow="O nás"
+        title="Za každým zvarom stojí jeden človek"
+        description="Bez tímu a obchodného oddelenia — jeden zvárač, jedna dielňa v Považskej Bystrici a poctivá práca s nerezom."
+      />
+
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Môj príbeh">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <SectionHeading
-              as="h1"
-              id="about-heading"
-              eyebrow="O nás"
-              title="Za každým zvarom stojí jeden človek"
-            />
-            {/* TODO: verify with client (personal story) */}
-            <p className="text-muted-foreground mt-6 text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed">
               Volám sa {siteConfig.owner} a RSweld som založil s jednoduchou myšlienkou: robiť nerez
               poriadne. Za firmou nie je tím ani obchodné oddelenie. Som to ja, moja dielňa v
               Považskej Bystrici a niekoľko rokov praxe so zváraním nerezovej ocele.

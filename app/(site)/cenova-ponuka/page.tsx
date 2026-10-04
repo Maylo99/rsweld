@@ -2,8 +2,7 @@ import { ClockIcon, FileTextIcon, PhoneIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 import { QuoteForm } from "@/components/forms/quote-form";
-import { SectionHeading } from "@/components/shared/section-heading";
-import { siteConfig } from "@/lib/site";
+import { PageHero, PageHeroPhoneCard } from "@/components/shared/page-hero";
 
 export const metadata: Metadata = {
   title: "Cenová ponuka",
@@ -31,49 +30,42 @@ const steps = [
 
 export default function QuoteRequestPage() {
   return (
-    <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-      <SectionHeading
+    <>
+      <PageHero
+        id="quote-heading"
         eyebrow="Cenová ponuka"
         title="Nezáväzný dopyt"
         description="Vyplňte formulár alebo rovno zavolajte — obe cesty vedú k rovnakej ponuke."
+        aside={<PageHeroPhoneCard label="Radšej telefonicky?" />}
       />
 
-      <div className="mt-12 grid gap-12 lg:grid-cols-[1fr_20rem]">
-        <div className="border-border bg-card rounded-2xl border p-6 sm:p-8">
-          <QuoteForm />
-        </div>
-
-        <aside className="space-y-8">
-          <ol className="space-y-6">
-            {steps.map((step, index) => (
-              <li key={step.title} className="flex gap-4">
-                <span className="bg-accent text-accent-foreground flex size-10 shrink-0 items-center justify-center rounded-lg">
-                  <step.icon className="size-5" aria-hidden />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold">
-                    {index + 1}. {step.title}
-                  </p>
-                  <p className="text-muted-foreground mt-1 text-sm leading-relaxed">{step.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-
-          <div className="border-border rounded-xl border p-5">
-            <p className="text-sm font-semibold">Radšej telefonicky?</p>
-            <a
-              href={siteConfig.phoneHref}
-              className="text-primary mt-1 block text-lg font-semibold hover:underline"
-            >
-              {siteConfig.phone}
-            </a>
-            <p className="text-muted-foreground mt-1 text-sm">
-              {siteConfig.owner} · {siteConfig.location}
-            </p>
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Formulár dopytu">
+        <div className="grid gap-12 lg:grid-cols-[1fr_20rem]">
+          <div className="border-border bg-card rounded-2xl border p-6 sm:p-8">
+            <QuoteForm />
           </div>
-        </aside>
-      </div>
-    </section>
+
+          <aside>
+            <ol className="space-y-6">
+              {steps.map((step, index) => (
+                <li key={step.title} className="flex gap-4">
+                  <span className="bg-accent text-accent-foreground flex size-10 shrink-0 items-center justify-center rounded-lg">
+                    <step.icon className="size-5" aria-hidden />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {index + 1}. {step.title}
+                    </p>
+                    <p className="text-muted-foreground mt-1 text-sm leading-relaxed">
+                      {step.text}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </aside>
+        </div>
+      </section>
+    </>
   );
 }

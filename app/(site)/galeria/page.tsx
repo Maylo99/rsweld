@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
-import { SectionHeading } from "@/components/shared/section-heading";
+import { PageHero } from "@/components/shared/page-hero";
 import { getGallery } from "@/lib/queries";
 
 export const metadata: Metadata = {
@@ -17,15 +17,16 @@ export default async function GalleryPage() {
   const { photos, tags } = await getGallery();
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-      <SectionHeading
+    <>
+      <PageHero
+        id="gallery-heading"
         eyebrow="Galéria"
         title="Naša práca z nerezu"
         description="Vyberte tému alebo si prezrite všetko — každá zákazka je vyrobená na mieru."
       />
-      <div className="mt-10">
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Fotografie">
         <GalleryGrid photos={photos} tags={tags} />
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

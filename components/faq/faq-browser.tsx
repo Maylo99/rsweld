@@ -11,6 +11,7 @@ import Link from "next/link";
 
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { FaqAccordion } from "@/components/shared/faq-accordion";
+import { PageHero, PageHeroPhoneCard } from "@/components/shared/page-hero";
 import { SteelBackdrop } from "@/components/shared/steel-backdrop";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -38,50 +39,19 @@ function questionCount(count: number) {
 }
 
 /*
- * FAQ page body: compact dark hero, then category tabs (vertical cards on
+ * FAQ page body: page hero, then category tabs (vertical cards on
  * desktop, 2×2 grid on mobile) swapping the questions of one category.
  */
 export function FaqBrowser() {
   return (
     <>
-      <section
-        className="dark bg-background text-foreground relative overflow-hidden"
-        aria-labelledby="faq-heading"
-      >
-        <SteelBackdrop glow="top-right" fadeFrom="top" sparks={false} />
-        <div className="relative mx-auto flex max-w-6xl flex-col gap-8 px-4 py-14 sm:py-16 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-primary-soft text-sm font-semibold tracking-wide uppercase">
-              Časté otázky
-            </p>
-            <h1
-              id="faq-heading"
-              className="mt-3 max-w-2xl text-4xl font-bold text-balance sm:text-5xl"
-            >
-              S čím vám môžeme pomôcť?
-            </h1>
-            <p className="text-muted-foreground mt-4 max-w-xl text-lg leading-relaxed">
-              Vyberte si tému a nájdite odpovede o cenách, termínoch, materiáloch aj montáži.
-            </p>
-          </div>
-          <a
-            href={siteConfig.phoneHref}
-            className="group border-border bg-card/60 hover:border-primary-soft flex shrink-0 items-center gap-4 self-start rounded-xl border p-4 backdrop-blur transition-colors lg:self-auto"
-          >
-            <span className="bg-primary text-primary-foreground flex size-11 items-center justify-center rounded-lg">
-              <PhoneIcon className="size-5" aria-hidden />
-            </span>
-            <span>
-              <span className="text-muted-foreground block text-xs font-semibold tracking-wide uppercase">
-                Radšej sa opýtate priamo?
-              </span>
-              <span className="group-hover:text-primary-soft font-semibold transition-colors">
-                {siteConfig.phone}
-              </span>
-            </span>
-          </a>
-        </div>
-      </section>
+      <PageHero
+        id="faq-heading"
+        eyebrow="Časté otázky"
+        title="S čím vám môžeme pomôcť?"
+        description="Vyberte si tému a nájdite odpovede o cenách, termínoch, materiáloch aj montáži."
+        aside={<PageHeroPhoneCard label="Radšej sa opýtate priamo?" />}
+      />
 
       <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Otázky a odpovede">
         <Tabs
