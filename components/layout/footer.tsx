@@ -3,14 +3,16 @@ import Link from "next/link";
 
 import { InstagramIcon } from "@/components/shared/instagram-icon";
 import { Logo } from "@/components/shared/logo";
+import { SteelBackdrop } from "@/components/shared/steel-backdrop";
 import { mainNav, siteConfig } from "@/lib/site";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="dark bg-background text-foreground mt-auto">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="dark bg-background text-foreground border-border relative mt-auto overflow-hidden border-t">
+      <SteelBackdrop glow="bottom-left" fadeFrom="bottom" />
+      <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand */}
         <div className="space-y-3">
           <Logo className="text-2xl" />
@@ -87,7 +89,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t">
+      <div className="relative border-t">
         <div className="text-muted-foreground mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4 text-xs sm:flex-row sm:justify-between">
           <p>
             © {year} {siteConfig.name}. Všetky práva vyhradené.

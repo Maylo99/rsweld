@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
+import { SteelBackdrop } from "@/components/shared/steel-backdrop";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
 
@@ -11,19 +12,7 @@ import { siteConfig } from "@/lib/site";
 export function Hero() {
   return (
     <section className="dark bg-background text-foreground relative overflow-hidden">
-      {/* Subtle brushed-steel texture + brand glow, pure CSS (no image request) */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-40"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -top-40 right-[-10%] size-[480px] rounded-full bg-[oklch(0.4866_0.2203_263.04)] opacity-15 blur-[140px]"
-      />
+      <SteelBackdrop glow="top-right" fadeFrom="top" />
 
       <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-16 sm:pt-28 sm:pb-24">
         <p className="text-primary-soft text-sm font-semibold tracking-wide uppercase">
