@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 pnpm db:migrate   # applies prisma/migrations via DIRECT_URL
-pnpm db:seed      # idempotent upsert of gallery photos/tags + testimonials
+pnpm db:seed      # idempotent upsert of gallery photos/tags
 ```
 
 Without `DATABASE_URL`, pages fall back to the static seed data in `lib/data/`
@@ -139,17 +139,17 @@ everyone out.
 
 ## Scripts
 
-| Script                 | Purpose                                        |
-| ---------------------- | ---------------------------------------------- |
-| `pnpm dev`             | Dev server (Turbopack).                        |
-| `pnpm build`           | Production build.                              |
-| `pnpm start`           | Serve the production build.                    |
-| `pnpm lint`            | ESLint.                                        |
-| `pnpm format`          | Prettier — write.                              |
-| `pnpm format:check`    | Prettier — check only.                         |
-| `pnpm prisma:generate` | Generate the Prisma client (`lib/generated`).  |
-| `pnpm db:migrate`      | `prisma migrate deploy` (needs `DIRECT_URL`).  |
-| `pnpm db:seed`         | Seed photos, tags + testimonials (idempotent). |
+| Script                 | Purpose                                       |
+| ---------------------- | --------------------------------------------- |
+| `pnpm dev`             | Dev server (Turbopack).                       |
+| `pnpm build`           | Production build.                             |
+| `pnpm start`           | Serve the production build.                   |
+| `pnpm lint`            | ESLint.                                       |
+| `pnpm format`          | Prettier — write.                             |
+| `pnpm format:check`    | Prettier — check only.                        |
+| `pnpm prisma:generate` | Generate the Prisma client (`lib/generated`). |
+| `pnpm db:migrate`      | `prisma migrate deploy` (needs `DIRECT_URL`). |
+| `pnpm db:seed`         | Seed photos and tags (idempotent).            |
 
 ## Project structure
 
@@ -183,7 +183,7 @@ rsweld/
 ├── components/
 │   ├── ui/                    # shadcn/ui primitives
 │   ├── layout/                # header (sticky, sheet menu), footer
-│   ├── home/                  # hero, services, references, about, testimonials, faq, cta
+│   ├── home/                  # hero, services, references, about, faq, cta
 │   ├── gallery/               # gallery-grid, lightbox
 │   ├── forms/                 # quote-form, contact-form, use-inquiry-submit
 │   ├── admin/                 # nav, photos/, upload/, arrange/, tags/, pickers

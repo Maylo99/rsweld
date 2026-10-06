@@ -2,11 +2,10 @@ import { cache } from "react";
 
 import { isDatabaseConfigured } from "@/lib/config";
 import { gallerySeed } from "@/lib/data/gallery";
-import { testimonialsSeed } from "@/lib/data/testimonials";
 import { placementPhotos, publicGallery } from "@/lib/gallery";
 import { fetchGalleryData } from "@/lib/gallery-data";
 import { placementConfig } from "@/lib/placements";
-import type { DisplayPhoto, GalleryData, PlacementKey, TestimonialItem } from "@/lib/types";
+import type { DisplayPhoto, GalleryData, PlacementKey } from "@/lib/types";
 
 /**
  * Content queries with graceful degradation: read from the database when
@@ -37,28 +36,4 @@ export async function getGallery() {
 /** Photos the administrator put into a website section, in their order. */
 export async function getPlacementPhotos(placement: PlacementKey): Promise<DisplayPhoto[]> {
   return placementPhotos(await getGalleryData(), placement, placementConfig[placement].limit);
-}
-
-export async function getTestimonials(): Promise<TestimonialItem[]> {
-  if (!isDatabaseConfigured()) {
-    return testimonialsSeed;
-  }
-
-  try {
-    const { prisma } = await import("@/lib/prisma");
-    const rows = await prisma.testimonial.findMany({
-      where: { published: true },
-      orderBy: { sortOrder: "asc" },
-    });
-    return rows.map((row) => ({
-      id: row.id,
-      author: row.author,
-      company: row.company ?? undefined,
-      quote: row.quote,
-      sortOrder: row.sortOrder,
-    }));
-  } catch (error) {
-    console.error("getTestimonials: database read failed, using seed data", error);
-    return testimonialsSeed;
-  }
 }
