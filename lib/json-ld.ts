@@ -15,6 +15,7 @@ export function getLocalBusinessJsonLd() {
     telephone: siteConfig.phone,
     email: siteConfig.email,
     image: `${siteConfig.url}/og.jpg`,
+    logo: `${siteConfig.url}/logo.png`,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Považská Bystrica",

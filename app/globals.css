@@ -37,6 +37,7 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-primary: var(--primary);
   --color-primary-soft: var(--primary-soft);
+  --color-logo: var(--logo);
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
@@ -66,6 +67,8 @@
   --primary: oklch(0.4866 0.2203 263.04); /* #114ED9 */
   /* Brand color for *text* - identical to primary on light backgrounds. */
   --primary-soft: oklch(0.4866 0.2203 263.04);
+  /* Logo color - the exact brand blue on light backgrounds. */
+  --logo: oklch(0.4866 0.2203 263.04);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.967 0.001 286.375); /* zinc-100 */
   --secondary-foreground: oklch(0.21 0.006 285.885);
@@ -107,6 +110,9 @@
   --primary: oklch(0.4866 0.2203 263.04); /* keep brand: white text passes AA */
   /* Lighter brand tint for *text* on dark backgrounds (7.98:1 on zinc-950). */
   --primary-soft: oklch(0.7214 0.1224 264.84);
+  /* Logo stays saturated blue (not the pastel text tint), just lifted
+     enough to read on zinc-950 (#467EF7, 5.3:1) - like the original. */
+  --logo: oklch(0.62 0.19 263);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.274 0.006 286.033); /* zinc-800 */
   --secondary-foreground: oklch(0.985 0 0);
