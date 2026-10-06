@@ -34,15 +34,15 @@ export const processSteps: ProcessStep[] = [
     id: "process-workshop",
     title: "Výroba v dielni",
     description:
-      "Rezanie, TIG zváranie, brúsenie a chemické čistenie zvarov. Každý kus kontrolujeme ešte v dielni.",
-    duration: "zvyčajne 2-4 týždne",
+      "Rezanie, zváranie TIG aj MIG/MAG, brúsenie a chemické čistenie zvarov. Každý kus kontrolujeme ešte v dielni.",
+    duration: "podľa náročnosti",
     icon: "workshop",
   },
   {
     id: "process-handover",
     title: "Montáž a odovzdanie",
     description:
-      "Konštrukciu privezieme, ukotvíme a na mieste dočistíme. Po sebe upraceme a odovzdáme hotovú prácu.",
+      "Výrobok privezieme, namontujeme a na mieste finálne doladíme. Po sebe upraceme a odovzdáme hotovú prácu.",
     duration: "zväčša 1 deň",
     icon: "handover",
   },
