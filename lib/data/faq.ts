@@ -5,17 +5,17 @@ export const faqCategories: { id: FaqCategory; title: string; description: strin
   {
     id: "pricing",
     title: "Cena a ponuka",
-    description: "Koľko to stojí, ako rýchlo dostanete ponuku a čo je zadarmo.",
+    description: "Koľko to stojí a ako rýchlo dostanete ponuku.",
   },
   {
     id: "production",
     title: "Výroba a montáž",
-    description: "Termíny výroby, montáž priamo u vás a záruka na prácu.",
+    description: "Termíny výroby a montáž priamo u vás.",
   },
   {
     id: "materials",
-    title: "Materiály a údržba",
-    description: "Aký nerez zvoliť, s čím sa dá kombinovať a ako sa oň starať.",
+    title: "Materiály",
+    description: "Nerez alebo oceľ - čo sa na vašu zákazku hodí viac.",
   },
   {
     id: "cooperation",
@@ -25,7 +25,7 @@ export const faqCategories: { id: FaqCategory; title: string; description: strin
 ];
 
 // TODO: verify answers with client (lead times, service area radius, minimum order size,
-// pricing, free measurement, warranty length, payment terms)
+// pricing, payment terms)
 export const faqItems: FaqItem[] = [
   {
     id: "faq-small-jobs",
@@ -33,23 +33,15 @@ export const faqItems: FaqItem[] = [
     featured: true,
     question: "Robíte aj malé zákazky?",
     answer:
-      "Áno. Okrem priemyselných zákaziek radi zvárame aj menšie projekty, napríklad zábradlie na schodisko, francúzsky balkón alebo opravu existujúcej konštrukcie. Napíšte nám, čo potrebujete, a ozveme sa.",
+      "Áno. Okrem priemyselných zákaziek radi zvárame aj menšie projekty, napríklad zábradlie na schodisko alebo francúzsky balkón. Napíšte nám, čo potrebujete, a ozveme sa.",
   },
   {
     id: "faq-price",
     category: "pricing",
     featured: true,
-    question: "Koľko stojí nerezové zábradlie?",
+    question: "Koľko stojí zábradlie na mieru?",
     answer:
-      "Cena závisí hlavne od dĺžky, typu výplne (prúty, lanko, sklo), od toho, či ide o interiér alebo exteriér, a od spôsobu kotvenia. Presnú sumu vám povieme po zameraní, prípadne už podľa fotky a približných rozmerov.",
-  },
-  {
-    id: "faq-free-quote",
-    category: "pricing",
-    featured: true,
-    question: "Je cenová ponuka a zameranie zadarmo?",
-    answer:
-      "Cenová ponuka je vždy bezplatná a nezáväzná. Zameranie v okolí Považskej Bystrice je zadarmo. Pri vzdialenejších lokalitách sa na podmienkach dohodneme vopred.",
+      "Cena závisí hlavne od materiálu (nerez alebo oceľ), dĺžky, typu výplne (prúty, lanko, sklo), od toho, či ide o interiér alebo exteriér, a od spôsobu kotvenia. Presnú sumu vám povieme po zameraní, prípadne už podľa fotky a približných rozmerov.",
   },
   {
     id: "faq-quote-time",
@@ -64,14 +56,14 @@ export const faqItems: FaqItem[] = [
     featured: true,
     question: "Ako dlho trvá výroba a montáž?",
     answer:
-      "Výroba bežného zábradlia trvá zvyčajne 2-4 týždne od potvrdenia objednávky, v sezóne môže byť termín dlhší. Samotná montáž na mieste väčšinou zaberie jeden deň. Termín vždy uvedieme v cenovej ponuke.",
+      "Termín závisí hlavne od náročnosti a zložitosti projektu a od toho, koľko zákaziek máme práve rozpracovaných. Jednoduché zábradlie zvládneme rýchlejšie, rozsiahlejšia konštrukcia alebo atypické riešenie si vyžiada viac času. Preto vám termín výroby aj montáže vždy uvedieme konkrétne v cenovej ponuke a dohodnutý termín dodržíme.",
   },
   {
     id: "faq-service-area",
     category: "cooperation",
     question: "Pôsobíte len v Považskej Bystrici?",
     answer:
-      "Sídlime v Považskej Bystrici a najčastejšie pracujeme v okruhu Trenčianskeho kraja. Po dohode vieme realizovať montáž aj ďalej, závisí to od rozsahu zákazky.",
+      "Sídlime v Považskej Bystrici a najčastejšie pracujeme v Trenčianskom a Žilinskom kraji. Po dohode vieme realizovať montáž aj ďalej, závisí to od rozsahu zákazky.",
   },
   {
     id: "faq-drawings",
@@ -79,55 +71,36 @@ export const faqItems: FaqItem[] = [
     featured: true,
     question: "Potrebujem mať vlastný výkres?",
     answer:
-      "Nie je to podmienka. Ak výkresovú dokumentáciu máte, pracujeme presne podľa nej. Ak nie, prídeme, zameriame a navrhneme riešenie spolu s vami.",
+      "Nie je to podmienka. Ak výkresovú dokumentáciu máte, pracujeme presne podľa nej. Ak nie, prídeme, zameriame a dohodneme všetky potrebné detaily.",
   },
   {
     id: "faq-materials",
     category: "materials",
     question: "S akými materiálmi pracujete?",
     answer:
-      "Špecializujeme sa na nerezovú oceľ (AISI 304/316). Vďaka chemickému čisteniu a pasivácii zvarov je výsledok odolný voči korózii aj v exteriéri.",
+      "Pracujeme s oceľou aj nerezom. Nerezové zvary chemicky čistíme a pasivujeme, oceľ chránime povrchovou úpravou, takže výsledok vydrží aj v exteriéri.",
   },
   {
-    id: "faq-304-vs-316",
+    id: "faq-stainless-vs-steel",
     category: "materials",
-    question: "Aký je rozdiel medzi nerezom 304 a 316?",
+    featured: true,
+    question: "Nerez alebo oceľ - čo si vybrať?",
+    // TODO: verify with client (surface finishes offered for steel)
     answer:
-      "Nerez 316 obsahuje molybdén, a preto lepšie odoláva soli a chlóru. Odporúčame ho do exteriéru pri cestách, ktoré sa v zime solia, a k bazénom. Do interiéru a na bežné terasy úplne postačí nerez 304.",
-  },
-  {
-    id: "faq-combined",
-    category: "materials",
-    question: "Dá sa nerez kombinovať so sklom alebo drevom?",
-    answer:
-      "Áno. Vyrábame zábradlia so sklenenou výplňou aj s dreveným madlom. Rovnako robíme nerezové konštrukcie pre kamenné či drevené dosky, napríklad stolíky a lavice.",
+      "Nerez nepotrebuje náter, je takmer bezúdržbový a pôsobí elegantne. Oceľ zase ponúka množstvo možností povrchových úprav. Radi vám poradíme, čo sa na vašu zákazku hodí viac.",
   },
   {
     id: "faq-companies",
     category: "cooperation",
     question: "Vyrábate aj pre firmy podľa výkresov?",
     answer:
-      "Áno. Pre strojárske a výrobné firmy zvárame kusové aj malosériové komponenty podľa výkresovej dokumentácie. Prijímame PDF aj CAD formáty (DWG, DXF, STEP).",
+      "Áno. Pre strojárske a výrobné firmy zvárame kusové aj sériové komponenty podľa výkresovej dokumentácie.",
   },
   {
     id: "faq-installation",
     category: "production",
     question: "Zabezpečujete aj montáž?",
     answer:
-      "Áno, montáž je súčasťou našich služieb. Konštrukciu vyrobíme v dielni a namontujeme priamo na mieste vrátane kotvenia a finálneho dočistenia.",
-  },
-  {
-    id: "faq-warranty",
-    category: "production",
-    question: "Poskytujete na prácu záruku?",
-    answer:
-      "Áno, na zvary aj montáž poskytujeme záruku. Jej dĺžku uvádzame v cenovej ponuke. Ak by sa čokoľvek vyskytlo, ozvite sa a vyriešime to.",
-  },
-  {
-    id: "faq-care",
-    category: "materials",
-    question: "Ako sa o nerezové zábradlie starať?",
-    answer:
-      "Stačí ho občas umyť vlažnou vodou s jemným saponátom a utrieť mäkkou handričkou. Nepoužívajte drôtenky ani prípravky s chlórom. V exteriéri je dobré zábradlie umyť aspoň raz za sezónu, najmä po zime.",
+      "Áno, montáž je súčasťou našich služieb. Konštrukciu vyrobíme v dielni a namontujeme priamo na mieste vrátane kotvenia a finálneho opracovania.",
   },
 ];

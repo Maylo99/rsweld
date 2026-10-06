@@ -8,12 +8,11 @@ import { PageHero } from "@/components/shared/page-hero";
 import { ProcessSection } from "@/components/shared/process-section";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { getPlacementPhotos } from "@/lib/queries";
-import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "O nás",
   description:
-    "RSweld je René Slávik, zvárač nerezu z Považskej Bystrice. Zábradlia a konštrukcie na mieru s citom pre detail, od zamerania až po montáž.",
+    "RSweld je zváračská dielňa z Považskej Bystrice. Zábradlia a konštrukcie z nerezu aj ocele na mieru s citom pre detail, od zamerania až po montáž.",
 };
 
 // Re-generate at most once per hour when a database is connected.
@@ -21,32 +20,31 @@ export const revalidate = 3600;
 
 // TODO: verify with client (years of practice, background story, values)
 const facts = [
-  { value: "5+", label: "rokov praxe so zváraním nerezu" },
-  { value: "1", label: "človek od zamerania po montáž" },
-  { value: "TIG", label: "precízna metóda zvárania" },
-  { value: "304/316", label: "nerezová oceľ AISI" },
+  { value: "7+", label: "rokov praxe so zváraním nerezu a ocele" },
+  { value: "TIG · MIG/MAG", label: "metódy zvárania" },
+  { value: "2", label: "materiály - nerez aj oceľ" },
 ];
 
 const values = [
   {
     icon: ScanSearchIcon,
     title: "Cit pre detail",
-    text: "Zvar, ktorý vidno, musí vyzerať dobre aj zblízka. Brúsim a čistím, kým nie som spokojný ja, nie len zákazník.",
+    text: "Zvar, ktorý vidno, musí vyzerať dobre aj zblízka. Brúsime a čistíme, kým nie je výsledok bez kompromisov.",
   },
   {
     icon: HandshakeIcon,
     title: "Osobný prístup",
-    text: "Žiadne prepájanie na iné oddelenie. So mnou sa dohodnete na všetkom a ja zákazku aj vyrobím a namontujem.",
+    text: "Žiadne prepájanie z oddelenia na oddelenie. Zákazku s vami dohodneme, vyrobíme aj namontujeme - všetko pod jednou strechou.",
   },
   {
     icon: ShieldCheckIcon,
     title: "Poctivý materiál",
-    text: "Pracujem s kvalitnou nerezovou oceľou a zvary chemicky ošetrím, aby nerez zostal nerezom aj o dvadsať rokov.",
+    text: "Pracujeme s kvalitným nerezom aj oceľou. Nerezové zvary chemicky ošetríme, oceľ ochránime povrchovou úpravou, aby všetko vydržalo aj o dvadsať rokov.",
   },
   {
     icon: TimerIcon,
     title: "Dodržané slovo",
-    text: "Termín a cenu, na ktorých sa dohodneme, dodržím. Ak sa niečo zmení, dozviete sa to odo mňa hneď.",
+    text: "Termín a cenu, na ktorých sa dohodneme, dodržíme. Ak sa niečo zmení, dozviete sa to od nás hneď.",
   },
 ];
 
@@ -62,27 +60,27 @@ export default async function AboutPage() {
 
   return (
     <>
-      {/* TODO: verify with client (personal story) */}
+      {/* TODO: verify with client (company story) */}
       <PageHero
         id="about-heading"
         eyebrow="O nás"
-        title="Za každým zvarom stojí jeden človek"
-        description="Bez tímu a obchodného oddelenia - jeden zvárač, jedna dielňa v Považskej Bystrici a poctivá práca s nerezom."
+        title="Za každým zvarom stojí poctivé remeslo"
+        description="Zváračská dielňa v Považskej Bystrici - zábradlia, konštrukcie a komponenty z nerezu aj ocele, vyrobené na mieru."
       />
 
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Môj príbeh">
+      <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Náš príbeh">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <p className="text-lg leading-relaxed">
-              Volám sa {siteConfig.owner} a RSweld som založil s jednoduchou myšlienkou: robiť nerez
-              poriadne. Za firmou nie je tím ani obchodné oddelenie. Som to ja, moja dielňa v
-              Považskej Bystrici a niekoľko rokov praxe so zváraním nerezovej ocele.
+              RSweld vznikol s jednoduchou myšlienkou: robiť nerez aj oceľ poriadne. Sme zváračská
+              dielňa v Považskej Bystrici so sedemročnou praxou v zváraní nerezu a ocele a každú
+              zákazku vedieme od prvého zamerania až po montáž.
             </p>
             <p className="text-muted-foreground mt-4 leading-relaxed">
-              Začínal som pri priemyselných komponentoch podľa výkresovej dokumentácie, kde
-              rozhodujú desatiny milimetra. Tú presnosť si dnes nosím do každej zákazky, či ide o
-              strojársky diel, zábradlie na schodisko alebo dizajnový stolík. Každý kus vyrábam sám,
-              a preto viem, že je urobený dobre.
+              Začínali sme pri priemyselných komponentoch podľa výkresovej dokumentácie, kde
+              rozhodujú desatiny milimetra. Tú presnosť dnes prenášame do každej zákazky, či ide o
+              strojársky diel, zábradlie na schodisko alebo dizajnový stolík. Každý kus vyrábame vo
+              vlastnej dielni, a preto ručíme za to, že je urobený dobre.
             </p>
           </div>
 
@@ -104,7 +102,7 @@ export default async function AboutPage() {
           </div>
         </div>
 
-        <dl className="border-border mt-16 grid grid-cols-2 gap-6 border-y py-8 lg:grid-cols-4">
+        <dl className="border-border mt-16 grid gap-6 border-y py-8 sm:grid-cols-3">
           {facts.map((fact) => (
             <div key={fact.label} className="flex flex-col gap-1">
               <dt className="text-muted-foreground text-sm">{fact.label}</dt>
@@ -121,9 +119,9 @@ export default async function AboutPage() {
           <AnimatedSection>
             <SectionHeading
               id="values-heading"
-              eyebrow="Na čom mi záleží"
+              eyebrow="Na čom nám záleží"
               title="Remeslo s citom pre detail"
-              description="Malá dielňa má jednu veľkú výhodu: každá zákazka je pre mňa osobná."
+              description="Ako menšia dielňa máme jednu veľkú výhodu: každej zákazke venujeme plnú pozornosť."
             />
           </AnimatedSection>
 

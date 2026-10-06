@@ -21,10 +21,10 @@ export function getLocalBusinessJsonLd() {
       addressLocality: "Považská Bystrica",
       addressCountry: "SK",
     },
-    areaServed: {
-      "@type": "AdministrativeArea",
-      name: "Trenčiansky kraj",
-    },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Trenčiansky kraj" },
+      { "@type": "AdministrativeArea", name: "Žilinský kraj" },
+    ],
     founder: {
       "@type": "Person",
       name: siteConfig.owner,

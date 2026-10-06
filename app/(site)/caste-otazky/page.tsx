@@ -6,7 +6,7 @@ import { getFaqPageJsonLd } from "@/lib/json-ld";
 export const metadata: Metadata = {
   title: "Časté otázky",
   description:
-    "Odpovede na časté otázky o nerezových zábradliach a zváraní nerezu: cena, cenová ponuka, termíny výroby, montáž, záruka, materiály a údržba.",
+    "Odpovede na časté otázky o zábradliach a zváraní nerezu aj ocele: cena, cenová ponuka, termíny výroby, montáž a materiály.",
 };
 
 export default function FaqPage() {
