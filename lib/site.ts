@@ -5,7 +5,7 @@
 export const siteConfig = {
   name: "RSweld",
   description:
-    "Zváranie nerezových komponentov a výroba nerezových zábradlí na mieru - Považská Bystrica a okolie.",
+    "Zváranie nerezu aj ocele - zábradlia, konštrukcie a komponenty na mieru. Považská Bystrica a okolie.",
   location: "Považská Bystrica, Slovensko",
   serviceArea: "Považská Bystrica a okolie (Trenčiansky kraj)",
   url: "https://rsweld.sk",

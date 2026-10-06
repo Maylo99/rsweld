@@ -28,15 +28,15 @@ export function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-16 sm:pt-28 sm:pb-24">
         <p className="text-primary-soft text-sm font-semibold tracking-wide uppercase">
-          Zváranie nerezovej ocele · {siteConfig.location}
+          Zváranie nerezu a ocele · {siteConfig.location}
         </p>
         <h1 className="mt-4 max-w-3xl text-5xl font-bold text-balance sm:text-6xl">
-          Nerezové zábradlia a konštrukcie na mieru
+          Zábradlia a konštrukcie z nerezu aj ocele na mieru
         </h1>
         <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
-          Od zábradlia na terasu po priemyselné dopravníky. Zvárame, brúsime, chemicky čistíme a
-          montujeme - presne podľa výkresovej dokumentácie alebo návrhu, ktorý pripravíme spolu s
-          vami.
+          Od zábradlia na terasu po priemyselné dopravníky - z nerezu aj z ocele. Zvárame, brúsime,
+          povrchovo upravujeme a montujeme - presne podľa výkresovej dokumentácie alebo návrhu,
+          ktorý pripravíme spolu s vami.
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -58,7 +58,7 @@ export function Hero() {
         {/* TODO: verify with client (collaborations, years of experience) */}
         <ul className="text-muted-foreground mt-12 flex flex-wrap gap-x-8 gap-y-3 text-sm">
           {[
-            "TIG zváranie nerezu",
+            "Zváranie nerezu aj ocele",
             "Práca podľa výkresovej dokumentácie",
             "Spolupráca s IMC a Red Bull",
             "Montáž priamo na mieste",

@@ -1,6 +1,6 @@
 # RSweld
 
-Company website for RSweld — stainless steel welding and custom railings
+Company website for RSweld — stainless steel and steel welding and custom railings
 (Považská Bystrica, Slovakia). See `README.md` for setup and env vars.
 
 ## Language rules (client requirement)

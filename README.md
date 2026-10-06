@@ -1,6 +1,6 @@
 # RSweld
 
-Company website for **RSweld** — stainless steel welding and custom stainless
+Company website for **RSweld** — stainless steel and steel welding and custom
 railings (Považská Bystrica, Slovakia).
 
 > **Status: Phase 2 — full site.** Design, content, gallery with lightbox,

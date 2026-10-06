@@ -16,9 +16,9 @@ export const services: ServiceItem[] = [
   {
     id: "service-welding",
     step: 2,
-    title: "Zváranie nerezu",
+    title: "Zváranie nerezu a ocele",
     description:
-      "Presné TIG zváranie nerezovej ocele - od zábradlí a konštrukcií po priemyselné komponenty podľa výkresov.",
+      "Presné zváranie nerezu aj ocele - od zábradlí a konštrukcií po priemyselné komponenty podľa výkresov.",
     icon: "welding",
   },
   {
@@ -34,7 +34,7 @@ export const services: ServiceItem[] = [
     step: 4,
     title: "Chemické čistenie",
     description:
-      "Morenie a pasivácia zvarov pre maximálnu odolnosť voči korózii a dlhú životnosť nerezu.",
+      "Morenie a pasivácia nerezových zvarov pre maximálnu odolnosť voči korózii a dlhú životnosť nerezu.",
     icon: "cleaning",
   },
   {

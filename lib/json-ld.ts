@@ -3,7 +3,7 @@ import { siteConfig } from "@/lib/site";
 
 /**
  * LocalBusiness structured data for local SEO
- * ("zváranie nerezu Považská Bystrica" and related queries).
+ * ("zváranie nerezu / ocele Považská Bystrica" and related queries).
  */
 export function getLocalBusinessJsonLd() {
   return {

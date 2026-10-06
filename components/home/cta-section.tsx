@@ -22,7 +22,7 @@ export function CtaSection() {
             <AnimatedSection className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
               <div className="max-w-xl">
                 <h2 id="cta-heading" className="text-3xl font-bold sm:text-4xl">
-                  Máte projekt z nerezu?
+                  Máte projekt z nerezu alebo ocele?
                 </h2>
                 <p className="text-muted-foreground mt-3 leading-relaxed">
                   Pošlite nám popis alebo výkres a do pár dní sa ozveme s cenovou ponukou. Menšie

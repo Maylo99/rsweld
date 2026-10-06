@@ -37,14 +37,15 @@ export function AboutSection({ photo }: { photo?: DisplayPhoto }) {
         <AnimatedSection>
           <SectionHeading eyebrow="O nás" title="Remeslo, na ktoré sa dá spoľahnúť" />
           <p className="text-muted-foreground mt-6 leading-relaxed">
-            RSweld vedie {siteConfig.owner} z Považskej Bystrice. Špecializujeme sa na zváranie
-            nerezovej ocele - od zábradlí pre rodinné domy až po komponenty pre strojársky a
-            vodárenský priemysel. Každú zákazku riešime na mieru: podľa vašej výkresovej
-            dokumentácie, alebo prídeme, zameriame a navrhneme riešenie spolu.
+            RSweld vedie {siteConfig.owner} z Považskej Bystrice. Zvárame nerez aj oceľ - od
+            zábradlí pre rodinné domy až po komponenty pre strojársky a vodárenský priemysel. Každú
+            zákazku riešime na mieru: podľa vašej výkresovej dokumentácie, alebo prídeme, zameriame
+            a navrhneme riešenie spolu.
           </p>
           <p className="text-muted-foreground mt-4 leading-relaxed">
             Záleží nám na detailoch, ktoré vidno aj po rokoch - čisté zvary, precízne brúsenie a
-            chemické ošetrenie povrchu, vďaka ktorému nerez zostane nerezom.
+            správna povrchová úprava: nerez chemicky čistíme a pasivujeme, oceľ chránime pred
+            koróziou.
           </p>
           <ul className="mt-8 space-y-3">
             {trustPoints.map((point) => (

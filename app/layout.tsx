@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} - zváranie nerezu a nerezové zábradlia | Považská Bystrica`,
+    default: `${siteConfig.name} - zváranie nerezu a ocele, zábradlia na mieru | Považská Bystrica`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sk_SK",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} - zváranie nerezu a nerezové zábradlia`,
+    title: `${siteConfig.name} - zváranie nerezu a ocele, zábradlia na mieru`,
     description: siteConfig.description,
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: siteConfig.name }],
   },
