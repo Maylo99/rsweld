@@ -1,7 +1,6 @@
 import "dotenv/config";
 
 import { gallerySeed } from "../lib/data/gallery";
-import { testimonialsSeed } from "../lib/data/testimonials";
 import { prisma } from "../lib/prisma";
 
 /**
@@ -61,16 +60,6 @@ async function main() {
     }
   }
   console.log(`Seeded ${photos.length} photos and ${tags.length} tags.`);
-
-  for (const testimonial of testimonialsSeed) {
-    const { id, company, ...data } = testimonial;
-    await prisma.testimonial.upsert({
-      where: { id },
-      create: { id, company: company ?? null, ...data },
-      update: { company: company ?? null, ...data },
-    });
-  }
-  console.log(`Seeded ${testimonialsSeed.length} testimonials.`);
 }
 
 main()

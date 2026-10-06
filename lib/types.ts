@@ -51,14 +51,6 @@ export type DisplayPhoto = Omit<PhotoItem, "tagIds" | "placements"> & {
   tags: TagItem[];
 };
 
-export type TestimonialItem = {
-  id: string;
-  author: string;
-  company?: string;
-  quote: string;
-  sortOrder: number;
-};
-
 export type ServiceItem = {
   id: string;
   step: number;
