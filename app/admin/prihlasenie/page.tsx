@@ -23,7 +23,7 @@ export default async function AdminLoginPage({
     <div className="flex flex-1 items-center justify-center px-4 py-16">
       <div className="w-full max-w-sm">
         <div className="mb-6 text-center">
-          <Logo className="text-2xl" />
+          <Logo className="mx-auto h-12" />
           <h1 className="font-heading mt-4 text-xl font-semibold">Administrácia</h1>
           <p className="text-muted-foreground mt-1 text-sm">
             Prihláste sa pre správu galérie realizácií.

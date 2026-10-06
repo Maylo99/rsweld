@@ -79,8 +79,10 @@ export function SteelBackdrop({
       <div
         className="absolute inset-0"
         style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent 0 47px, rgba(198,214,240,0.11) 47px 48px), repeating-linear-gradient(90deg, transparent 0 47px, rgba(198,214,240,0.11) 47px 48px)",
+          // Horizontal lines are anchored to the same edge as the sparks
+          // (180deg = from the top, 0deg = from the bottom); otherwise the
+          // section height shifts the lines off the spark offsets.
+          backgroundImage: `repeating-linear-gradient(${fadeFrom === "top" ? "180deg" : "0deg"}, transparent 0 47px, rgba(198,214,240,0.11) 47px 48px), repeating-linear-gradient(90deg, transparent 0 47px, rgba(198,214,240,0.11) 47px 48px)`,
           maskImage: fade,
           WebkitMaskImage: fade,
         }}

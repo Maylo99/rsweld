@@ -15,7 +15,7 @@ export function Footer() {
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Brand */}
         <div className="space-y-3">
-          <Logo className="text-2xl" />
+          <Logo className="h-11" />
           <p className="text-muted-foreground max-w-xs text-sm leading-relaxed">
             {siteConfig.description}
           </p>

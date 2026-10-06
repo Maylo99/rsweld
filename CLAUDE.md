@@ -98,6 +98,11 @@ react-hook-form · Resend · Motion · Supabase Storage.
 - `text-primary` **fails contrast on dark sections** — use `text-primary-soft`
   for brand-colored _text_ (identical in light mode, lighter tint in `.dark`).
 - Dark sections (hero, CTA, footer) = wrap in `class="dark"`; tokens re-map.
+- Logo = inline SVG in `components/shared/logo.tsx` (vectorised from the
+  client's raster on rs-weld.com), colored by the `--logo` token (exact brand
+  blue; brighter `#467EF7` in `.dark`). Size it by height (`h-9`), not text
+  size. `LogoMark` = torch only (hero decoration). Favicons `app/icon.svg`,
+  `app/apple-icon.png`, `app/favicon.ico`; `public/logo.{svg,png}` for JSON-LD.
 - One animation wrapper: `components/shared/animated-section.tsx`
   (LazyMotion, fade + 12px rise, 450ms, once, reduced-motion aware). No ad-hoc
   animations elsewhere.
@@ -121,5 +126,5 @@ react-hook-form · Resend · Motion · Supabase Storage.
 ## Project state
 
 Phase 2 (design + content + DB schema) done. Pending real-world hookup:
-client's logo file, real photos, Supabase + Resend credentials (then
+real photos, Supabase + Resend credentials (then
 `pnpm db:migrate && pnpm db:seed`), and copy marked `TODO: verify with client`.

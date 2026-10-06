@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 
+import { LogoMark } from "@/components/shared/logo";
 import { SteelBackdrop } from "@/components/shared/steel-backdrop";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site";
@@ -13,6 +14,17 @@ export function Hero() {
   return (
     <section className="dark bg-background text-foreground relative overflow-hidden">
       <SteelBackdrop glow="top-right" fadeFrom="top" />
+
+      {/* The logo's TIG torch, oversized, aiming into the hero - with a glowing
+          arc at its tip. Static and decorative; hidden where it would crowd
+          the copy. The nozzle tip sits at ~2.2% / 62.4% of the mark's box. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-24 right-[-3%] hidden w-[400px] lg:block xl:right-[4%]"
+      >
+        <LogoMark className="w-full opacity-25" />
+        <span className="absolute top-[62.4%] left-[2.2%] size-28 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,1)_0%,rgba(235,245,255,0.95)_5%,rgba(150,200,255,0.55)_14%,rgba(70,126,247,0.2)_36%,transparent_68%)]" />
+      </div>
 
       <div className="relative mx-auto max-w-6xl px-4 pt-20 pb-16 sm:pt-28 sm:pb-24">
         <p className="text-primary-soft text-sm font-semibold tracking-wide uppercase">
