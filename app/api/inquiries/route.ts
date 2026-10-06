@@ -104,7 +104,7 @@ async function persistInquiry(inquiry: InquiryInput, filePath: string | null): P
 /**
  * POST /api/inquiries
  *
- * Accepts JSON or multipart/form-data (quote form with optional attachment).
+ * Accepts JSON or multipart/form-data (inquiry form with optional attachment).
  * Validates with Zod, persists via Prisma and notifies via Resend - the
  * latter two degrade gracefully while credentials are not yet provisioned.
  */
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // Validate the attachment (optional, quote requests only).
+  // Validate the attachment (optional).
   if (parsed.file) {
     if (parsed.file.size > MAX_ATTACHMENT_BYTES) {
       return NextResponse.json(

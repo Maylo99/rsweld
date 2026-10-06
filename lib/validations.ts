@@ -29,12 +29,14 @@ export const inquirySchema = z.object({
 
 export type InquiryInput = z.infer<typeof inquirySchema>;
 
-/** Client-side form schema - `type` is fixed per form, not user input. */
+export type InquiryType = InquiryInput["type"];
+
+/** Client-side form schema - `type` comes from the form's type switch, not a text field. */
 export const inquiryFormSchema = inquirySchema.omit({ type: true });
 
 export type InquiryFormValues = z.infer<typeof inquiryFormSchema>;
 
-/** Attachment constraints for quote requests (drawings, photos). */
+/** Attachment constraints for inquiries (drawings, photos). */
 export const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export const ACCEPTED_ATTACHMENT_EXTENSIONS = [

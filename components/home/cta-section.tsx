@@ -30,7 +30,7 @@ export function CtaSection() {
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <Button size="lg" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
+                <Button size="lg" nativeButton={false} render={<Link href="/kontakt#dopyt" />}>
                   Nezáväzná cenová ponuka
                   <ArrowRightIcon aria-hidden />
                 </Button>

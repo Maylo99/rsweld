@@ -40,8 +40,8 @@ export function Header() {
               </Link>
             );
           })}
-          <Button size="sm" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
-            Nezáväzný dopyt
+          <Button size="sm" nativeButton={false} render={<Link href="/kontakt#dopyt" />}>
+            Cenová ponuka
           </Button>
         </nav>
 
@@ -86,9 +86,9 @@ export function Header() {
                 <Button
                   className="w-full"
                   nativeButton={false}
-                  render={<Link href="/cenova-ponuka" />}
+                  render={<Link href="/kontakt#dopyt" />}
                 >
-                  Nezáväzný dopyt
+                  Cenová ponuka
                 </Button>
                 <a
                   href={siteConfig.phoneHref}

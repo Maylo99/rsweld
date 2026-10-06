@@ -40,7 +40,7 @@ export function Hero() {
         </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <Button size="lg" nativeButton={false} render={<Link href="/cenova-ponuka" />}>
+          <Button size="lg" nativeButton={false} render={<Link href="/kontakt#dopyt" />}>
             Nezáväzná cenová ponuka
             <ArrowRightIcon aria-hidden />
           </Button>

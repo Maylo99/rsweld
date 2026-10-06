@@ -4,17 +4,17 @@ import { useState } from "react";
 import type { UseFormSetError } from "react-hook-form";
 import { toast } from "sonner";
 
-import type { InquiryFormValues } from "@/lib/validations";
+import type { InquiryFormValues, InquiryType } from "@/lib/validations";
 
 type SubmitOptions = {
-  type: "contact" | "quote";
+  type: InquiryType;
   file?: File | null;
   setError: UseFormSetError<InquiryFormValues>;
   onSuccess: () => void;
 };
 
 /**
- * Shared submit logic for both inquiry forms: posts multipart form data,
+ * Submit logic for the inquiry form: posts multipart form data,
  * maps server field errors back onto the form, drives toasts.
  */
 export function useInquirySubmit() {
