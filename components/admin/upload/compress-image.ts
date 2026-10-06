@@ -1,5 +1,5 @@
 /**
- * Downscales a photo in the browser before upload. Phone photos are 3–10 MB;
+ * Downscales a photo in the browser before upload. Phone photos are 3-10 MB;
  * the site never shows them wider than ~1600 px, and Server Actions / Vercel
  * cap request bodies at a few MB. Also bakes in EXIF rotation.
  */
@@ -26,7 +26,7 @@ export async function compressImage(file: File): Promise<File> {
   const width = Math.round(bitmap.width * scale);
   const height = Math.round(bitmap.height * scale);
 
-  // Already small and in a web format — upload as-is.
+  // Already small and in a web format - upload as-is.
   if (scale === 1 && file.size < 1.5 * 1024 * 1024 && /^image\/(jpeg|png|webp)$/.test(file.type)) {
     bitmap.close();
     return file;

@@ -114,7 +114,7 @@ export function GalleryGrid({ photos, tags }: GalleryGridProps) {
                   alt={photo.imageAlt}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  // First row is above the fold — load eagerly for LCP.
+                  // First row is above the fold - load eagerly for LCP.
                   priority={index < 3}
                   className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                 />

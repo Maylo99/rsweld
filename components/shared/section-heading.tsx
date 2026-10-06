@@ -9,7 +9,7 @@ type SectionHeadingProps = {
   title: string;
   description?: string;
   align?: "left" | "center";
-  /** Heading level — `h1` for the page title of a subpage, `h2` otherwise. */
+  /** Heading level - `h1` for the page title of a subpage, `h2` otherwise. */
   as?: "h1" | "h2";
   /** Id of the heading, for `aria-labelledby` on the parent section. */
   id?: string;

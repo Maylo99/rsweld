@@ -8,7 +8,7 @@ import type { MutationResult } from "@/app/admin/actions";
 /**
  * Runs a gallery Server Action from a client component: tracks pending state
  * and reports the outcome as a toast. The action revalidates the admin, so the
- * page re-renders with fresh data on success — no manual refresh needed.
+ * page re-renders with fresh data on success - no manual refresh needed.
  */
 export function useMutation() {
   const [pending, startTransition] = useTransition();

@@ -64,7 +64,7 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.21 0.006 285.885);
   --primary: oklch(0.4866 0.2203 263.04); /* #114ED9 */
-  /* Brand color for *text* — identical to primary on light backgrounds. */
+  /* Brand color for *text* - identical to primary on light backgrounds. */
   --primary-soft: oklch(0.4866 0.2203 263.04);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.967 0.001 286.375); /* zinc-100 */
@@ -155,7 +155,7 @@
 
 /*
  * Welding arc traveling along the blueprint grid (SteelBackdrop). Decorative
- * ambient effect — pure CSS, only transform/opacity so it stays on the
+ * ambient effect - pure CSS, only transform/opacity so it stays on the
  * compositor thread and never touches LCP. Disabled for reduced-motion.
  */
 @layer utilities {
@@ -175,7 +175,7 @@
     will-change: transform, opacity;
     animation: weld-run var(--weld-duration, 9s) linear var(--weld-delay, 0s) infinite;
   }
-  /* the arc itself — a bright glowing bead at the leading edge */
+  /* the arc itself - a bright glowing bead at the leading edge */
   .weld-spark::after {
     content: "";
     position: absolute;

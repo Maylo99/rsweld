@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
-// Headings only — body text uses the system font stack (see globals.css),
+// Headings only - body text uses the system font stack (see globals.css),
 // which keeps LCP fast on text-heavy pages.
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -15,7 +15,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — zváranie nerezu a nerezové zábradlia | Považská Bystrica`,
+    default: `${siteConfig.name} - zváranie nerezu a nerezové zábradlia | Považská Bystrica`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -23,14 +23,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sk_SK",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — zváranie nerezu a nerezové zábradlia`,
+    title: `${siteConfig.name} - zváranie nerezu a nerezové zábradlia`,
     description: siteConfig.description,
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
 /**
- * Root layout — document shell only. Public pages get their chrome (header,
+ * Root layout - document shell only. Public pages get their chrome (header,
  * footer, structured data) from `app/(site)/layout.tsx`; the admin area under
  * `/admin` deliberately renders without it.
  */

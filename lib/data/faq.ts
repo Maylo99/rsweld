@@ -56,7 +56,7 @@ export const faqItems: FaqItem[] = [
     category: "pricing",
     question: "Ako dlho trvá vypracovanie cenovej ponuky?",
     answer:
-      "Pri bežných zákazkách posielame cenovú ponuku zvyčajne do 2–3 pracovných dní. Pri zložitejších projektoch podľa výkresovej dokumentácie sa vopred dohodneme na termíne.",
+      "Pri bežných zákazkách posielame cenovú ponuku zvyčajne do 2-3 pracovných dní. Pri zložitejších projektoch podľa výkresovej dokumentácie sa vopred dohodneme na termíne.",
   },
   {
     id: "faq-lead-time",
@@ -64,7 +64,7 @@ export const faqItems: FaqItem[] = [
     featured: true,
     question: "Ako dlho trvá výroba a montáž?",
     answer:
-      "Výroba bežného zábradlia trvá zvyčajne 2–4 týždne od potvrdenia objednávky, v sezóne môže byť termín dlhší. Samotná montáž na mieste väčšinou zaberie jeden deň. Termín vždy uvedieme v cenovej ponuke.",
+      "Výroba bežného zábradlia trvá zvyčajne 2-4 týždne od potvrdenia objednávky, v sezóne môže byť termín dlhší. Samotná montáž na mieste väčšinou zaberie jeden deň. Termín vždy uvedieme v cenovej ponuke.",
   },
   {
     id: "faq-service-area",

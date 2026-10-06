@@ -67,7 +67,7 @@ export default async function AboutPage() {
         id="about-heading"
         eyebrow="O nás"
         title="Za každým zvarom stojí jeden človek"
-        description="Bez tímu a obchodného oddelenia — jeden zvárač, jedna dielňa v Považskej Bystrici a poctivá práca s nerezom."
+        description="Bez tímu a obchodného oddelenia - jeden zvárač, jedna dielňa v Považskej Bystrici a poctivá práca s nerezom."
       />
 
       <section className="mx-auto max-w-6xl px-4 py-12 sm:py-16" aria-label="Môj príbeh">

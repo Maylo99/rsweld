@@ -43,7 +43,7 @@ type PhotoUploaderProps = {
   disabled?: boolean;
 };
 
-/** Camera / messenger file names carry no meaning — don't prefill them. */
+/** Camera / messenger file names carry no meaning - don't prefill them. */
 const MEANINGLESS_NAME =
   /^(img|dsc|dscn|dcim|pxl|mvimg|photo|image|whatsapp|screenshot|snimka|fotka|p\d|\d)[\s_-]?/i;
 
@@ -163,7 +163,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
       <div className="border-border bg-card mt-6 rounded-2xl border p-8 text-center sm:p-12">
         <CheckCircle2 className="mx-auto size-12 text-emerald-600" />
         <h2 className="font-heading mt-4 text-xl font-semibold">
-          Hotovo — nahraté {doneCount} {pluralizePhotos(doneCount)}
+          Hotovo - nahraté {doneCount} {pluralizePhotos(doneCount)}
         </h2>
         <p className="text-muted-foreground mx-auto mt-1 max-w-md text-sm">
           Nové fotky sú zaradené na koniec každého zoznamu. Poradie zmeníte v časti Zobrazenie na
@@ -193,7 +193,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
 
   return (
     <div className="mt-6 space-y-6">
-      {/* Step 1 — choose files */}
+      {/* Step 1 - choose files */}
       <div
         onDragOver={(event) => {
           event.preventDefault();
@@ -263,7 +263,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
 
       {queue.length > 0 ? (
         <>
-          {/* Step 2 — names */}
+          {/* Step 2 - names */}
           <section className="border-border bg-card rounded-2xl border p-4 sm:p-6">
             <h2 className="font-heading text-base font-semibold">1. Pomenujte fotky</h2>
             <p className="text-muted-foreground mt-0.5 text-sm">
@@ -341,7 +341,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
             </ul>
           </section>
 
-          {/* Step 3 — shared settings */}
+          {/* Step 3 - shared settings */}
           <section className="border-border bg-card rounded-2xl border p-4 sm:p-6">
             <h2 className="font-heading text-base font-semibold">
               2. Tagy pre všetky vybraté fotky
@@ -383,7 +383,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
               {running
                 ? `Nahrávam… ${doneCount} z ${queue.length}`
                 : doneCount > 0
-                  ? `Nahraté ${doneCount} z ${queue.length} — zvyšné skúste znova.`
+                  ? `Nahraté ${doneCount} z ${queue.length} - zvyšné skúste znova.`
                   : `Pripravené: ${pendingItems.length} ${pluralizePhotos(pendingItems.length)}`}
             </p>
             <div className="ml-auto flex gap-2">

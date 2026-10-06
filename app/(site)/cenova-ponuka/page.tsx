@@ -7,18 +7,18 @@ import { PageHero, PageHeroPhoneCard } from "@/components/shared/page-hero";
 export const metadata: Metadata = {
   title: "Cenová ponuka",
   description:
-    "Nezáväzná cenová ponuka na zváranie nerezu — zábradlia, konštrukcie a priemyselné komponenty. Pošlite popis zákazky alebo výkres, ozveme sa do pár dní.",
+    "Nezáväzná cenová ponuka na zváranie nerezu - zábradlia, konštrukcie a priemyselné komponenty. Pošlite popis zákazky alebo výkres, ozveme sa do pár dní.",
 };
 
 const steps = [
   {
     icon: FileTextIcon,
     title: "Popíšte zákazku",
-    text: "Stačí pár viet — čo potrebujete, rozmery a prípadne výkres alebo fotka.",
+    text: "Stačí pár viet - čo potrebujete, rozmery a prípadne výkres alebo fotka.",
   },
   {
     icon: ClockIcon,
-    title: "Ozveme sa do 2–3 dní",
+    title: "Ozveme sa do 2-3 dní",
     text: "Ponuku pripravíme zvyčajne do niekoľkých pracovných dní.",
   },
   {
@@ -35,7 +35,7 @@ export default function QuoteRequestPage() {
         id="quote-heading"
         eyebrow="Cenová ponuka"
         title="Nezáväzný dopyt"
-        description="Vyplňte formulár alebo rovno zavolajte — obe cesty vedú k rovnakej ponuke."
+        description="Vyplňte formulár alebo rovno zavolajte - obe cesty vedú k rovnakej ponuke."
         aside={<PageHeroPhoneCard label="Radšej telefonicky?" />}
       />
 

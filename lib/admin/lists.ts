@@ -1,7 +1,7 @@
 import { PLACEMENTS, type OrderedList, type PlacementKey } from "@/lib/types";
 
 /**
- * Ordered lists are addressed in the URL as `?zoznam=` — a placement key in
+ * Ordered lists are addressed in the URL as `?zoznam=` - a placement key in
  * kebab case (`home-featured`) or `tag-<id>`.
  */
 export function listKey(list: OrderedList): string {

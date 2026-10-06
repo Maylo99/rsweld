@@ -194,7 +194,7 @@ export async function removeFromList(list: OrderedList, photoIds: string[]): Pro
 
 /**
  * Saves a new order for one list. The submitted ids must be exactly the list's
- * current members — otherwise the admin is looking at stale data.
+ * current members - otherwise the admin is looking at stale data.
  */
 export async function reorderList(list: OrderedList, ids: string[]): Promise<void> {
   const prisma = await getPrisma();
@@ -299,7 +299,7 @@ export async function updatePhoto(
     const existing = await tx.photo.findUnique({ where: { id } });
 
     if (!existing) {
-      throw new UserFacingError("Fotka sa nenašla — možno ju medzitým niekto zmazal.");
+      throw new UserFacingError("Fotka sa nenašla - možno ju medzitým niekto zmazal.");
     }
 
     await tx.photo.update({

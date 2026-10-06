@@ -18,7 +18,7 @@ export function Header() {
   return (
     <header className="bg-background/90 supports-[backdrop-filter]:bg-background/75 sticky top-0 z-40 w-full border-b backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link href="/" aria-label="RSweld — domov">
+        <Link href="/" aria-label="RSweld - domov">
           <Logo />
         </Link>
 

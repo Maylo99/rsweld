@@ -43,7 +43,7 @@ import {
  * Server Actions behind the admin area.
  *
  * Middleware already blocks unauthenticated navigation, but Server Actions are
- * POSTs to the page itself and must re-check the session themselves — every
+ * POSTs to the page itself and must re-check the session themselves - every
  * mutating action starts with `requireSession()`.
  */
 
@@ -78,7 +78,7 @@ export async function loginAction(
     return {
       status: "error",
       message:
-        "Prihlásenie nie je nastavené — v prostredí chýbajú premenné ADMIN_EMAIL, ADMIN_PASSWORD alebo AUTH_SECRET.",
+        "Prihlásenie nie je nastavené - v prostredí chýbajú premenné ADMIN_EMAIL, ADMIN_PASSWORD alebo AUTH_SECRET.",
     };
   }
 
@@ -169,7 +169,7 @@ function readImageFile(formData: FormData): { file: File | null; error?: string 
   }
 
   if (value.size > MAX_IMAGE_BYTES) {
-    return { file: null, error: "Fotka je príliš veľká — skúste ju zmenšiť alebo vybrať inú." };
+    return { file: null, error: "Fotka je príliš veľká - skúste ju zmenšiť alebo vybrať inú." };
   }
 
   if (!isAcceptedImage(value)) {
@@ -261,7 +261,7 @@ export async function updatePhotoAction(
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Gallery — direct calls from client components                              */
+/*  Gallery - direct calls from client components                              */
 /* -------------------------------------------------------------------------- */
 
 const idsSchema = z.array(z.string().min(1).max(100)).min(1).max(500);

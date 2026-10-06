@@ -31,7 +31,7 @@ const groups = faqCategories.map((category) => ({
   items: faqItems.filter((item) => item.category === category.id),
 }));
 
-/** Slovak plural: 1 otázka, 2–4 otázky, 5+ otázok. */
+/** Slovak plural: 1 otázka, 2-4 otázky, 5+ otázok. */
 function questionCount(count: number) {
   if (count === 1) return "1 otázka";
   if (count >= 2 && count <= 4) return `${count} otázky`;

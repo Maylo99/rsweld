@@ -29,7 +29,7 @@ export const inquirySchema = z.object({
 
 export type InquiryInput = z.infer<typeof inquirySchema>;
 
-/** Client-side form schema — `type` is fixed per form, not user input. */
+/** Client-side form schema - `type` is fixed per form, not user input. */
 export const inquiryFormSchema = inquirySchema.omit({ type: true });
 
 export type InquiryFormValues = z.infer<typeof inquiryFormSchema>;
@@ -85,7 +85,7 @@ export const photoSchema = z.object({
     .max(1000, { message: "Popis je príliš dlhý (max. 1000 znakov)." })
     .optional()
     .or(z.literal("")),
-  // Optional in the form — falls back to the title, which is descriptive.
+  // Optional in the form - falls back to the title, which is descriptive.
   imageAlt: z
     .string()
     .trim()
@@ -102,7 +102,7 @@ export type PhotoInput = z.infer<typeof photoSchema>;
 /**
  * Gallery image constraints (admin upload). Photos are downscaled in the
  * browser before upload (`components/admin/upload/compress-image.ts`), so the
- * server limit only has to cover the compressed file — and must stay below the
+ * server limit only has to cover the compressed file - and must stay below the
  * Server Action body limit in `next.config.ts` and Vercel's 4.5 MB cap.
  */
 export const MAX_IMAGE_BYTES = 3.5 * 1024 * 1024;

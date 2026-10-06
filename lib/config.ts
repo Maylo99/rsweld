@@ -1,7 +1,7 @@
 /**
  * Runtime feature detection. The site is built to run with an empty `.env`
  * (seed content, no persistence), so every integration is probed rather than
- * assumed — see the "graceful degradation" section in CLAUDE.md.
+ * assumed - see the "graceful degradation" section in CLAUDE.md.
  */
 
 export function isDatabaseConfigured(): boolean {

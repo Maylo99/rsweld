@@ -39,7 +39,7 @@ type NavZoneProps = {
  * Prev/next hit area: a full-height strip along the photo edge, with the
  * round button drawn inside it. The strip is the actual <button>, so a click
  * anywhere near the arrow counts. Centering is done with flexbox, not
- * `-translate-y-1/2` — the button's `active:translate-y-px` press effect
+ * `-translate-y-1/2` - the button's `active:translate-y-px` press effect
  * would override that transform and make the button jump away mid-click.
  */
 function NavZone({ side, onClick, label, children }: NavZoneProps) {

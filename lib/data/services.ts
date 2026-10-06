@@ -10,7 +10,7 @@ export const services: ServiceItem[] = [
     step: 1,
     title: "Cenová ponuka",
     description:
-      "Pošlite nám popis zákazky alebo výkresovú dokumentáciu — ponuku pripravíme zvyčajne do niekoľkých pracovných dní.",
+      "Pošlite nám popis zákazky alebo výkresovú dokumentáciu - ponuku pripravíme zvyčajne do niekoľkých pracovných dní.",
     icon: "quote",
   },
   {
@@ -18,7 +18,7 @@ export const services: ServiceItem[] = [
     step: 2,
     title: "Zváranie nerezu",
     description:
-      "Presné TIG zváranie nerezovej ocele — od zábradlí a konštrukcií po priemyselné komponenty podľa výkresov.",
+      "Presné TIG zváranie nerezovej ocele - od zábradlí a konštrukcií po priemyselné komponenty podľa výkresov.",
     icon: "welding",
   },
   {
@@ -42,7 +42,7 @@ export const services: ServiceItem[] = [
     step: 5,
     title: "Montáž",
     description:
-      "Doprava a odborná montáž priamo u vás — zábradlie či konštrukciu odovzdáme hotové.",
+      "Doprava a odborná montáž priamo u vás - zábradlie či konštrukciu odovzdáme hotové.",
     icon: "assembly",
   },
 ];

@@ -1,7 +1,7 @@
-// RSweld – Prisma schema
+// RSweld - Prisma schema
 //
 // Prisma 7 note: connection URLs live in `prisma.config.ts` (for Migrate) and in
-// the driver adapter passed to `PrismaClient` (for runtime) — not in this block.
+// the driver adapter passed to `PrismaClient` (for runtime) - not in this block.
 
 generator client {
   provider = "prisma-client-js"
@@ -68,7 +68,7 @@ model Tag {
 }
 
 /// Photo ↔ tag membership. `sortOrder` is the photo's position when the
-/// gallery is filtered by this tag — independent of every other list.
+/// gallery is filtered by this tag - independent of every other list.
 model PhotoTag {
   photoId   String
   tagId     String

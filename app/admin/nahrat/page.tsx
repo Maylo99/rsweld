@@ -37,7 +37,7 @@ export default async function UploadPage() {
           <ImageOff className="text-primary-soft mt-0.5 size-5 shrink-0" />
           <span>
             {localUploads
-              ? "Úložisko Supabase nie je nastavené — pri vývoji sa fotky ukladajú lokálne do public/uploads."
+              ? "Úložisko Supabase nie je nastavené - pri vývoji sa fotky ukladajú lokálne do public/uploads."
               : "Úložisko fotiek nie je nastavené (chýbajú Supabase prístupy), takže nové fotky sa nepodarí nahrať."}
           </span>
         </p>

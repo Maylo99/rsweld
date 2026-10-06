@@ -17,7 +17,7 @@ type PageHeroProps = {
 /*
  * Compact dark header shared by every subpage: eyebrow, h1, lead text and an
  * optional aside card over the steel backdrop. Static on purpose (no
- * scroll-in) — it holds the page's h1 and often its LCP text.
+ * scroll-in) - it holds the page's h1 and often its LCP text.
  */
 export function PageHero({ eyebrow, title, description, id, aside }: PageHeroProps) {
   return (

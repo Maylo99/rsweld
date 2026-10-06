@@ -23,7 +23,7 @@ export function Hero() {
         </h1>
         <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-relaxed">
           Od zábradlia na terasu po priemyselné dopravníky. Zvárame, brúsime, chemicky čistíme a
-          montujeme — presne podľa výkresovej dokumentácie alebo návrhu, ktorý pripravíme spolu s
+          montujeme - presne podľa výkresovej dokumentácie alebo návrhu, ktorý pripravíme spolu s
           vami.
         </p>
 

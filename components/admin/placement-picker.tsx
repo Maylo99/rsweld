@@ -85,7 +85,7 @@ export function PlacementPicker({
                   blocked ? "text-destructive" : "text-muted-foreground",
                 )}
               >
-                {blocked ? "Plné — najprv odoberte inú fotku." : status}
+                {blocked ? "Plné - najprv odoberte inú fotku." : status}
               </span>
               {blocked ? (
                 <Link

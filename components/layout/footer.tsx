@@ -83,7 +83,7 @@ export function Footer() {
           <p className="text-muted-foreground inline-flex items-start gap-2 text-sm leading-relaxed">
             <MapPinIcon className="text-primary mt-0.5 size-4 shrink-0" aria-hidden />
             <span>
-              {siteConfig.serviceArea}. Po dohode aj ďalšie regióny — závisí od rozsahu zákazky.
+              {siteConfig.serviceArea}. Po dohode aj ďalšie regióny - závisí od rozsahu zákazky.
             </span>
           </p>
         </div>

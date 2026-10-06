@@ -16,7 +16,7 @@ const buckets = new Map<string, Bucket>();
 
 export type RateLimitResult = {
   allowed: boolean;
-  /** Seconds until the window resets — for the "try again later" message. */
+  /** Seconds until the window resets - for the "try again later" message. */
   retryAfterSeconds: number;
 };
 

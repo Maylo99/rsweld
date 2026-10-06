@@ -2,7 +2,7 @@
  * Single-user admin authentication.
  *
  * There is exactly one administrator and the credentials live in the
- * environment (`ADMIN_EMAIL`, `ADMIN_PASSWORD`) — no user table, no password
+ * environment (`ADMIN_EMAIL`, `ADMIN_PASSWORD`) - no user table, no password
  * reset flow. A successful login mints an HMAC-signed session token that is
  * stored in an HttpOnly cookie.
  *

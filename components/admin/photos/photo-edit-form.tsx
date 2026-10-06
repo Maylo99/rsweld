@@ -211,7 +211,7 @@ export function PhotoEditForm({ photo, tags, occupied, positions, readOnly }: Ph
             aria-invalid={Boolean(state.fieldErrors?.description) || undefined}
           />
           <FieldDescription>
-            Krátky text pod fotkou — z akého materiálu, pre koho, čo bolo špecifické.
+            Krátky text pod fotkou - z akého materiálu, pre koho, čo bolo špecifické.
           </FieldDescription>
           <FieldError>{state.fieldErrors?.description?.[0]}</FieldError>
         </Field>
@@ -246,7 +246,7 @@ export function PhotoEditForm({ photo, tags, occupied, positions, readOnly }: Ph
           />
           {placements.length === 0 ? (
             <FieldDescription>
-              Fotka sa na webe nezobrazí nikde — zostane len tu v administrácii.
+              Fotka sa na webe nezobrazí nikde - zostane len tu v administrácii.
             </FieldDescription>
           ) : null}
         </Field>

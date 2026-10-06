@@ -42,7 +42,7 @@ export function useInquirySubmit() {
 
       if (response.ok && payload.success) {
         toast.success("Ďakujeme za správu!", {
-          description: "Ozveme sa vám čo najskôr — zvyčajne do 2–3 pracovných dní.",
+          description: "Ozveme sa vám čo najskôr - zvyčajne do 2-3 pracovných dní.",
         });
         options.onSuccess();
         return;

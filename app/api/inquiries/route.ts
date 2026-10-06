@@ -105,7 +105,7 @@ async function persistInquiry(inquiry: InquiryInput, filePath: string | null): P
  * POST /api/inquiries
  *
  * Accepts JSON or multipart/form-data (quote form with optional attachment).
- * Validates with Zod, persists via Prisma and notifies via Resend — the
+ * Validates with Zod, persists via Prisma and notifies via Resend - the
  * latter two degrade gracefully while credentials are not yet provisioned.
  */
 export async function POST(request: Request) {

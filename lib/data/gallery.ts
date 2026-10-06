@@ -1,11 +1,11 @@
 import type { GalleryData, PhotoItem, PlacementKey, TagItem } from "@/lib/types";
 
 /*
- * Gallery seed data — real client photos delivered 2026-07 (WhatsApp set),
+ * Gallery seed data - real client photos delivered 2026-07 (WhatsApp set),
  * renamed to descriptive English file names in /public/references.
  * Used as the site's fallback content without a database and by `pnpm db:seed`.
  */
-// TODO: verify with client — titles, descriptions, tag names and assignments
+// TODO: verify with client - titles, descriptions, tag names and assignments
 
 export const tagsSeed: TagItem[] = [
   { id: "tag-railings", name: "Zábradlia", slug: "zabradlia" },
@@ -25,7 +25,7 @@ const photos: SeedPhoto[] = [
     id: "ref-exterior-staircase-railing",
     title: "Exteriérové schodiskové zábradlie",
     description:
-      "Nerezové zábradlie na vonkajšie schodisko a terasu rodinného domu — vodorovná prútová výplň odolná voči poveternosti.",
+      "Nerezové zábradlie na vonkajšie schodisko a terasu rodinného domu - vodorovná prútová výplň odolná voči poveternosti.",
     imagePath: "/references/exterior-staircase-railing.jpg",
     imageAlt: "Nerezové zábradlie na vonkajšom schodisku a terase rodinného domu",
     tags: ["tag-railings", "tag-staircases", "tag-terraces"],
@@ -34,7 +34,7 @@ const photos: SeedPhoto[] = [
     id: "ref-cable-staircase-railing",
     title: "Lankové schodiskové zábradlie",
     description:
-      "Interiérové schodiskové zábradlie s nerezovou lankovou výplňou — vzdušný vzhľad a čistý výhľad do priestoru.",
+      "Interiérové schodiskové zábradlie s nerezovou lankovou výplňou - vzdušný vzhľad a čistý výhľad do priestoru.",
     imagePath: "/references/cable-staircase-railing.jpg",
     imageAlt: "Interiérové nerezové schodiskové zábradlie s lankovou výplňou",
     tags: ["tag-railings", "tag-staircases", "tag-interior"],
@@ -52,7 +52,7 @@ const photos: SeedPhoto[] = [
     id: "ref-design-side-tables",
     title: "Dizajnové príručné stolíky",
     description:
-      "Zákazková výroba sady okrúhlych príručných stolíkov — nerezová konštrukcia s kamennou doskou.",
+      "Zákazková výroba sady okrúhlych príručných stolíkov - nerezová konštrukcia s kamennou doskou.",
     imagePath: "/references/design-side-tables.jpg",
     imageAlt: "Sada okrúhlych príručných stolíkov s nerezovou konštrukciou a kamennou doskou",
     tags: ["tag-design", "tag-interior"],
@@ -70,7 +70,7 @@ const photos: SeedPhoto[] = [
     id: "ref-tig-weld-detail",
     title: "Detail TIG zvaru nerezu",
     description:
-      "Detail zvaru nerezového profilu metódou TIG — rovnomerná húsenica bez potreby dodatočného brúsenia.",
+      "Detail zvaru nerezového profilu metódou TIG - rovnomerná húsenica bez potreby dodatočného brúsenia.",
     imagePath: "/references/tig-weld-detail.jpg",
     imageAlt: "Detail rovnomerného TIG zvaru na nerezovom profile",
     tags: ["tag-welds"],
@@ -79,7 +79,7 @@ const photos: SeedPhoto[] = [
     id: "ref-tig-weld-base-plate",
     title: "Zvar kotviacej platne",
     description:
-      "Obvodový TIG zvar nerezovej kotviacej platne k profilu — presná príprava pre montážne kotvenie.",
+      "Obvodový TIG zvar nerezovej kotviacej platne k profilu - presná príprava pre montážne kotvenie.",
     imagePath: "/references/tig-weld-base-plate.jpg",
     imageAlt: "Obvodový TIG zvar nerezovej kotviacej platne k profilu",
     tags: ["tag-welds", "tag-railings"],
@@ -97,7 +97,7 @@ const photos: SeedPhoto[] = [
     id: "ref-industrial-hopper",
     title: "Nerezová násypka",
     description:
-      "Zákazková nerezová násypka pre priemyselnú výrobnú linku — zvary vyhotovené podľa výkresovej dokumentácie.",
+      "Zákazková nerezová násypka pre priemyselnú výrobnú linku - zvary vyhotovené podľa výkresovej dokumentácie.",
     imagePath: "/references/industrial-hopper.jpg",
     imageAlt: "Zváraná nerezová priemyselná násypka na montážnom stole",
     tags: ["tag-industry"],
@@ -106,7 +106,7 @@ const photos: SeedPhoto[] = [
     id: "ref-perforated-guard",
     title: "Perforovaný nerezový kryt",
     description:
-      "Nerezový ochranný kryt s perforáciou pre priemyselné zariadenie — bezpečnostný prvok výrobnej linky.",
+      "Nerezový ochranný kryt s perforáciou pre priemyselné zariadenie - bezpečnostný prvok výrobnej linky.",
     imagePath: "/references/perforated-guard.jpg",
     imageAlt: "Nerezový perforovaný ochranný kryt priemyselného zariadenia",
     tags: ["tag-industry"],
