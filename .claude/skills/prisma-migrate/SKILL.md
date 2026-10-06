@@ -1,6 +1,6 @@
 ---
 name: prisma-migrate
-description: Add or change Prisma models and run migrations against Supabase Postgres in this Prisma 7 setup. Use when the user wants to add a DB model/table/column, "create a migration", change the schema, or set up phase-2 data. Encodes the Prisma 7 + driver-adapter + Supabase pooled/direct URL gotchas that generic Prisma advice gets wrong here.
+description: Add or change Prisma models and run migrations against Railway Postgres in this Prisma 7 setup. Use when the user wants to add a DB model/table/column, "create a migration", change the schema, or set up phase-2 data. Encodes the Prisma 7 + driver-adapter + Railway private/public URL gotchas that generic Prisma advice gets wrong here.
 ---
 
 # prisma-migrate
@@ -12,19 +12,22 @@ adapter — the old `url`/`directUrl`-in-schema advice does NOT apply.
 
 - `prisma/schema.prisma` holds `generator` + `datasource` (**provider only, no
   URLs**) and the models.
-- **Runtime** connections use `@prisma/adapter-pg` with the pooled `DATABASE_URL`
-  (pgbouncer, port 6543) — see `lib/prisma.ts`. Import the `prisma` singleton
-  from `@/lib/prisma`.
-- **Migrate / introspect** use the connection in `prisma.config.ts`, which is
-  `DIRECT_URL` (direct, port 5432, **no** pgbouncer). Migrations over pgbouncer
-  fail — always use the direct URL.
+- **Runtime** connections use `@prisma/adapter-pg` with `DATABASE_URL` (on
+  Railway the private `postgres.railway.internal` URL) — see `lib/prisma.ts`.
+  Import the `prisma` singleton from `@/lib/prisma`.
+- **Migrate / introspect** use the connection in `prisma.config.ts`:
+  `DIRECT_URL` (Railway public TCP proxy URL), falling back to `DATABASE_URL`.
+  On Railway, `railway.json` runs `pnpm db:migrate` in the build, where the
+  private network is unreachable — hence the public URL.
+- Local DB: `docker compose up -d`, then
+  `DATABASE_URL=postgresql://rsweld:rsweld@localhost:5432/rsweld`.
 - Generated client → `lib/generated/prisma` (git-ignored).
 
 ## Preconditions
 
 - Node 22 active (see `CLAUDE.md`).
-- `.env` exists with real `DATABASE_URL` **and** `DIRECT_URL` (migrations need a
-  reachable direct connection). Without them, only `prisma generate` works.
+- `.env` exists with a reachable `DATABASE_URL` (or `DIRECT_URL`). Without
+  one, only `prisma generate` works.
 
 ## Add / change a model
 
@@ -50,9 +53,10 @@ adapter — the old `url`/`directUrl`-in-schema advice does NOT apply.
 pnpm prisma migrate deploy      # applies pending migrations, no prompts
 ```
 
-Runs against `DIRECT_URL` from the deploy environment.
+On Railway this runs automatically in the build (`railway.json`) against
+`DIRECT_URL` — committing the migration is enough.
 
-## Inspect an existing Supabase DB (introspection)
+## Inspect an existing DB (introspection)
 
 ```bash
 pnpm prisma db pull             # writes existing schema into schema.prisma
@@ -64,10 +68,11 @@ pnpm prisma db pull             # writes existing schema into schema.prisma
   block. Remove it; URLs live in `prisma.config.ts` (migrate) and the adapter
   (runtime).
 - **"Cannot resolve environment variable"** on `generate` → `prisma.config.ts`
-  reads `DIRECT_URL` via dotenv; ensure `.env` exists or the fallback `?? ""`
+  reads the URL via dotenv; ensure `.env` exists or the fallback `|| ""`
   keeps generate working.
-- **Migration hangs / prepared-statement errors** → you're pointing Migrate at
-  the pooled URL. Use `DIRECT_URL`.
+- **`getaddrinfo ENOTFOUND postgres.railway.internal`** → Migrate (or a build)
+  ran outside Railway's private network. Set `DIRECT_URL` to the public URL
+  (`${{Postgres.DATABASE_PUBLIC_URL}}`).
 - **Client type errors after schema edit** → forgot to regenerate; run
   `pnpm prisma:generate`.
 

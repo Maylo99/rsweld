@@ -9,8 +9,7 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       // Admin photo uploads. Photos are downscaled in the browser first (see
-      // MAX_IMAGE_BYTES in lib/validations.ts); this must stay under Vercel's
-      // 4.5 MB request cap.
+      // MAX_IMAGE_BYTES in lib/validations.ts), so a few MB is plenty.
       bodySizeLimit: "4mb",
     },
   },
@@ -22,17 +21,6 @@ const nextConfig: NextConfig = {
       { source: "/cenova-ponuka", destination: "/kontakt#dopyt", permanent: true },
       { source: "/admin/realizacie/:path*", destination: "/admin", permanent: false },
     ];
-  },
-  images: {
-    // Gallery photos uploaded through the admin live in the public Supabase
-    // Storage bucket; seed photos are still served from /public.
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.supabase.co",
-        pathname: "/storage/v1/object/public/**",
-      },
-    ],
   },
 };
 

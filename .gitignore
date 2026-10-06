@@ -47,7 +47,7 @@ next-env.d.ts
 # claude code – personal, machine-local settings (skills & shared config are committed)
 .claude/settings.local.json
 
-# Admin photo uploads in local development (no Supabase Storage)
+# Admin photo uploads in local development (no object storage)
 /public/uploads/
 
 # IDE

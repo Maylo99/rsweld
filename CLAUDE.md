@@ -26,8 +26,8 @@ Company website for RSweld — stainless steel and steel welding and custom rail
 ## Stack
 
 Next.js 16 (App Router, TS strict) · Tailwind v4 · shadcn/ui (**Base UI /
-Nova**, not Radix) · Prisma 7 + `@prisma/adapter-pg` → Supabase Postgres · Zod ·
-react-hook-form · Resend · Motion · Supabase Storage.
+Nova**, not Radix) · Prisma 7 + `@prisma/adapter-pg` → Railway Postgres · Zod ·
+react-hook-form · Resend · Motion · S3 (Railway Bucket). Hosted on Railway.
 
 ## Landmines (not obvious from the code)
 
@@ -35,10 +35,13 @@ react-hook-form · Resend · Motion · Supabase Storage.
 
 - `url` / `directUrl` are **forbidden** in the `datasource` block.
 - Runtime: `PrismaClient` takes the `@prisma/adapter-pg` driver adapter with
-  pooled `DATABASE_URL` (`lib/prisma.ts`); `@prisma/client-runtime-utils` must
+  `DATABASE_URL` (`lib/prisma.ts`); `@prisma/client-runtime-utils` must
   stay a direct dependency (generated client requires it, pnpm is strict).
-- Migrate: connection comes from `prisma.config.ts` = `DIRECT_URL` (port 5432,
-  no pgbouncer). The config loads `.env` itself via `dotenv` — Prisma 7 doesn't.
+- Railway's private network (`postgres.railway.internal`) is **unreachable
+  during builds**: `next build` prerenders ISR pages via `DIRECT_URL` (public
+  TCP proxy URL), and Migrate (`prisma.config.ts`) uses `DIRECT_URL`, falling
+  back to `DATABASE_URL`. `railway.json` runs `pnpm db:migrate` before
+  `pnpm build`. The config loads `.env` itself via `dotenv` — Prisma 7 doesn't.
 - The initial migration was generated **offline**:
   `prisma migrate diff --from-empty --to-schema … --script`; apply with
   `pnpm db:migrate`. Generated client → `lib/generated/prisma` (git-ignored).
@@ -77,11 +80,24 @@ react-hook-form · Resend · Motion · Supabase Storage.
   messages come only from `UserFacingError` (`lib/errors.ts`) — anything else
   shows a generic Slovak error.
 - Photos are downscaled in the browser before upload (Server Action body limit
-  `4mb` in `next.config.ts`, Vercel caps requests at 4.5 MB).
+  `4mb` in `next.config.ts`).
+
 - `/realizacie` permanently redirects to `/galeria` (old links / SEO);
   `/cenova-ponuka` → `/kontakt#dopyt` (the site has **one** inquiry form).
 - Public pages live in the `app/(site)/` route group (header/footer/JSON-LD);
   `app/layout.tsx` is the bare document shell so `/admin` stays clean.
+
+### Object storage (Railway Bucket, S3 API)
+
+- Railway Buckets are **private** — no public URLs. One bucket, two prefixes:
+  `gallery/` is streamed by `app/media/[...key]/route.ts` (`Photo.imagePath`
+  = `/media/gallery/…`, immutable cache); `inquiries/` is never served by that
+  route — attachments are shared via 7-day presigned URLs only.
+- Client in `lib/s3.ts` (`S3_*` env vars, lazy). Keep
+  `requestChecksumCalculation: "WHEN_REQUIRED"` — the SDK's default CRC
+  checksums break S3-compatible providers.
+- Local: `docker compose up -d` (Postgres + Adobe S3Mock, path-style). MinIO
+  images are no longer published on Docker Hub — don't switch back.
 
 ### Graceful degradation without credentials
 
@@ -89,8 +105,8 @@ react-hook-form · Resend · Motion · Supabase Storage.
   back to `lib/data/` seed content. `/api/inquiries` skips persistence/email
   with a `console.warn` when creds are missing. Don't break this: the site must
   build and run with an empty `.env`.
-- `lib/supabase.ts` clients are **lazy factories** — never instantiate at
-  module level (build-time page-data collection would throw).
+- `lib/s3.ts` client is a **lazy factory** — never instantiate at module
+  level (build-time page-data collection would throw).
 
 ## Design system
 
@@ -126,6 +142,7 @@ react-hook-form · Resend · Motion · Supabase Storage.
 
 ## Project state
 
-Phase 2 (design + content + DB schema) done. Pending real-world hookup:
-real photos, Supabase + Resend credentials (then
-`pnpm db:migrate && pnpm db:seed`), and copy marked `TODO: verify with client`.
+Phase 2 (design + content + DB schema) done. Moved from Supabase/Vercel to
+Railway (Postgres + Bucket). Pending real-world hookup: real photos, Railway
+service variables + Resend credentials (then `pnpm db:seed` once), and copy
+marked `TODO: verify with client`.

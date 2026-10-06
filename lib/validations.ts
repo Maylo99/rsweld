@@ -105,7 +105,7 @@ export type PhotoInput = z.infer<typeof photoSchema>;
  * Gallery image constraints (admin upload). Photos are downscaled in the
  * browser before upload (`components/admin/upload/compress-image.ts`), so the
  * server limit only has to cover the compressed file - and must stay below the
- * Server Action body limit in `next.config.ts` and Vercel's 4.5 MB cap.
+ * Server Action body limit in `next.config.ts`.
  */
 export const MAX_IMAGE_BYTES = 3.5 * 1024 * 1024;
 

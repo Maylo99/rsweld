@@ -1,10 +1,13 @@
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+
 import { isStorageConfigured } from "@/lib/config";
 import { UserFacingError } from "@/lib/errors";
-import { createSupabaseAdminClient, REFERENCES_BUCKET } from "@/lib/supabase";
+import { GALLERY_PREFIX, getBucketName, getS3Client, MEDIA_ROUTE } from "@/lib/s3";
 
 /**
- * Gallery image storage (Supabase Storage, public `references` bucket).
- * Server-only: every call goes through the service-role client.
+ * Gallery image storage (S3 bucket, `gallery/` prefix). Images are served
+ * through the `/media/[...key]` proxy route, so `Photo.imagePath` stores a
+ * site-relative path like `/media/gallery/railing-1a2b3c4d.jpg`.
  */
 
 /** Builds a collision-free object name from the original file name. */
@@ -23,9 +26,9 @@ function buildObjectPath(fileName: string): string {
 }
 
 /**
- * Local development without Supabase: photos go to `public/uploads/` (git
+ * Local development without object storage: photos go to `public/uploads/` (git
  * ignored) so the whole admin flow can be tried out. Never used in production -
- * a serverless filesystem is read-only and ephemeral.
+ * a container filesystem is ephemeral and wiped on every deploy.
  */
 const LOCAL_UPLOAD_DIR = "uploads/gallery";
 
@@ -54,24 +57,29 @@ export async function uploadGalleryImage(file: File): Promise<string> {
 
   if (!isStorageConfigured()) {
     throw new UserFacingError(
-      "Úložisko obrázkov nie je nastavené (chýbajú Supabase prístupy). Fotku sa nepodarilo nahrať.",
+      "Úložisko obrázkov nie je nastavené (chýbajú prístupy k S3 bucketu). Fotku sa nepodarilo nahrať.",
     );
   }
 
-  const supabase = createSupabaseAdminClient();
-  const objectPath = buildObjectPath(file.name);
+  const key = `${GALLERY_PREFIX}${buildObjectPath(file.name)}`;
 
-  const { error } = await supabase.storage
-    .from(REFERENCES_BUCKET)
-    .upload(objectPath, file, { contentType: file.type || "image/jpeg", upsert: false });
-
-  if (error) {
+  try {
+    await getS3Client().send(
+      new PutObjectCommand({
+        Bucket: getBucketName(),
+        Key: key,
+        Body: Buffer.from(await file.arrayBuffer()),
+        ContentType: file.type || "image/jpeg",
+        // Keys are unique per upload, so the object never changes.
+        CacheControl: "public, max-age=31536000, immutable",
+      }),
+    );
+  } catch (error) {
     console.error("uploadGalleryImage: upload failed", error);
     throw new UserFacingError("Fotku sa nepodarilo nahrať do úložiska. Skúste to prosím znova.");
   }
 
-  const { data } = supabase.storage.from(REFERENCES_BUCKET).getPublicUrl(objectPath);
-  return data.publicUrl;
+  return `${MEDIA_ROUTE}${key}`;
 }
 
 /**
@@ -87,27 +95,18 @@ export async function deleteGalleryImage(imagePath: string): Promise<void> {
     return;
   }
 
-  if (!isStorageConfigured() || !imagePath.startsWith("http")) {
+  if (!isStorageConfigured() || !imagePath.startsWith(`${MEDIA_ROUTE}${GALLERY_PREFIX}`)) {
     return;
   }
-
-  const marker = `/${REFERENCES_BUCKET}/`;
-  const markerIndex = imagePath.indexOf(marker);
-
-  if (markerIndex === -1) {
-    return;
-  }
-
-  const objectPath = decodeURIComponent(imagePath.slice(markerIndex + marker.length));
 
   try {
-    const supabase = createSupabaseAdminClient();
-    const { error } = await supabase.storage.from(REFERENCES_BUCKET).remove([objectPath]);
-
-    if (error) {
-      console.error("deleteGalleryImage: remove failed", error);
-    }
+    await getS3Client().send(
+      new DeleteObjectCommand({
+        Bucket: getBucketName(),
+        Key: decodeURIComponent(imagePath.slice(MEDIA_ROUTE.length)),
+      }),
+    );
   } catch (error) {
-    console.error("deleteGalleryImage: unexpected error", error);
+    console.error("deleteGalleryImage: remove failed", error);
   }
 }
