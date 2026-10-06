@@ -10,7 +10,7 @@ import type { DisplayPhoto, GalleryData, PlacementKey } from "@/lib/types";
 /**
  * Content queries with graceful degradation: read from the database when
  * configured, otherwise fall back to the static seed data. This keeps the
- * site fully functional before Supabase credentials are provisioned and
+ * site fully functional before database credentials are provisioned and
  * during local development without a DB.
  */
 

@@ -1,7 +1,7 @@
 /**
  * Downscales a photo in the browser before upload. Phone photos are 3-10 MB;
- * the site never shows them wider than ~1600 px, and Server Actions / Vercel
- * cap request bodies at a few MB. Also bakes in EXIF rotation.
+ * the site never shows them wider than ~1600 px, and the Server Action body
+ * limit (`next.config.ts`) is a few MB. Also bakes in EXIF rotation.
  */
 const MAX_EDGE = 2400;
 const QUALITY = 0.86;

@@ -1,8 +1,11 @@
+import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { isStorageConfigured } from "@/lib/config";
 import { sendInquiryNotification } from "@/lib/email";
-import { createSupabaseAdminClient } from "@/lib/supabase";
+import { getBucketName, getS3Client, INQUIRIES_PREFIX } from "@/lib/s3";
 import {
   inquirySchema,
   isAcceptedAttachment,
@@ -12,9 +15,8 @@ import {
 
 export const runtime = "nodejs";
 
-const INQUIRIES_BUCKET = "inquiries";
-/** Signed URL lifetime for the attachment link in the notification email. */
-const ATTACHMENT_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 7; // 7 days
+/** Presigned URL lifetime for the attachment link (7 days = S3 SigV4 maximum). */
+const ATTACHMENT_URL_EXPIRES_SECONDS = 60 * 60 * 24 * 7;
 
 type ParsedRequest = {
   fields: unknown;
@@ -46,37 +48,48 @@ async function parseRequest(request: Request): Promise<ParsedRequest | null> {
   }
 }
 
-/** Uploads the attachment to Supabase Storage; returns null when not configured or on failure. */
+/** Uploads the attachment to the private bucket; returns null when not configured or on failure. */
 async function uploadAttachment(
   file: File,
 ): Promise<{ path: string; signedUrl: string | null } | null> {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    console.warn("uploadAttachment: Supabase not configured, skipping attachment upload.");
+  if (!isStorageConfigured()) {
+    console.warn("uploadAttachment: object storage not configured, skipping attachment upload.");
+    return null;
+  }
+
+  const s3 = getS3Client();
+  const bucket = getBucketName();
+  const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${INQUIRIES_PREFIX}${Date.now()}-${crypto.randomUUID().slice(0, 8)}-${sanitizedName}`;
+
+  try {
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: path,
+        Body: Buffer.from(await file.arrayBuffer()),
+        ContentType: file.type || "application/octet-stream",
+      }),
+    );
+  } catch (error) {
+    console.error("uploadAttachment: upload failed", error);
     return null;
   }
 
   try {
-    const supabaseAdmin = createSupabaseAdminClient();
-    const sanitizedName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const path = `${Date.now()}-${crypto.randomUUID().slice(0, 8)}-${sanitizedName}`;
-
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from(INQUIRIES_BUCKET)
-      .upload(path, file, { contentType: file.type || "application/octet-stream" });
-
-    if (uploadError) {
-      console.error("uploadAttachment: upload failed", uploadError);
-      return null;
-    }
-
-    const { data: signed } = await supabaseAdmin.storage
-      .from(INQUIRIES_BUCKET)
-      .createSignedUrl(path, ATTACHMENT_URL_EXPIRES_SECONDS);
-
-    return { path, signedUrl: signed?.signedUrl ?? null };
+    const signedUrl = await getSignedUrl(
+      s3,
+      new GetObjectCommand({
+        Bucket: bucket,
+        Key: path,
+        ResponseContentDisposition: `attachment; filename="${sanitizedName}"`,
+      }),
+      { expiresIn: ATTACHMENT_URL_EXPIRES_SECONDS },
+    );
+    return { path, signedUrl };
   } catch (error) {
-    console.error("uploadAttachment: unexpected error", error);
-    return null;
+    console.error("uploadAttachment: presigning failed", error);
+    return { path, signedUrl: null };
   }
 }
 

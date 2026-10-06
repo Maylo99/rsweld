@@ -9,11 +9,13 @@ loadEnv();
  * Prisma 7 configuration.
  *
  * Runtime connections (PrismaClient) go through the driver adapter in
- * `lib/prisma.ts`, which uses the pooled `DATABASE_URL` (Supabase pgbouncer).
+ * `lib/prisma.ts`.
  *
- * Migrate / introspect commands run here and MUST use a *direct* connection
- * (no pgbouncer), so `datasource.url` points at `DIRECT_URL`. The empty-string
- * fallback keeps `prisma generate` working before a database is configured.
+ * Migrate / introspect commands run here. On Railway they run during the build,
+ * where the private network is unreachable, so `DIRECT_URL` (the public TCP
+ * proxy URL) wins over `DATABASE_URL`. Locally a single `DATABASE_URL` is
+ * enough. The empty-string fallback keeps `prisma generate` working before a
+ * database is configured.
  */
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -22,6 +24,6 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: process.env.DIRECT_URL ?? "",
+    url: process.env.DIRECT_URL || process.env.DATABASE_URL || "",
   },
 });

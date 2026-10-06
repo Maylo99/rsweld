@@ -15,7 +15,7 @@ export async function loadAdminGallery(): Promise<{
     return {
       data: gallerySeed,
       readOnlyReason:
-        "Databáza nie je pripojená, takže sa zobrazujú ukážkové dáta a zmeny sa nedajú uložiť. Doplňte DATABASE_URL a DIRECT_URL do .env a spustite pnpm db:migrate && pnpm db:seed.",
+        "Databáza nie je pripojená, takže sa zobrazujú ukážkové dáta a zmeny sa nedajú uložiť. Doplňte DATABASE_URL do .env a spustite pnpm db:migrate && pnpm db:seed.",
     };
   }
 

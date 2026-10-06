@@ -32,7 +32,7 @@ model Inquiry {
   email     String
   phone     String?
   message   String
-  /// Path of an uploaded drawing/attachment in Supabase Storage (quote requests).
+  /// Object key of an uploaded drawing/attachment in the S3 bucket (quote requests).
   filePath  String?
   createdAt DateTime    @default(now())
 
@@ -43,7 +43,7 @@ model Photo {
   id          String           @id @default(cuid())
   title       String
   description String?
-  /// Public path of the image (Supabase Storage `references` bucket or /public).
+  /// Public path of the image (`/media/gallery/...` proxied from the S3 bucket, or /public).
   imagePath   String
   /// Slovak alt text for the image (accessibility + SEO).
   imageAlt    String

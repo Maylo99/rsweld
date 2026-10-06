@@ -1,0 +1,26 @@
+# Local stand-ins for the Railway services: Postgres + an S3-compatible bucket
+# (Adobe S3Mock - accepts any credentials, path-style only). Start with
+# `docker compose up -d`, then use the local values from .env.example.
+# S3Mock keeps objects in the container only - they are gone after
+# `docker compose down`.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: rsweld
+      POSTGRES_PASSWORD: rsweld
+      POSTGRES_DB: rsweld
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  s3:
+    image: adobe/s3mock:latest
+    environment:
+      COM_ADOBE_TESTING_S3MOCK_STORE_INITIAL_BUCKETS: rsweld
+    ports:
+      - "9090:9090"
+
+volumes:
+  postgres-data:
