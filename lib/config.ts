@@ -26,3 +26,11 @@ export function isStorageConfigured(): boolean {
     process.env.S3_SECRET_ACCESS_KEY,
   );
 }
+
+export type SamplePhotosMode = "auto" | "show" | "hide";
+
+/** `SAMPLE_PHOTOS=show|hide` - see `lib/sample-photos.ts`. Anything else = auto. */
+export function samplePhotosMode(): SamplePhotosMode {
+  const value = process.env.SAMPLE_PHOTOS?.trim().toLowerCase();
+  return value === "show" || value === "hide" ? value : "auto";
+}

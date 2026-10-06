@@ -5,6 +5,7 @@ import { gallerySeed } from "@/lib/data/gallery";
 import { placementPhotos, publicGallery } from "@/lib/gallery";
 import { fetchGalleryData } from "@/lib/gallery-data";
 import { placementConfig } from "@/lib/placements";
+import { applySamplePhotosMode } from "@/lib/sample-photos";
 import type { DisplayPhoto, GalleryData, PlacementKey } from "@/lib/types";
 
 /**
@@ -15,7 +16,11 @@ import type { DisplayPhoto, GalleryData, PlacementKey } from "@/lib/types";
  */
 
 /** One snapshot per request, shared by every section that renders photos. */
-const getGalleryData = cache(async (): Promise<GalleryData> => {
+const getGalleryData = cache(async (): Promise<GalleryData> =>
+  applySamplePhotosMode(await loadGalleryData()),
+);
+
+async function loadGalleryData(): Promise<GalleryData> {
   if (!isDatabaseConfigured()) {
     return gallerySeed;
   }
@@ -26,7 +31,7 @@ const getGalleryData = cache(async (): Promise<GalleryData> => {
     console.error("getGalleryData: database read failed, using seed data", error);
     return gallerySeed;
   }
-});
+}
 
 /** Data for the /galeria page (gallery order + per-tag orders). */
 export async function getGallery() {
