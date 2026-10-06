@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
     return [
       // The gallery used to live at /realizacie — keep old links and rankings.
       { source: "/realizacie", destination: "/galeria", permanent: true },
+      // The quote request form was merged into the contact page.
+      { source: "/cenova-ponuka", destination: "/kontakt#dopyt", permanent: true },
       { source: "/admin/realizacie/:path*", destination: "/admin", permanent: false },
     ];
   },

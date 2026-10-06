@@ -6,7 +6,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -15,12 +23,36 @@ import {
   isAcceptedAttachment,
   MAX_ATTACHMENT_BYTES,
   type InquiryFormValues,
+  type InquiryType,
 } from "@/lib/validations";
 
 import { useInquirySubmit } from "./use-inquiry-submit";
 
-export function QuoteForm() {
+/** The two intents the single site form covers; copy adapts to the choice. */
+const inquiryTypes: Record<
+  InquiryType,
+  { label: string; messageLabel: string; placeholder: string; hint?: string }
+> = {
+  quote: {
+    label: "Cenová ponuka",
+    messageLabel: "Popis zákazky",
+    placeholder: "Čo potrebujete vyrobiť? Rozmery, materiál, termín…",
+    hint: "Čím viac detailov, tým presnejšia bude cenová ponuka.",
+  },
+  contact: {
+    label: "Otázka",
+    messageLabel: "Správa",
+    placeholder: "S čím vám môžeme pomôcť?",
+  },
+};
+
+/*
+ * The site's only inquiry form (contact + quote request). Quote is the
+ * default - it is what almost every visitor comes for.
+ */
+export function InquiryForm() {
   const { isSubmitting, submitInquiry } = useInquirySubmit();
+  const [type, setType] = useState<InquiryType>("quote");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   // Bumping the key remounts (and thereby clears) the uncontrolled file input.
@@ -32,6 +64,7 @@ export function QuoteForm() {
   });
 
   const { errors } = form.formState;
+  const copy = inquiryTypes[type];
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const selected = event.target.files?.[0] ?? null;
@@ -57,7 +90,7 @@ export function QuoteForm() {
   async function onSubmit(values: InquiryFormValues) {
     if (fileError) return;
     await submitInquiry(values, {
-      type: "quote",
+      type,
       file,
       setError: form.setError,
       onSuccess: () => {
@@ -71,11 +104,33 @@ export function QuoteForm() {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
       <FieldGroup>
+        <FieldSet>
+          <FieldLegend variant="label">S čím sa na nás obraciate?</FieldLegend>
+          <div className="grid grid-cols-2 gap-2 sm:max-w-sm">
+            {(Object.keys(inquiryTypes) as InquiryType[]).map((value) => (
+              <label
+                key={value}
+                className="border-border has-checked:border-primary has-checked:bg-accent has-checked:text-accent-foreground has-focus-visible:ring-ring/50 flex cursor-pointer items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-colors has-focus-visible:ring-3"
+              >
+                <input
+                  type="radio"
+                  name="inquiry-type"
+                  value={value}
+                  checked={type === value}
+                  onChange={() => setType(value)}
+                  className="sr-only"
+                />
+                {inquiryTypes[value].label}
+              </label>
+            ))}
+          </div>
+        </FieldSet>
+
         <div className="grid gap-5 sm:grid-cols-2">
           <Field data-invalid={Boolean(errors.name)}>
-            <FieldLabel htmlFor="quote-name">Meno a priezvisko</FieldLabel>
+            <FieldLabel htmlFor="inquiry-name">Meno a priezvisko</FieldLabel>
             <Input
-              id="quote-name"
+              id="inquiry-name"
               autoComplete="name"
               aria-invalid={Boolean(errors.name)}
               {...form.register("name")}
@@ -84,9 +139,9 @@ export function QuoteForm() {
           </Field>
 
           <Field data-invalid={Boolean(errors.email)}>
-            <FieldLabel htmlFor="quote-email">E-mail</FieldLabel>
+            <FieldLabel htmlFor="inquiry-email">E-mail</FieldLabel>
             <Input
-              id="quote-email"
+              id="inquiry-email"
               type="email"
               autoComplete="email"
               aria-invalid={Boolean(errors.email)}
@@ -97,9 +152,9 @@ export function QuoteForm() {
         </div>
 
         <Field data-invalid={Boolean(errors.phone)}>
-          <FieldLabel htmlFor="quote-phone">Telefón (nepovinné)</FieldLabel>
+          <FieldLabel htmlFor="inquiry-phone">Telefón (nepovinné)</FieldLabel>
           <Input
-            id="quote-phone"
+            id="inquiry-phone"
             type="tel"
             autoComplete="tel"
             aria-invalid={Boolean(errors.phone)}
@@ -109,25 +164,25 @@ export function QuoteForm() {
         </Field>
 
         <Field data-invalid={Boolean(errors.message)}>
-          <FieldLabel htmlFor="quote-message">Popis zákazky</FieldLabel>
+          <FieldLabel htmlFor="inquiry-message">{copy.messageLabel}</FieldLabel>
           <Textarea
-            id="quote-message"
+            id="inquiry-message"
             rows={6}
-            placeholder="Čo potrebujete vyrobiť? Rozmery, materiál, termín…"
+            placeholder={copy.placeholder}
             aria-invalid={Boolean(errors.message)}
             {...form.register("message")}
           />
-          <FieldDescription>Čím viac detailov, tým presnejšia bude cenová ponuka.</FieldDescription>
+          {copy.hint ? <FieldDescription>{copy.hint}</FieldDescription> : null}
           <FieldError errors={errors.message ? [errors.message] : undefined} />
         </Field>
 
         <Field data-invalid={Boolean(fileError)}>
-          <FieldLabel htmlFor="quote-file">
+          <FieldLabel htmlFor="inquiry-file">
             <PaperclipIcon className="size-4" aria-hidden />
-            Výkresová dokumentácia (nepovinné)
+            Výkres alebo fotka (nepovinné)
           </FieldLabel>
           <Input
-            id="quote-file"
+            id="inquiry-file"
             key={fileInputKey}
             type="file"
             accept={ACCEPTED_ATTACHMENT_EXTENSIONS.join(",")}
@@ -145,7 +200,7 @@ export function QuoteForm() {
           ) : (
             <SendIcon aria-hidden />
           )}
-          Odoslať dopyt
+          {type === "quote" ? "Odoslať dopyt" : "Odoslať správu"}
         </Button>
       </FieldGroup>
     </form>

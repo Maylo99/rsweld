@@ -167,8 +167,7 @@ rsweld/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx           # home: hero → services → references → about → …
 │   │   ├── galeria/           # gallery with tag filter (?tag=slug) + lightbox
-│   │   ├── cenova-ponuka/     # quote form (file upload)
-│   │   └── kontakt/           # contact info, map, contact form
+│   │   └── kontakt/           # contact info, map, the inquiry form (quote + contact)
 │   ├── admin/                 # single-user admin (noindex)
 │   │   ├── layout.tsx         # admin chrome (only when signed in)
 │   │   ├── page.tsx           # photo library (bulk actions)
@@ -185,7 +184,7 @@ rsweld/
 │   ├── layout/                # header (sticky, sheet menu), footer
 │   ├── home/                  # hero, services, references, about, faq, cta
 │   ├── gallery/               # gallery-grid, lightbox
-│   ├── forms/                 # quote-form, contact-form, use-inquiry-submit
+│   ├── forms/                 # inquiry-form (quote + contact), use-inquiry-submit
 │   ├── admin/                 # nav, photos/, upload/, arrange/, tags/, pickers
 │   └── shared/                # logo, animated-section, section-heading, instagram-icon
 ├── lib/

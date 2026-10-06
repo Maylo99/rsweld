@@ -10,7 +10,7 @@ Company website for RSweld — stainless steel and steel welding and custom rail
   messages in code, test names.
 - **Slovak is only for**: (1) visible site content — headings, copy, button
   labels, user-facing validation messages, meta descriptions, alt texts;
-  (2) URL route segments (`/cenova-ponuka`, `/galeria`, `/kontakt`, `/admin/zobrazenie`).
+  (2) URL route segments (`/galeria`, `/kontakt`, `/admin/zobrazenie`).
 - Draft copy that the client has not confirmed is marked
   `TODO: verify with client` (comment in English).
 
@@ -78,7 +78,8 @@ react-hook-form · Resend · Motion · Supabase Storage.
   shows a generic Slovak error.
 - Photos are downscaled in the browser before upload (Server Action body limit
   `4mb` in `next.config.ts`, Vercel caps requests at 4.5 MB).
-- `/realizacie` permanently redirects to `/galeria` (old links / SEO).
+- `/realizacie` permanently redirects to `/galeria` (old links / SEO);
+  `/cenova-ponuka` → `/kontakt#dopyt` (the site has **one** inquiry form).
 - Public pages live in the `app/(site)/` route group (header/footer/JSON-LD);
   `app/layout.tsx` is the bare document shell so `/admin` stays clean.
 

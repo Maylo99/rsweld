@@ -139,7 +139,7 @@ function ContactCard({ className }: { className?: string }) {
               size="sm"
               variant="outline"
               nativeButton={false}
-              render={<Link href="/kontakt" />}
+              render={<Link href="/kontakt#dopyt" />}
             >
               Napísať správu
             </Button>
