@@ -43,7 +43,7 @@ export default async function EditPhotoPage({ params }: { params: Promise<{ id: 
     ...data.tags
       .filter((tag) => photo.tagIds.includes(tag.id))
       .map((tag) => ({
-        label: `Galéria – tag „${tag.name}“`,
+        label: `Galéria - tag „${tag.name}“`,
         position: (data.tagOrder[tag.id] ?? []).indexOf(id) + 1,
         total: (data.tagOrder[tag.id] ?? []).length,
         href: listHref({ kind: "tag", tagId: tag.id }),

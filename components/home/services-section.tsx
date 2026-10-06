@@ -30,7 +30,7 @@ export function ServicesSection() {
         <SectionHeading
           eyebrow="Služby"
           title="Od cenovej ponuky po hotovú montáž"
-          description="Celý proces zvládneme pod jednou strechou — bez preposielania medzi dodávateľmi."
+          description="Celý proces zvládneme pod jednou strechou - bez preposielania medzi dodávateľmi."
         />
       </AnimatedSection>
 

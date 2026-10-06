@@ -55,7 +55,7 @@ function describeList(data: GalleryData, list: OrderedList) {
   if (list.kind === "tag") {
     const tag = data.tags.find((item) => item.id === list.tagId);
     return {
-      eyebrow: "Galéria — filter podľa tagu",
+      eyebrow: "Galéria - filter podľa tagu",
       title: tag?.name ?? "Neznámy tag",
       hint: "Poradie, v akom sa fotky zobrazia, keď si návštevník v galérii vyberie tento tag. Je nezávislé od poradia vo „Všetky“ aj v iných tagoch.",
       href: tag ? `/galeria?tag=${tag.slug}` : "/galeria",
@@ -71,7 +71,7 @@ function describeList(data: GalleryData, list: OrderedList) {
     title: list.placement === "GALLERY" ? "Všetky fotky" : config.label,
     hint:
       list.placement === "GALLERY"
-        ? "Fotky na stránke Galéria a ich poradie pri filtri „Všetky“. Každý tag má vlastné poradie — vyberiete ho v zozname tagov."
+        ? "Fotky na stránke Galéria a ich poradie pri filtri „Všetky“. Každý tag má vlastné poradie - vyberiete ho v zozname tagov."
         : list.placement === "HOME_ABOUT"
           ? "Jedna fotka vedľa textu „O nás“. Ak žiadnu nevyberiete, zobrazí sa predvolená."
           : `${config.hint} Zobrazí sa najviac ${config.limit} fotiek v tomto poradí.`,
@@ -136,7 +136,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
         ok = result.ok;
         if (!result.ok) message = result.message;
       } catch {
-        message = "Spojenie zlyhalo — poradie sa neuložilo.";
+        message = "Spojenie zlyhalo - poradie sa neuložilo.";
       }
       // A newer save superseded this one; let it report instead.
       if (version !== saveVersion.current) return;
@@ -220,7 +220,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
         </span>
         {full && !readOnly ? (
           <span className="text-muted-foreground">
-            Všetky miesta sú obsadené — ak chcete pridať inú fotku, najprv niektorú odoberte.
+            Všetky miesta sú obsadené - ak chcete pridať inú fotku, najprv niektorú odoberte.
           </span>
         ) : null}
         <span aria-live="polite" className="inline-flex items-center gap-1.5">
@@ -245,7 +245,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
             {list.kind === "tag"
               ? "Žiadna fotka zatiaľ nemá tento tag."
               : list.placement === "HOME_ABOUT"
-                ? "Nie je vybraná žiadna fotka — na webe sa zobrazuje predvolená."
+                ? "Nie je vybraná žiadna fotka - na webe sa zobrazuje predvolená."
                 : "V tejto časti zatiaľ nie sú žiadne fotky."}
           </p>
           <Button className="mt-4" disabled={readOnly} onClick={() => setDialogOpen(true)}>
@@ -290,7 +290,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
                   dimmed={info.limit !== undefined && index >= info.limit}
                   warning={
                     list.kind === "tag" && !inGallery.has(photo.id)
-                      ? "Nie je v galérii — na webe sa neukáže"
+                      ? "Nie je v galérii - na webe sa neukáže"
                       : undefined
                   }
                   onShowInGallery={() =>
@@ -337,7 +337,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
             ? `Vybraté fotky dostanú tag „${info.title}“ a zaradia sa na koniec.`
             : list.placement === "HOME_ABOUT"
               ? "Vyberte jednu fotku. Ak tu už nejaká je, nahradí ju."
-              : "Vybraté fotky sa zaradia na koniec — potom ich môžete presunúť."
+              : "Vybraté fotky sa zaradia na koniec - potom ich môžete presunúť."
         }
         singleChoice={info.limit === 1}
         maxSelectable={
@@ -361,7 +361,7 @@ type SortablePhotoProps = {
   total: number;
   disabled: boolean;
   readOnly: boolean;
-  /** Beyond the section's limit — kept but not shown on the site. */
+  /** Beyond the section's limit - kept but not shown on the site. */
   dimmed: boolean;
   warning?: string;
   onShowInGallery: () => void;
@@ -407,7 +407,7 @@ function SortablePhoto({
         ref={setActivatorNodeRef}
         {...attributes}
         {...listeners}
-        aria-label={`${index + 1}. ${photo.title}${disabled ? "" : " — potiahnite pre zmenu poradia"}`}
+        aria-label={`${index + 1}. ${photo.title}${disabled ? "" : " - potiahnite pre zmenu poradia"}`}
         aria-roledescription="presúvateľná fotka"
         className={cn(
           "bg-muted focus-visible:ring-ring relative block aspect-[4/3] touch-manipulation outline-none focus-visible:ring-2 focus-visible:ring-inset",
@@ -432,7 +432,7 @@ function SortablePhoto({
         ) : null}
         {dimmed ? (
           <span className="absolute inset-x-2 bottom-2 rounded-md bg-black/70 px-2 py-1 text-center text-[11px] text-white">
-            Nad limit — na webe sa nezobrazí
+            Nad limit - na webe sa nezobrazí
           </span>
         ) : null}
       </div>

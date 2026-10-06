@@ -7,7 +7,7 @@ import {
 } from "@/lib/types";
 
 /**
- * Pure helpers over a `GalleryData` snapshot — shared by the public site and
+ * Pure helpers over a `GalleryData` snapshot - shared by the public site and
  * the admin, safe to import from client components.
  */
 

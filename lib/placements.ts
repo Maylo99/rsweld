@@ -29,11 +29,11 @@ export const placementConfig: Record<PlacementKey, PlacementConfig> = {
     badge: "Galéria",
     page: "Galéria",
     href: "/galeria",
-    hint: "Stránka Galéria — poradie pri filtri „Všetky“.",
+    hint: "Stránka Galéria - poradie pri filtri „Všetky“.",
   },
   HOME_FEATURED: {
     label: "Vybrané projekty",
-    shortLabel: "Úvod – vybrané projekty",
+    shortLabel: "Úvod - vybrané projekty",
     badge: "Úvod",
     page: "Úvodná stránka",
     href: "/#vybrane-projekty",
@@ -42,7 +42,7 @@ export const placementConfig: Record<PlacementKey, PlacementConfig> = {
   },
   HOME_ABOUT: {
     label: "Fotka v časti O nás",
-    shortLabel: "Úvod – O nás",
+    shortLabel: "Úvod - O nás",
     badge: "O nás",
     page: "Úvodná stránka",
     href: "/#o-nas",

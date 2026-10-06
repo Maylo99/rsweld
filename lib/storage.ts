@@ -24,7 +24,7 @@ function buildObjectPath(fileName: string): string {
 
 /**
  * Local development without Supabase: photos go to `public/uploads/` (git
- * ignored) so the whole admin flow can be tried out. Never used in production —
+ * ignored) so the whole admin flow can be tried out. Never used in production -
  * a serverless filesystem is read-only and ephemeral.
  */
 const LOCAL_UPLOAD_DIR = "uploads/gallery";
@@ -76,7 +76,7 @@ export async function uploadGalleryImage(file: File): Promise<string> {
 
 /**
  * Best-effort cleanup of a previously uploaded image. Silently ignores images
- * that are not ours (seed photos served from `/public`) — a failed cleanup must
+ * that are not ours (seed photos served from `/public`) - a failed cleanup must
  * never block the database change that triggered it.
  */
 export async function deleteGalleryImage(imagePath: string): Promise<void> {

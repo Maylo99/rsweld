@@ -35,7 +35,7 @@ export default async function ArrangePage({
     <div>
       <PageHeader
         title="Zobrazenie na webe"
-        description="Vyberte časť webu a určte, ktoré fotky sa v nej zobrazia a v akom poradí. Každý zoznam má vlastné poradie — zmena v jednom neovplyvní ostatné."
+        description="Vyberte časť webu a určte, ktoré fotky sa v nej zobrazia a v akom poradí. Každý zoznam má vlastné poradie - zmena v jednom neovplyvní ostatné."
       />
       <ReadOnlyNotice reason={readOnlyReason} />
 

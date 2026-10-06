@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 /**
- * Supabase clients — currently used only for Storage (reference / gallery
+ * Supabase clients - currently used only for Storage (reference / gallery
  * images, inquiry attachments). Database access goes through Prisma.
  *
  * Both factories are lazy so importing this module never throws while
@@ -29,7 +29,7 @@ export function createSupabaseClient() {
 }
 
 /**
- * Service-role client. **Server-only** — the service role key bypasses Row
+ * Service-role client. **Server-only** - the service role key bypasses Row
  * Level Security, so never import this into client components. Used for
  * uploads to Storage (inquiry attachments, admin uploads later).
  */

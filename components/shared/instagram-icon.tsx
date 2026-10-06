@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 /*
- * Instagram glyph — lucide-react v1 removed brand icons, so we keep a small
+ * Instagram glyph - lucide-react v1 removed brand icons, so we keep a small
  * inline SVG with the same styling contract (stroke = currentColor, size via
  * className).
  */

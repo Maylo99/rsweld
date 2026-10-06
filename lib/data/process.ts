@@ -27,7 +27,7 @@ export const processSteps: ProcessStep[] = [
     title: "Cenová ponuka",
     description:
       "Dostanete prehľadnú ponuku s cenou a termínom. Je nezáväzná, takže sa rozhodujete bez tlaku.",
-    duration: "do 2–3 pracovných dní",
+    duration: "do 2-3 pracovných dní",
     icon: "quote",
   },
   {
@@ -35,7 +35,7 @@ export const processSteps: ProcessStep[] = [
     title: "Výroba v dielni",
     description:
       "Rezanie, TIG zváranie, brúsenie a chemické čistenie zvarov. Každý kus kontrolujeme ešte v dielni.",
-    duration: "zvyčajne 2–4 týždne",
+    duration: "zvyčajne 2-4 týždne",
     icon: "workshop",
   },
   {

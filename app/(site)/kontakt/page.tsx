@@ -9,7 +9,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Kontakt",
   description:
-    "Kontakt na RSweld — René Slávik, Považská Bystrica. Zváranie nerezu, zábradlia a priemyselné komponenty. Zavolajte alebo napíšte.",
+    "Kontakt na RSweld - René Slávik, Považská Bystrica. Zváranie nerezu, zábradlia a priemyselné komponenty. Zavolajte alebo napíšte.",
 };
 
 export default function ContactPage() {
@@ -19,7 +19,7 @@ export default function ContactPage() {
         id="contact-heading"
         eyebrow="Kontakt"
         title="Ozvite sa nám"
-        description="Na telefóne aj e-maile — a keď treba, prídeme zamerať priamo k vám."
+        description="Na telefóne aj e-maile - a keď treba, prídeme zamerať priamo k vám."
       />
 
       <section
@@ -98,7 +98,7 @@ export default function ContactPage() {
             {/* Map */}
             <div className="border-border overflow-hidden rounded-xl border">
               <iframe
-                title="Mapa — Považská Bystrica"
+                title="Mapa - Považská Bystrica"
                 src="https://www.google.com/maps?q=Pova%C5%BEsk%C3%A1%20Bystrica&output=embed"
                 className="h-64 w-full"
                 loading="lazy"

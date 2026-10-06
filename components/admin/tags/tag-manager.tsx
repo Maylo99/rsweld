@@ -136,7 +136,7 @@ export function TagManager({ data, readOnly }: TagManagerProps) {
 
       {tags.length === 0 ? (
         <p className="border-border text-muted-foreground rounded-2xl border border-dashed p-10 text-center text-sm">
-          Zatiaľ nemáte žiadne tagy. Vytvorte prvý — napr. „Zábradlia“ alebo „Priemysel“.
+          Zatiaľ nemáte žiadne tagy. Vytvorte prvý - napr. „Zábradlia“ alebo „Priemysel“.
         </p>
       ) : (
         <div>

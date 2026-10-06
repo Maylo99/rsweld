@@ -7,7 +7,7 @@ type SteelBackdropProps = {
   className?: string;
   /** Corner the brand-blue glow sits in. */
   glow?: "top-right" | "top-left" | "bottom-left" | "bottom-right";
-  /** Where the blueprint grid fades from — mirrors the section's edge. */
+  /** Where the blueprint grid fades from - mirrors the section's edge. */
   fadeFrom?: "top" | "bottom";
   /** Show the welding-arc sparks running along the grid lines. */
   sparks?: boolean;
@@ -22,7 +22,7 @@ const glowPosition: Record<NonNullable<SteelBackdropProps["glow"]>, string> = {
 
 /*
  * Sparks ride the horizontal grid lines. The grid has a 48px pitch with the
- * line drawn at 47–48px, so a line centre is at 47.5 + n*48; a 2px spark is
+ * line drawn at 47-48px, so a line centre is at 47.5 + n*48; a 2px spark is
  * centred on it at top = 46.5 + n*48.
  *
  * Line choice avoids the section edge: for `top` sections the first lines sit
@@ -41,8 +41,8 @@ const SPARK_TIMING = [
 const gridLineOffset = (n: number) => 46.5 + n * 48;
 
 /*
- * Thematic backdrop for the site's dark sections (hero, footer). Pure CSS —
- * no image request — so it never touches LCP or the Lighthouse budget.
+ * Thematic backdrop for the site's dark sections (hero, footer). Pure CSS -
+ * no image request - so it never touches LCP or the Lighthouse budget.
  * Three layers evoke the brand: a technical blueprint grid (a nod to working
  * "podľa výkresovej dokumentácie"), a fine brushed-steel sheen, and a brand
  * glow. Decorative only → aria-hidden + pointer-events-none.
@@ -74,7 +74,7 @@ export function SteelBackdrop({
         }}
       />
 
-      {/* Blueprint grid — more present, but in a soft cool-steel tint (not
+      {/* Blueprint grid - more present, but in a soft cool-steel tint (not
           stark white) so it stays gentle; faded inward with a radial mask. */}
       <div
         className="absolute inset-0"
@@ -108,7 +108,7 @@ export function SteelBackdrop({
         </div>
       ) : null}
 
-      {/* Brushed-steel sheen — fine horizontal lines */}
+      {/* Brushed-steel sheen - fine horizontal lines */}
       <div
         className="absolute inset-0 opacity-40"
         style={{

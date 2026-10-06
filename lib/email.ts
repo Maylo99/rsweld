@@ -37,7 +37,7 @@ export async function sendInquiryNotification(
     inquiry.message,
     "",
     options.attachmentUrl
-      ? `Príloha: ${options.attachmentName ?? "súbor"} — ${options.attachmentUrl}`
+      ? `Príloha: ${options.attachmentName ?? "súbor"} - ${options.attachmentUrl}`
       : null,
   ].filter((line): line is string => line !== null);
 
@@ -45,12 +45,12 @@ export async function sendInquiryNotification(
     from,
     to,
     replyTo: inquiry.email,
-    subject: `Nový dopyt z webu ${siteConfig.name} — ${typeLabel}`,
+    subject: `Nový dopyt z webu ${siteConfig.name} - ${typeLabel}`,
     text: lines.join("\n"),
   });
 
   if (error) {
-    // Surface but don't fail the request — the inquiry is already persisted.
+    // Surface but don't fail the request - the inquiry is already persisted.
     console.error("sendInquiryNotification: Resend returned an error", error);
   }
 }

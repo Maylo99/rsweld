@@ -28,7 +28,7 @@ export function FeaturedReferencesSection({ photos }: FeaturedReferencesSectionP
           <SectionHeading
             eyebrow="Realizácie"
             title="Vybrané projekty"
-            description="Ukážka toho, čo z nerezu vyrábame — od zábradlí po priemyselné celky."
+            description="Ukážka toho, čo z nerezu vyrábame - od zábradlí po priemyselné celky."
           />
           <Button variant="outline" nativeButton={false} render={<Link href="/galeria" />}>
             Celá galéria

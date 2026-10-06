@@ -33,7 +33,7 @@ export type PhotoItem = {
  * ordered independently of each other.
  */
 export type GalleryData = {
-  /** Library order — newest first. */
+  /** Library order - newest first. */
   photos: PhotoItem[];
   tags: TagItem[];
   /** Tag id → photo ids in that tag's order. */
@@ -82,7 +82,7 @@ export type ProcessStep = {
   id: string;
   title: string;
   description: string;
-  /** Short, typical duration hint shown as a chip (e.g. "do 2–3 dní"). */
+  /** Short, typical duration hint shown as a chip (e.g. "do 2-3 dní"). */
   duration: string;
   icon: "inquiry" | "measure" | "quote" | "workshop" | "handover";
 };

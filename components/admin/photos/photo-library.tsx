@@ -54,7 +54,7 @@ type PhotoLibraryProps = {
 const NO_TAG = "__none";
 const NOWHERE = "__nowhere";
 
-/** Slovak plural of "fotka" (1 / 2–4 / 5+). */
+/** Slovak plural of "fotka" (1 / 2-4 / 5+). */
 export function pluralizePhotos(count: number): string {
   if (count === 1) return "fotka";
   if (count >= 2 && count <= 4) return "fotky";
@@ -116,7 +116,7 @@ export function PhotoLibrary({ data, readOnly }: PhotoLibraryProps) {
         <ImageOff className="text-muted-foreground mx-auto size-10" />
         <h2 className="font-heading mt-4 text-lg font-semibold">Zatiaľ tu nie sú žiadne fotky</h2>
         <p className="text-muted-foreground mx-auto mt-1 max-w-sm text-sm">
-          Nahrajte prvé fotky — môžete ich vybrať naraz viac a otagovať ich už pri nahrávaní.
+          Nahrajte prvé fotky - môžete ich vybrať naraz viac a otagovať ich už pri nahrávaní.
         </p>
         {readOnly ? null : (
           <Button

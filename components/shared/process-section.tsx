@@ -22,7 +22,7 @@ const stepIcons: Record<ProcessStep["icon"], LucideIcon> = {
 };
 
 /*
- * "How a job runs" timeline — vertical on mobile, horizontal from `lg` up,
+ * "How a job runs" timeline - vertical on mobile, horizontal from `lg` up,
  * with a connecting line behind the step markers.
  */
 export function ProcessSection({ className }: { className?: string }) {

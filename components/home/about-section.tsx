@@ -14,7 +14,7 @@ import type { DisplayPhoto } from "@/lib/types";
 const trustPoints = [
   "Práca podľa výkresovej dokumentácie aj vlastného návrhu",
   "Spolupráca so strojárskou firmou IMC na priemyselných zákazkách",
-  "Dizajnové kusy — vrátane stolíkov pre Red Bull",
+  "Dizajnové kusy - vrátane stolíkov pre Red Bull",
   "Doprava a montáž priamo na mieste realizácie",
 ];
 
@@ -38,12 +38,12 @@ export function AboutSection({ photo }: { photo?: DisplayPhoto }) {
           <SectionHeading eyebrow="O nás" title="Remeslo, na ktoré sa dá spoľahnúť" />
           <p className="text-muted-foreground mt-6 leading-relaxed">
             RSweld vedie {siteConfig.owner} z Považskej Bystrice. Špecializujeme sa na zváranie
-            nerezovej ocele — od zábradlí pre rodinné domy až po komponenty pre strojársky a
+            nerezovej ocele - od zábradlí pre rodinné domy až po komponenty pre strojársky a
             vodárenský priemysel. Každú zákazku riešime na mieru: podľa vašej výkresovej
             dokumentácie, alebo prídeme, zameriame a navrhneme riešenie spolu.
           </p>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Záleží nám na detailoch, ktoré vidno aj po rokoch — čisté zvary, precízne brúsenie a
+            Záleží nám na detailoch, ktoré vidno aj po rokoch - čisté zvary, precízne brúsenie a
             chemické ošetrenie povrchu, vďaka ktorému nerez zostane nerezom.
           </p>
           <ul className="mt-8 space-y-3">

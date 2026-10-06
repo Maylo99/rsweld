@@ -1,10 +1,10 @@
 import type { TestimonialItem } from "@/lib/types";
 
 /*
- * Testimonial seed data — drafts to be replaced with real client quotes.
+ * Testimonial seed data - drafts to be replaced with real client quotes.
  * Kept short so the section reads credible, not salesy.
  */
-// TODO: verify with client — replace with real testimonials
+// TODO: verify with client - replace with real testimonials
 export const testimonialsSeed: TestimonialItem[] = [
   {
     id: "testimonial-01",
