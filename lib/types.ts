@@ -78,3 +78,19 @@ export type ProcessStep = {
   duration: string;
   icon: "inquiry" | "measure" | "quote" | "workshop" | "handover";
 };
+
+/** A workshop service on the services page (`/sluzby`). */
+export type CraftService = {
+  id: string;
+  title: string;
+  description: string;
+  icon:
+    | "measure"
+    | "cutting"
+    | "welding"
+    | "grinding"
+    | "cleaning"
+    | "galvanizing"
+    | "finishing"
+    | "assembly";
+};
