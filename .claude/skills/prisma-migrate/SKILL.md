@@ -17,8 +17,8 @@ adapter — the old `url`/`directUrl`-in-schema advice does NOT apply.
   Import the `prisma` singleton from `@/lib/prisma`.
 - **Migrate / introspect** use the connection in `prisma.config.ts`:
   `DIRECT_URL` (Railway public TCP proxy URL), falling back to `DATABASE_URL`.
-  On Railway, `railway.json` runs `pnpm db:migrate` in the build, where the
-  private network is unreachable — hence the public URL.
+  On Railway migrations are run **manually** (locally with the public URL, or
+  `railway ssh` → `pnpm db:migrate` inside the app container).
 - Local DB: `docker compose up -d`, then
   `DATABASE_URL=postgresql://rsweld:rsweld@localhost:5432/rsweld`.
 - Generated client → `lib/generated/prisma` (git-ignored).
@@ -53,8 +53,8 @@ adapter — the old `url`/`directUrl`-in-schema advice does NOT apply.
 pnpm prisma migrate deploy      # applies pending migrations, no prompts
 ```
 
-On Railway this runs automatically in the build (`railway.json`) against
-`DIRECT_URL` — committing the migration is enough.
+On Railway this is run manually after deploying the commit with the new
+migration — remind the user; the build does not migrate.
 
 ## Inspect an existing DB (introspection)
 

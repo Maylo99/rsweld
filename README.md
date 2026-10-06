@@ -84,9 +84,10 @@ and the API skips persistence (logged as a warning) — nothing crashes.
 ## Deploying on Railway
 
 The project has three Railway services: the **app** (this repo), **Postgres**
-and a **Bucket**. `railway.json` sets the build command to
-`pnpm db:migrate && pnpm build`, so pending migrations are applied before every
-build, and the build prerenders the ISR pages from the live database.
+and a **Bucket**. Migrations are run **manually** (see step 4) — the build
+does not touch the schema. With `DIRECT_URL` set, the build prerenders the ISR
+pages from the live database; without it they are prerendered from seed data
+and refresh within an hour (or immediately after any admin change).
 
 1. **Postgres** — `+ New → Database → PostgreSQL`.
 2. **Bucket** — `+ New → Bucket` (pick the region closest to the app).
@@ -103,11 +104,25 @@ build, and the build prerenders the ISR pages from the live database.
    S3_SECRET_ACCESS_KEY=${{Bucket.SECRET_ACCESS_KEY}}
    ```
 
-   plus the Resend and admin variables. `DIRECT_URL` must be the **public**
-   URL: Railway's private network is not reachable during builds.
+   plus the Resend and admin variables. `DIRECT_URL` is optional and must be
+   the **public** URL (Postgres → Settings → Networking → TCP Proxy): Railway's
+   private network is not reachable during builds.
 
-4. Deploy, then seed once from your machine with the public URL:
-   `DATABASE_URL=<DATABASE_PUBLIC_URL> pnpm db:seed`.
+4. **Migrations + seed** (first deploy and after every schema change) — either
+   from your machine with the public URL:
+
+   ```bash
+   DATABASE_URL='<public URL>' pnpm db:migrate
+   DATABASE_URL='<public URL>' pnpm db:seed   # first time only
+   ```
+
+   or, without a public URL, inside the running app container:
+
+   ```bash
+   railway ssh            # pick the app service
+   pnpm db:migrate
+   pnpm db:seed           # first time only
+   ```
 
 ### Object storage
 
@@ -188,7 +203,7 @@ rsweld/
 │   ├── migrations/0_init/     # initial SQL (generated offline via migrate diff)
 │   └── seed.ts                # idempotent seed (tsx)
 ├── prisma.config.ts           # Prisma 7 config (DIRECT_URL for Migrate, seed cmd)
-├── railway.json               # Railway build/deploy (migrate → build → start)
+├── railway.json               # Railway build/deploy (build → start, healthcheck)
 ├── docker-compose.yml         # local Postgres + S3Mock
 ├── proxy.ts                   # auth gate for /admin/** (Next 16 middleware)
 ├── app/

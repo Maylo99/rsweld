@@ -38,10 +38,13 @@ react-hook-form · Resend · Motion · S3 (Railway Bucket). Hosted on Railway.
   `DATABASE_URL` (`lib/prisma.ts`); `@prisma/client-runtime-utils` must
   stay a direct dependency (generated client requires it, pnpm is strict).
 - Railway's private network (`postgres.railway.internal`) is **unreachable
-  during builds**: `next build` prerenders ISR pages via `DIRECT_URL` (public
-  TCP proxy URL), and Migrate (`prisma.config.ts`) uses `DIRECT_URL`, falling
-  back to `DATABASE_URL`. `railway.json` runs `pnpm db:migrate` before
-  `pnpm build`. The config loads `.env` itself via `dotenv` — Prisma 7 doesn't.
+  during builds**: `next build` reads the DB only via `DIRECT_URL` (public TCP
+  proxy URL, optional) — without it `isDatabaseConfigured()` is false at build
+  and ISR pages prerender from seed. Migrate (`prisma.config.ts`) uses
+  `DIRECT_URL`, falling back to `DATABASE_URL`.
+- Migrations are run **manually** by the owner (`pnpm db:migrate` locally with
+  the public URL, or via `railway ssh`) — don't add them back to the build.
+  The config loads `.env` itself via `dotenv` — Prisma 7 doesn't.
 - The initial migration was generated **offline**:
   `prisma migrate diff --from-empty --to-schema … --script`; apply with
   `pnpm db:migrate`. Generated client → `lib/generated/prisma` (git-ignored).
