@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
-import { siteConfig } from "@/lib/site";
 import type { DisplayPhoto } from "@/lib/types";
 
 /*
@@ -37,15 +36,15 @@ export function AboutSection({ photo }: { photo?: DisplayPhoto }) {
         <AnimatedSection>
           <SectionHeading eyebrow="O nás" title="Remeslo, na ktoré sa dá spoľahnúť" />
           <p className="text-muted-foreground mt-6 leading-relaxed">
-            RSweld vedie {siteConfig.owner} z Považskej Bystrice. Zvárame nerez aj oceľ - od
-            zábradlí pre rodinné domy až po komponenty pre strojársky a vodárenský priemysel. Každú
-            zákazku riešime na mieru: podľa vašej výkresovej dokumentácie, alebo prídeme, zameriame
-            a navrhneme riešenie spolu.
+            RSweld vznikol s jednoduchou myšlienkou: robiť nerez aj oceľ poriadne. Sme zváračská
+            dielňa v Považskej Bystrici so sedemročnou praxou v zváraní nerezu a ocele a každú
+            zákazku vedieme od prvého zamerania až po montáž.
           </p>
           <p className="text-muted-foreground mt-4 leading-relaxed">
-            Záleží nám na detailoch, ktoré vidno aj po rokoch - čisté zvary, precízne brúsenie a
-            správna povrchová úprava: nerez chemicky čistíme a pasivujeme, oceľ chránime pred
-            koróziou.
+            Začínali sme pri priemyselných komponentoch podľa výkresovej dokumentácie, kde rozhodujú
+            desatiny milimetra. Tú presnosť dnes prenášame do každej zákazky, či ide o strojársky
+            diel, zábradlie na schodisko alebo dizajnový stolík. Každý kus vyrábame vo vlastnej
+            dielni, a preto ručíme za to, že je urobený dobre.
           </p>
           <ul className="mt-8 space-y-3">
             {trustPoints.map((point) => (
