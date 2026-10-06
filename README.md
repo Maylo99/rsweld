@@ -166,6 +166,7 @@ rsweld/
 │   ├── (site)/                # public site — header, footer, JSON-LD
 │   │   ├── layout.tsx
 │   │   ├── page.tsx           # home: hero → services → references → about → …
+│   │   ├── sluzby/            # services page: workshop services (lib/data/offer.ts)
 │   │   ├── galeria/           # gallery with tag filter (?tag=slug) + lightbox
 │   │   └── kontakt/           # contact info, map, the inquiry form (quote + contact)
 │   ├── admin/                 # single-user admin (noindex)

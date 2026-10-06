@@ -1,4 +1,5 @@
 import {
+  ArrowRightIcon,
   DropletsIcon,
   FileTextIcon,
   FlameIcon,
@@ -6,6 +7,8 @@ import {
   WrenchIcon,
   type LucideIcon,
 } from "lucide-react";
+
+import Link from "next/link";
 
 import { AnimatedSection } from "@/components/shared/animated-section";
 import { SectionHeading } from "@/components/shared/section-heading";
@@ -58,6 +61,14 @@ export function ServicesSection() {
           );
         })}
       </ol>
+
+      <Link
+        href="/sluzby"
+        className="text-primary mt-8 inline-flex items-center gap-2 text-sm font-semibold hover:underline"
+      >
+        Všetky služby
+        <ArrowRightIcon className="size-4" aria-hidden />
+      </Link>
     </section>
   );
 }
