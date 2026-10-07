@@ -27,7 +27,7 @@ export const adminNavItems = [
     href: "/admin/zobrazenie",
     label: "Zobrazenie na webe",
     short: "Na webe",
-    hint: "Čo sa kde ukáže a v akom poradí",
+    hint: "Výber a poradie fotiek na webe",
     icon: LayoutTemplate,
     match: (path: string) => path.startsWith("/admin/zobrazenie"),
   },

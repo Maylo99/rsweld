@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useId, useMemo, useRef, useState, useTransition } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  useTransition,
+} from "react";
 import {
   closestCenter,
   DndContext,
@@ -27,11 +35,17 @@ import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
+  ArrowLeftToLine,
+  ArrowRightToLine,
   Check,
   ExternalLink,
   GripVertical,
+  LayoutGrid,
   Loader2,
+  MoreHorizontal,
+  Pencil,
   Plus,
+  Rows3,
   X,
 } from "lucide-react";
 
@@ -39,6 +53,13 @@ import { addToListAction, removeFromListAction, reorderListAction } from "@/app/
 import { AddPhotosDialog } from "@/components/admin/arrange/add-photos-dialog";
 import { useMutation } from "@/components/admin/use-mutation";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { placementConfig } from "@/lib/placements";
 import type { GalleryData, OrderedList, PhotoItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -50,6 +71,49 @@ type ListArrangerProps = {
 };
 
 type SaveState = "idle" | "saving" | "saved" | "error";
+
+/*
+ * Compact view (small thumbnails, no per-photo buttons) for long lists, where
+ * dragging across big cards means a lot of scrolling. Remembered per browser.
+ */
+const COMPACT_KEY = "rsweld-admin-arrange-compact";
+const compactListeners = new Set<() => void>();
+
+function readCompact(): boolean {
+  try {
+    return localStorage.getItem(COMPACT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function writeCompact(value: boolean) {
+  try {
+    localStorage.setItem(COMPACT_KEY, value ? "1" : "0");
+  } catch {
+    // Storage unavailable (private mode) - the toggle still works for this page.
+  }
+  compactListeners.forEach((listener) => listener());
+}
+
+function useCompactView(): [boolean, (value: boolean) => void] {
+  const [fallback, setFallback] = useState(false);
+  const stored = useSyncExternalStore(
+    (listener) => {
+      compactListeners.add(listener);
+      return () => compactListeners.delete(listener);
+    },
+    readCompact,
+    () => false,
+  );
+  return [
+    stored || fallback,
+    (value) => {
+      setFallback(value);
+      writeCompact(value);
+    },
+  ];
+}
 
 function describeList(data: GalleryData, list: OrderedList) {
   if (list.kind === "tag") {
@@ -154,9 +218,8 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
     });
   };
 
-  const move = (index: number, delta: number) => {
-    const target = index + delta;
-    if (target < 0 || target >= order.length) return;
+  const moveTo = (index: number, target: number) => {
+    if (target < 0 || target >= order.length || target === index) return;
     saveOrder(arrayMove(order, index, target));
   };
 
@@ -184,6 +247,10 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
   const inGallery = new Set(data.placementOrder.GALLERY);
   const full = info.limit !== undefined && info.limit > 1 && photos.length >= info.limit;
   const canSort = !readOnly && photos.length > 1;
+  const [compactSetting, setCompact] = useCompactView();
+  // Only worth offering once the list no longer fits on a screen or two.
+  const offerCompact = photos.length > 8;
+  const compact = offerCompact && compactSetting;
 
   return (
     <div>
@@ -216,12 +283,46 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
           {info.limit && info.limit > 1
             ? `${photos.length} z ${info.limit} miest`
             : `${photos.length} ${photos.length === 1 ? "fotka" : photos.length >= 2 && photos.length <= 4 ? "fotky" : "fotiek"}`}
-          {canSort ? " · poradie zmeníte potiahnutím alebo šípkami" : ""}
+          {canSort
+            ? compact
+              ? " · poradie zmeníte potiahnutím"
+              : " · poradie zmeníte potiahnutím alebo šípkami"
+            : ""}
         </span>
         {full && !readOnly ? (
           <span className="text-muted-foreground">
             Všetky miesta sú obsadené - ak chcete pridať inú fotku, najprv niektorú odoberte.
           </span>
+        ) : null}
+        {offerCompact ? (
+          <div
+            role="group"
+            aria-label="Veľkosť náhľadov"
+            className="border-border ml-auto inline-flex rounded-lg border p-0.5"
+          >
+            {(
+              [
+                { value: false, label: "Veľké", icon: Rows3 },
+                { value: true, label: "Kompaktné", icon: LayoutGrid },
+              ] as const
+            ).map((option) => (
+              <button
+                key={option.label}
+                type="button"
+                aria-pressed={compact === option.value}
+                onClick={() => setCompact(option.value)}
+                className={cn(
+                  "focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors outline-none focus-visible:ring-2",
+                  compact === option.value
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <option.icon className="size-3.5" />
+                {option.label}
+              </button>
+            ))}
+          </div>
         ) : null}
         <span aria-live="polite" className="inline-flex items-center gap-1.5">
           {saveState === "saving" ? (
@@ -278,7 +379,14 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
           }}
         >
           <SortableContext items={order} strategy={rectSortingStrategy}>
-            <ol className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4">
+            <ol
+              className={cn(
+                "mt-3 grid",
+                compact
+                  ? "grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8"
+                  : "grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4",
+              )}
+            >
               {photos.map((photo, index) => (
                 <SortablePhoto
                   key={photo.id}
@@ -287,6 +395,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
                   total={photos.length}
                   disabled={!canSort}
                   readOnly={readOnly}
+                  compact={compact}
                   dimmed={info.limit !== undefined && index >= info.limit}
                   warning={
                     list.kind === "tag" && !inGallery.has(photo.id)
@@ -300,7 +409,7 @@ export function ListArranger({ data, list, readOnly }: ListArrangerProps) {
                       { success: `„${photo.title}“ je teraz v galérii.` },
                     )
                   }
-                  onMove={(delta) => move(index, delta)}
+                  onMoveTo={(target) => moveTo(index, target)}
                   onRemove={() => removeOne(photo)}
                   removeLabel={list.kind === "tag" ? "Odobrať tag" : "Odobrať z tejto časti"}
                 />
@@ -361,11 +470,13 @@ type SortablePhotoProps = {
   total: number;
   disabled: boolean;
   readOnly: boolean;
+  /** Small thumbnail only - drag to reorder, click through to edit. */
+  compact: boolean;
   /** Beyond the section's limit - kept but not shown on the site. */
   dimmed: boolean;
   warning?: string;
   onShowInGallery: () => void;
-  onMove: (delta: number) => void;
+  onMoveTo: (target: number) => void;
   onRemove: () => void;
   removeLabel: string;
 };
@@ -376,10 +487,11 @@ function SortablePhoto({
   total,
   disabled,
   readOnly,
+  compact,
   dimmed,
   warning,
   onShowInGallery,
-  onMove,
+  onMoveTo,
   onRemove,
   removeLabel,
 }: SortablePhotoProps) {
@@ -398,7 +510,8 @@ function SortablePhoto({
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
       className={cn(
-        "group border-border bg-card relative overflow-hidden rounded-xl border",
+        "group border-border bg-card relative overflow-hidden border",
+        compact ? "rounded-lg" : "rounded-xl",
         isDragging && "opacity-30",
         dimmed && "opacity-50",
       )}
@@ -409,6 +522,7 @@ function SortablePhoto({
         {...listeners}
         aria-label={`${index + 1}. ${photo.title}${disabled ? "" : " - potiahnite pre zmenu poradia"}`}
         aria-roledescription="presúvateľná fotka"
+        title={compact ? `${index + 1}. ${photo.title}` : undefined}
         className={cn(
           "bg-muted focus-visible:ring-ring relative block aspect-[4/3] touch-manipulation outline-none focus-visible:ring-2 focus-visible:ring-inset",
           !disabled && "cursor-grab active:cursor-grabbing",
@@ -418,80 +532,131 @@ function SortablePhoto({
           src={photo.imagePath}
           alt=""
           fill
-          sizes="(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
+          sizes={
+            compact
+              ? "(max-width: 640px) 33vw, (max-width: 1280px) 20vw, 12vw"
+              : "(max-width: 640px) 50vw, (max-width: 1280px) 33vw, 25vw"
+          }
           className="pointer-events-none object-cover select-none"
           draggable={false}
         />
-        <span className="bg-background/95 text-foreground absolute top-2 left-2 flex h-7 min-w-7 items-center justify-center rounded-full px-2 text-sm font-semibold tabular-nums shadow">
+        <span
+          className={cn(
+            "bg-background/95 text-foreground absolute flex items-center justify-center rounded-full font-semibold tabular-nums shadow",
+            compact
+              ? "top-1 left-1 h-5 min-w-5 px-1.5 text-[11px]"
+              : "top-2 left-2 h-7 min-w-7 px-2 text-sm",
+          )}
+        >
           {index + 1}
         </span>
-        {!disabled ? (
+        {!disabled && !compact ? (
           <span className="absolute top-2 right-2 rounded-md bg-black/55 p-1 text-white opacity-80 group-hover:opacity-100">
             <GripVertical className="size-4" />
           </span>
         ) : null}
-        {dimmed ? (
+        {compact && warning ? (
+          <span
+            className="absolute top-1 right-1 rounded-full bg-amber-500 p-0.5 text-white shadow"
+            aria-label={warning}
+          >
+            <AlertTriangle className="size-3" />
+          </span>
+        ) : null}
+        {dimmed && !compact ? (
           <span className="absolute inset-x-2 bottom-2 rounded-md bg-black/70 px-2 py-1 text-center text-[11px] text-white">
             Nad limit - na webe sa nezobrazí
           </span>
         ) : null}
       </div>
 
-      <div className="p-2.5">
-        <Link
-          href={`/admin/fotky/${photo.id}`}
-          className="block truncate text-sm font-medium hover:underline"
-          title={photo.title}
-        >
-          {photo.title}
-        </Link>
-        {warning ? (
-          <p className="mt-1 flex items-start gap-1 text-[11px] leading-tight text-amber-700 dark:text-amber-400">
-            <AlertTriangle className="mt-px size-3 shrink-0" />
-            <span>
-              {warning}.{" "}
-              {!readOnly ? (
-                <button type="button" onClick={onShowInGallery} className="font-medium underline">
-                  Pridať do galérie
-                </button>
-              ) : null}
-            </span>
-          </p>
-        ) : null}
+      {compact ? null : (
+        <div className="p-2.5">
+          <Link
+            href={`/admin/fotky/${photo.id}`}
+            className="block truncate text-sm font-medium hover:underline"
+            title={photo.title}
+          >
+            {photo.title}
+          </Link>
+          {warning ? (
+            <p className="mt-1 flex items-start gap-1 text-[11px] leading-tight text-amber-700 dark:text-amber-400">
+              <AlertTriangle className="mt-px size-3 shrink-0" />
+              <span>
+                {warning}.{" "}
+                {!readOnly ? (
+                  <button type="button" onClick={onShowInGallery} className="font-medium underline">
+                    Pridať do galérie
+                  </button>
+                ) : null}
+              </span>
+            </p>
+          ) : null}
 
-        {!readOnly ? (
-          <div className="mt-2 flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={index === 0}
-              onClick={() => onMove(-1)}
-              aria-label={`Posunúť „${photo.title}“ dopredu`}
-            >
-              <ArrowLeft />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              disabled={index === total - 1}
-              onClick={() => onMove(1)}
-              aria-label={`Posunúť „${photo.title}“ dozadu`}
-            >
-              <ArrowRight />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-muted-foreground hover:text-destructive ml-auto"
-              onClick={onRemove}
-              aria-label={`${removeLabel}: ${photo.title}`}
-            >
-              <X />
-              <span className="hidden sm:inline">Odobrať</span>
-            </Button>
-          </div>
-        ) : null}
-      </div>
+          {!readOnly ? (
+            <div className="mt-2 flex items-center gap-1">
+              <Button
+                variant="outline"
+                size="icon-sm"
+                disabled={index === 0}
+                onClick={() => onMoveTo(index - 1)}
+                aria-label={`Posunúť „${photo.title}“ dopredu`}
+              >
+                <ArrowLeft />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                disabled={index === total - 1}
+                onClick={() => onMoveTo(index + 1)}
+                aria-label={`Posunúť „${photo.title}“ dozadu`}
+              >
+                <ArrowRight />
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  render={<Button variant="ghost" size="icon-sm" />}
+                  aria-label={`Ďalšie možnosti: ${photo.title}`}
+                >
+                  <MoreHorizontal />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  <DropdownMenuItem disabled={index === 0} onClick={() => onMoveTo(0)}>
+                    <ArrowLeftToLine />
+                    Presunúť na začiatok
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    disabled={index === total - 1}
+                    onClick={() => onMoveTo(total - 1)}
+                  >
+                    <ArrowRightToLine />
+                    Presunúť na koniec
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem render={<Link href={`/admin/fotky/${photo.id}`} />}>
+                    <Pencil />
+                    Upraviť fotku
+                  </DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onClick={onRemove}>
+                    <X />
+                    {removeLabel}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="text-muted-foreground hover:text-destructive ml-auto"
+                onClick={onRemove}
+                aria-label={`${removeLabel}: ${photo.title}`}
+                title={removeLabel}
+              >
+                <X />
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      )}
     </li>
   );
 }

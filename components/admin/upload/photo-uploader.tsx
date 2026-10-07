@@ -21,6 +21,7 @@ import { TagPicker } from "@/components/admin/tag-picker";
 import { compressImage, ImageDecodeError } from "@/components/admin/upload/compress-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { listHref } from "@/lib/admin/lists";
 import { placementConfig } from "@/lib/placements";
 import type { PlacementKey, TagItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -60,6 +61,8 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
   const [tagIds, setTagIds] = useState<string[]>([]);
   const [newTags, setNewTags] = useState<string[]>([]);
   const [placements, setPlacements] = useState<PlacementKey[]>(["GALLERY"]);
+  // Newest work first is what visitors expect; "end" keeps the old behavior.
+  const [position, setPosition] = useState<"start" | "end">("start");
   const [dragging, setDragging] = useState(false);
   const [running, setRunning] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
@@ -121,8 +124,11 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
 
     setRunning(true);
     // Tags typed as new are created by the first upload; later uploads find
-    // them by name, so every photo ends up with the same tags.
-    for (const item of pendingItems) {
+    // them by name, so every photo ends up with the same tags. With "start"
+    // each upload goes in front of the previous one, so upload the batch
+    // back to front to keep it in the order shown here.
+    const ordered = position === "start" ? [...pendingItems].reverse() : pendingItems;
+    for (const item of ordered) {
       update(item.key, { status: "uploading", error: undefined });
       try {
         const file = await compressImage(item.file);
@@ -132,6 +138,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
         tagIds.forEach((id) => formData.append("tagIds", id));
         newTags.forEach((name) => formData.append("newTags", name));
         validPlacements.forEach((placement) => formData.append("placements", placement));
+        formData.set("position", position);
 
         const result = await uploadPhotoAction(formData);
         update(
@@ -166,8 +173,8 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
           Hotovo - nahraté {doneCount} {pluralizePhotos(doneCount)}
         </h2>
         <p className="text-muted-foreground mx-auto mt-1 max-w-md text-sm">
-          Nové fotky sú zaradené na koniec každého zoznamu. Poradie zmeníte v časti Zobrazenie na
-          webe.
+          Nové fotky sú zaradené na {position === "start" ? "začiatok" : "koniec"} každého zoznamu.
+          Poradie môžete kedykoľvek zmeniť potiahnutím.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Button size="lg" onClick={reset}>
@@ -178,10 +185,10 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
             size="lg"
             variant="outline"
             nativeButton={false}
-            render={<Link href="/admin/zobrazenie" />}
+            render={<Link href={listHref({ kind: "placement", placement: "GALLERY" })} />}
           >
             <LayoutTemplate />
-            Upraviť poradie
+            Upraviť poradie galérie
           </Button>
           <Button size="lg" variant="ghost" nativeButton={false} render={<Link href="/admin" />}>
             Prejsť na fotky
@@ -365,8 +372,7 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
           <section className="border-border bg-card rounded-2xl border p-4 sm:p-6">
             <h2 className="font-heading text-base font-semibold">3. Kde sa majú zobraziť</h2>
             <p className="text-muted-foreground mt-0.5 mb-4 text-sm">
-              Nové fotky sa zaradia na koniec. Ak nevyberiete nič, fotky sa uložia len do
-              administrácie.
+              Ak nevyberiete nič, fotky sa uložia len do administrácie.
             </p>
             <PlacementPicker
               value={validPlacements}
@@ -375,6 +381,38 @@ export function PhotoUploader({ tags, occupied, disabled }: PhotoUploaderProps) 
               photoCount={Math.max(1, pendingItems.length)}
               disabled={running}
             />
+            <fieldset className="mt-5" disabled={running}>
+              <legend className="text-sm font-medium">Kam ich zaradiť v poradí</legend>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(
+                  [
+                    { value: "start", label: "Na začiatok", hint: "najnovšie budú prvé" },
+                    { value: "end", label: "Na koniec", hint: "za existujúce fotky" },
+                  ] as const
+                ).map((option) => (
+                  <label
+                    key={option.value}
+                    className={cn(
+                      "has-focus-visible:ring-ring flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-sm transition-colors has-focus-visible:ring-2",
+                      position === option.value
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:bg-muted",
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name="upload-position"
+                      value={option.value}
+                      checked={position === option.value}
+                      onChange={() => setPosition(option.value)}
+                      className="accent-primary"
+                    />
+                    <span className="font-medium">{option.label}</span>
+                    <span className="text-muted-foreground">- {option.hint}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           </section>
 
           {/* Submit */}

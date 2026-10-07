@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { Upload } from "lucide-react";
+import { ArrowDownUp, Upload } from "lucide-react";
 
 import { PageHeader, ReadOnlyNotice } from "@/components/admin/page-header";
 import { PhotoLibrary } from "@/components/admin/photos/photo-library";
 import { StatusToast } from "@/components/admin/status-toast";
 import { Button } from "@/components/ui/button";
+import { listHref } from "@/lib/admin/lists";
 import { loadAdminGallery } from "@/lib/admin/load";
 import { requireSession } from "@/lib/auth-server";
 
@@ -31,17 +32,28 @@ export default async function AdminPhotosPage({
         title="Fotky"
         description="Všetky nahraté fotky. Kliknutím fotku upravíte, cez štvorček v rohu označíte viac fotiek naraz a hromadne im pridáte tag alebo ich zobrazíte na webe."
         actions={
-          readOnlyReason ? (
-            <Button size="lg" disabled>
-              <Upload />
-              Nahrať fotky
+          <>
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<Link href={listHref({ kind: "placement", placement: "GALLERY" })} />}
+            >
+              <ArrowDownUp />
+              Zoradiť galériu
             </Button>
-          ) : (
-            <Button size="lg" nativeButton={false} render={<Link href="/admin/nahrat" />}>
-              <Upload />
-              Nahrať fotky
-            </Button>
-          )
+            {readOnlyReason ? (
+              <Button size="lg" disabled>
+                <Upload />
+                Nahrať fotky
+              </Button>
+            ) : (
+              <Button size="lg" nativeButton={false} render={<Link href="/admin/nahrat" />}>
+                <Upload />
+                Nahrať fotky
+              </Button>
+            )}
+          </>
         }
       />
 

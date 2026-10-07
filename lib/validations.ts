@@ -97,6 +97,8 @@ export const photoSchema = z.object({
   tagIds: z.array(z.string().min(1)).max(50),
   newTags: z.array(tagNameSchema).max(20),
   placements: z.array(z.enum(PLACEMENTS)),
+  // Where a *new* photo joins its lists; edits keep existing positions.
+  position: z.enum(["start", "end"]).default("end"),
 });
 
 export type PhotoInput = z.infer<typeof photoSchema>;

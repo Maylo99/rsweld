@@ -144,6 +144,7 @@ function parsePhotoForm(
     tagIds: formData.getAll("tagIds").map(String),
     newTags: formData.getAll("newTags").map(String),
     placements: formData.getAll("placements").map(String),
+    position: formData.get("position") ?? undefined,
   });
 
   if (!parsed.success) {

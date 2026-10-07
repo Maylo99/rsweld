@@ -110,28 +110,51 @@ export async function reorderTags(ids: string[]): Promise<void> {
 /*  List membership (tags + placements)                                        */
 /* -------------------------------------------------------------------------- */
 
-/** Appends photos at the end of a tag's order (keeps existing positions). */
-async function addPhotosToTag(tx: Tx, tagId: string, photoIds: string[]): Promise<void> {
+/** Where new members join a list. Existing members never move. */
+type InsertAt = "start" | "end";
+
+/**
+ * Sort orders for `count` new rows placed before or after `existing`, keeping
+ * the new rows in the given order. Orders may go below zero - only their
+ * relative order matters.
+ */
+function newSortOrders(existing: number[], count: number, at: InsertAt): number[] {
+  const first = at === "start" ? Math.min(1, ...existing) - count : Math.max(0, ...existing) + 1;
+  return Array.from({ length: count }, (_, index) => first + index);
+}
+
+/** Adds photos to a tag's order (keeps existing positions). */
+async function addPhotosToTag(
+  tx: Tx,
+  tagId: string,
+  photoIds: string[],
+  at: InsertAt = "end",
+): Promise<void> {
   const existing = await tx.photoTag.findMany({ where: { tagId } });
   const present = new Set(existing.map((row) => row.photoId));
-  let next = Math.max(0, ...existing.map((row) => row.sortOrder));
 
   const toAdd = photoIds.filter((id) => !present.has(id));
   if (toAdd.length === 0) return;
 
+  const orders = newSortOrders(
+    existing.map((row) => row.sortOrder),
+    toAdd.length,
+    at,
+  );
   await tx.photoTag.createMany({
-    data: toAdd.map((photoId) => ({ photoId, tagId, sortOrder: ++next })),
+    data: toAdd.map((photoId, index) => ({ photoId, tagId, sortOrder: orders[index] })),
   });
 }
 
 /**
- * Appends photos at the end of a website section. A single-photo section
- * (limit 1) swaps its photo; other limited sections refuse to overflow.
+ * Adds photos to a website section. A single-photo section (limit 1) swaps
+ * its photo; other limited sections refuse to overflow.
  */
 async function addPhotosToPlacement(
   tx: Tx,
   placement: PlacementKey,
   photoIds: string[],
+  at: InsertAt = "end",
 ): Promise<void> {
   const config = placementConfig[placement];
   const existing = await tx.photoPlacement.findMany({ where: { placement } });
@@ -156,9 +179,13 @@ async function addPhotosToPlacement(
     );
   }
 
-  let next = Math.max(0, ...existing.map((row) => row.sortOrder));
+  const orders = newSortOrders(
+    existing.map((row) => row.sortOrder),
+    toAdd.length,
+    at,
+  );
   await tx.photoPlacement.createMany({
-    data: toAdd.map((photoId) => ({ photoId, placement, sortOrder: ++next })),
+    data: toAdd.map((photoId, index) => ({ photoId, placement, sortOrder: orders[index] })),
   });
 }
 
@@ -245,7 +272,11 @@ function assertSameMembers(current: string[], submitted: string[]): void {
 /*  Photos                                                                     */
 /* -------------------------------------------------------------------------- */
 
-/** Brings a photo's tags and sections in line with the form, keeping positions. */
+/**
+ * Brings a photo's tags and sections in line with the form. Lists the photo
+ * already belongs to keep its position; newly joined lists get it at
+ * `input.position`.
+ */
 async function syncMemberships(tx: Tx, photoId: string, input: PhotoInput): Promise<void> {
   const tagIds = [...input.tagIds];
   for (const name of input.newTags) {
@@ -254,14 +285,14 @@ async function syncMemberships(tx: Tx, photoId: string, input: PhotoInput): Prom
 
   await tx.photoTag.deleteMany({ where: { photoId, tagId: { notIn: tagIds } } });
   for (const tagId of new Set(tagIds)) {
-    await addPhotosToTag(tx, tagId, [photoId]);
+    await addPhotosToTag(tx, tagId, [photoId], input.position);
   }
 
   await tx.photoPlacement.deleteMany({
     where: { photoId, placement: { notIn: input.placements } },
   });
   for (const placement of input.placements) {
-    await addPhotosToPlacement(tx, placement, [photoId]);
+    await addPhotosToPlacement(tx, placement, [photoId], input.position);
   }
 }
 
