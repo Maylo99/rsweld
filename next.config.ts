@@ -13,6 +13,21 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
   },
+  async headers() {
+    // Keep non-canonical hosts (e.g. the *.up.railway.app domain) out of search
+    // results - only SITE_URL's host (with or without www) may be indexed.
+    const host = new URL(process.env.SITE_URL || "https://rsweld.sk").hostname.replace(
+      /^www\./,
+      "",
+    );
+    return [
+      {
+        source: "/:path*",
+        missing: [{ type: "host", value: `(www\\.)?${host.replaceAll(".", "\\.")}` }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
+  },
   async redirects() {
     return [
       // The gallery used to live at /realizacie — keep old links and rankings.

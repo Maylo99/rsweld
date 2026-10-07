@@ -6,12 +6,14 @@ import { InquiryForm } from "@/components/forms/inquiry-form";
 import { InstagramIcon } from "@/components/shared/instagram-icon";
 import { PageHero, PageHeroPhoneCard } from "@/components/shared/page-hero";
 import { siteConfig } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Kontakt a cenová ponuka",
   description:
     "Nezáväzná cenová ponuka na zváranie nerezu a ocele - zábradlia, konštrukcie a priemyselné komponenty z Považskej Bystrice. Pošlite popis zákazky alebo výkres, zavolajte alebo napíšte.",
-};
+  path: "/kontakt",
+});
 
 const steps = [
   {

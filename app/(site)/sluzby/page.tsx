@@ -19,12 +19,14 @@ import { PageHero, PageHeroPhoneCard } from "@/components/shared/page-hero";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { craftServices } from "@/lib/data/offer";
 import type { CraftService } from "@/lib/types";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Služby",
   description:
     "Zameranie, delenie materiálu, zváranie nerezu a ocele (TIG, MIG/MAG), brúsenie, chemické čistenie, zinkovanie, povrchová úprava a montáž - zábradlia, konštrukcie aj priemyselné komponenty na mieru.",
-};
+  path: "/sluzby",
+});
 
 const craftIcons: Record<CraftService["icon"], LucideIcon> = {
   measure: RulerIcon,

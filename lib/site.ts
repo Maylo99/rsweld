@@ -8,7 +8,6 @@ export const siteConfig = {
     "Zváranie nerezu aj ocele - zábradlia, konštrukcie a komponenty na mieru. Považská Bystrica a okolie.",
   location: "Považská Bystrica, Slovensko",
   serviceArea: "Považská Bystrica a okolie (Trenčiansky a Žilinský kraj)",
-  url: "https://rsweld.sk",
   owner: "René Slávik",
   phone: "+421 911 533 066",
   phoneHref: "tel:+421911533066",

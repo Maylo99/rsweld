@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
+import { siteUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -13,20 +14,19 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${siteConfig.name} - zváranie nerezu a ocele, zábradlia na mieru | Považská Bystrica`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  openGraph: {
-    type: "website",
-    locale: "sk_SK",
-    siteName: siteConfig.name,
-    title: `${siteConfig.name} - zváranie nerezu a ocele, zábradlia na mieru`,
-    description: siteConfig.description,
-    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: siteConfig.name }],
-  },
+  applicationName: siteConfig.name,
+  authors: [{ name: siteConfig.owner }],
+  formatDetection: { telephone: false, email: false, address: false },
+  // Google Search Console HTML-tag verification (optional).
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 /**

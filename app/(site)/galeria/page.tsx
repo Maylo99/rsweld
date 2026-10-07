@@ -3,13 +3,14 @@ import type { Metadata } from "next";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { PageHero } from "@/components/shared/page-hero";
 import { getGallery } from "@/lib/queries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Galéria",
   description:
     "Galéria realizácií RSweld - zábradlia z nerezu a ocele, schodiská, terasy, dizajnové kusy a priemyselné komponenty. Považská Bystrica a okolie.",
-  alternates: { canonical: "/galeria" },
-};
+  path: "/galeria",
+});
 
 export const revalidate = 3600;
 

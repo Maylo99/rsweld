@@ -8,12 +8,14 @@ import { PageHero } from "@/components/shared/page-hero";
 import { ProcessSection } from "@/components/shared/process-section";
 import { SectionHeading } from "@/components/shared/section-heading";
 import { getPlacementPhotos } from "@/lib/queries";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "O nás",
   description:
     "RSweld je zváračská dielňa z Považskej Bystrice. Zábradlia a konštrukcie z nerezu aj ocele na mieru s citom pre detail, od zamerania až po montáž.",
-};
+  path: "/o-nas",
+});
 
 // Re-generate at most once per hour when a database is connected.
 export const revalidate = 3600;

@@ -64,23 +64,25 @@ and the API skips persistence (logged as a warning) — nothing crashes.
 
 ## Environment variables
 
-| Variable               | Purpose                                                                   |
-| ---------------------- | ------------------------------------------------------------------------- |
-| `DATABASE_URL`         | Runtime connection (Railway: private `postgres.railway.internal` URL).    |
-| `DIRECT_URL`           | Public TCP proxy URL — Prisma Migrate + `next build`. Optional locally.   |
-| `S3_BUCKET`            | Bucket name (Railway: `BUCKET`).                                          |
-| `S3_ENDPOINT`          | S3 API endpoint (Railway: `ENDPOINT`).                                    |
-| `S3_REGION`            | Region (Railway: `REGION`, usually `auto`).                               |
-| `S3_ACCESS_KEY_ID`     | Access key (Railway: `ACCESS_KEY_ID`) — **server only**.                  |
-| `S3_SECRET_ACCESS_KEY` | Secret key (Railway: `SECRET_ACCESS_KEY`) — **server only**.              |
-| `S3_FORCE_PATH_STYLE`  | `true` for local S3Mock / older Railway buckets; empty otherwise.         |
-| `SAMPLE_PHOTOS`        | `show` / `hide` the seed sample photos on the public site; empty = as is. |
-| `RESEND_API_KEY`       | API key from [resend.com](https://resend.com).                            |
-| `RESEND_FROM_EMAIL`    | Verified sender, e.g. `RSweld <dopyty@rsweld.sk>`.                        |
-| `NOTIFICATION_EMAIL`   | Inbox that receives inquiry notifications.                                |
-| `ADMIN_EMAIL`          | The single administrator's login e-mail.                                  |
-| `ADMIN_PASSWORD`       | That administrator's password — the only thing guarding `/admin`.         |
-| `AUTH_SECRET`          | Random secret signing the admin session cookie (32 bytes, base64url).     |
+| Variable                   | Purpose                                                                   |
+| -------------------------- | ------------------------------------------------------------------------- |
+| `SITE_URL`                 | Canonical origin (`https://rsweld.sk`); other hosts get `noindex`.        |
+| `GOOGLE_SITE_VERIFICATION` | Search Console HTML-tag token (optional).                                 |
+| `DATABASE_URL`             | Runtime connection (Railway: private `postgres.railway.internal` URL).    |
+| `DIRECT_URL`               | Public TCP proxy URL — Prisma Migrate + `next build`. Optional locally.   |
+| `S3_BUCKET`                | Bucket name (Railway: `BUCKET`).                                          |
+| `S3_ENDPOINT`              | S3 API endpoint (Railway: `ENDPOINT`).                                    |
+| `S3_REGION`                | Region (Railway: `REGION`, usually `auto`).                               |
+| `S3_ACCESS_KEY_ID`         | Access key (Railway: `ACCESS_KEY_ID`) — **server only**.                  |
+| `S3_SECRET_ACCESS_KEY`     | Secret key (Railway: `SECRET_ACCESS_KEY`) — **server only**.              |
+| `S3_FORCE_PATH_STYLE`      | `true` for local S3Mock / older Railway buckets; empty otherwise.         |
+| `SAMPLE_PHOTOS`            | `show` / `hide` the seed sample photos on the public site; empty = as is. |
+| `RESEND_API_KEY`           | API key from [resend.com](https://resend.com).                            |
+| `RESEND_FROM_EMAIL`        | Verified sender, e.g. `RSweld <dopyty@rsweld.sk>`.                        |
+| `NOTIFICATION_EMAIL`       | Inbox that receives inquiry notifications.                                |
+| `ADMIN_EMAIL`              | The single administrator's login e-mail.                                  |
+| `ADMIN_PASSWORD`           | That administrator's password — the only thing guarding `/admin`.         |
+| `AUTH_SECRET`              | Random secret signing the admin session cookie (32 bytes, base64url).     |
 
 ## Deploying on Railway
 

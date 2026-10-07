@@ -87,6 +87,11 @@ react-hook-form · Resend · Motion · S3 (Railway Bucket). Hosted on Railway.
 
 - `/realizacie` permanently redirects to `/galeria` (old links / SEO);
   `/cenova-ponuka` → `/kontakt#dopyt` (the site has **one** inquiry form).
+- SEO: every public page exports `pageMetadata({ title, description, path })`
+  (`lib/seo.ts`) — Next replaces a parent's `openGraph` instead of merging, so
+  hand-written metadata loses OG/canonical. Absolute URLs come from `siteUrl`
+  (`SITE_URL` env), never a hard-coded domain; hosts other than `SITE_URL` get
+  `X-Robots-Tag: noindex` (`next.config.ts` headers).
 - Public pages live in the `app/(site)/` route group (header/footer/JSON-LD);
   `app/layout.tsx` is the bare document shell so `/admin` stays clean.
 

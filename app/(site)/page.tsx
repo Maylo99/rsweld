@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { AboutSection } from "@/components/home/about-section";
 import { CtaSection } from "@/components/home/cta-section";
 import { FaqSection } from "@/components/home/faq-section";
@@ -6,6 +8,15 @@ import { Hero } from "@/components/home/hero";
 import { ServicesSection } from "@/components/home/services-section";
 import { ProcessSection } from "@/components/shared/process-section";
 import { getPlacementPhotos } from "@/lib/queries";
+import { pageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
+
+// Title comes from the root layout's default.
+export const metadata: Metadata = pageMetadata({
+  description: siteConfig.description,
+  path: "/",
+  socialTitle: `${siteConfig.name} - zváranie nerezu a ocele, zábradlia na mieru`,
+});
 
 // Re-generate at most once per hour when a database is connected.
 export const revalidate = 3600;
