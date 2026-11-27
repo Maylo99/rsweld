@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { UseFormSetError } from "react-hook-form";
 import { toast } from "sonner";
 
+import { trackEvent } from "@/lib/analytics";
 import type { InquiryFormValues, InquiryType } from "@/lib/validations";
 
 type SubmitOptions = {
@@ -41,6 +42,8 @@ export function useInquirySubmit() {
       } = await response.json().catch(() => ({}));
 
       if (response.ok && payload.success) {
+        // GA4 conversion (imported into Google Ads) - only after the server accepted it.
+        trackEvent("generate_lead", { form_name: "dopyt", inquiry_type: options.type });
         toast.success("Ďakujeme za správu!", {
           description: "Ozveme sa vám čo najskôr - zvyčajne do 2-3 pracovných dní.",
         });

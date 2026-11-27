@@ -2,6 +2,7 @@ import { ArrowRightIcon, PhoneIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
 import { SteelBackdrop } from "@/components/shared/steel-backdrop";
@@ -76,6 +77,7 @@ export default function NotFound() {
         </div>
       </main>
       <Footer />
+      <GoogleAnalytics />
     </>
   );
 }
