@@ -1,6 +1,7 @@
 import { MailIcon, MapPinIcon, PhoneIcon } from "lucide-react";
 import Link from "next/link";
 
+import { CookieSettingsButton } from "@/components/analytics/cookie-banner";
 import { InstagramIcon } from "@/components/shared/instagram-icon";
 import { Logo } from "@/components/shared/logo";
 import { SteelBackdrop } from "@/components/shared/steel-backdrop";
@@ -95,7 +96,8 @@ export function Footer() {
             © {year} {siteConfig.name}. Všetky práva vyhradené.
           </p>
           <p>
-            {siteConfig.owner} · {siteConfig.location}
+            {siteConfig.owner} · {siteConfig.location} ·{" "}
+            <CookieSettingsButton className="hover:text-foreground cursor-pointer underline-offset-4 transition-colors hover:underline" />
           </p>
         </div>
       </div>
